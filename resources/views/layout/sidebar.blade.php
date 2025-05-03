@@ -14,10 +14,10 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            
+
             <!-- Dashboard -->
             <li class="nav-item">
-                <a href="{{ url('/') }}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
+                <a href="{{ url('/') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'dashboard') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a>
@@ -26,15 +26,15 @@
             <!-- Data Pengguna -->
             <li class="nav-header">Data Pengguna</li>
             <li class="nav-item">
-              <a href="{{ url('/profile') }}" class="nav-link {{ ($activeMenu == 'profile') ? 'active' : '' }}">
-                  <i class="nav-icon fas fa-user"></i>
-                  <p>Profile</p>
-              </a>
+                <a href="{{ url('/profile') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'profile') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user"></i>
+                    <p>Profile</p>
+                </a>
 
-            <!-- jadwal -->
+                <!-- jadwal -->
             <li class="nav-header">Jadwal</li>
             <li class="nav-item">
-                <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
+                <a href="{{ url('/jadwal') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'jadwal') ? 'active' : ''}}">
                     <i class="nav-icon far fa-bookmark"></i>
                     <p>Lihat Jadwal</p>
                 </a>

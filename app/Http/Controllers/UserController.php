@@ -12,7 +12,7 @@ class UserController extends Controller
         if (!$user) {
             abort(404, 'Dummy user tidak ditemukan');
         }
-    
+    // 
         $breadcrumb = (object) [
             'title' => 'Profile User',
             'list' => ['Home', 'Profile']

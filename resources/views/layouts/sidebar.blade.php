@@ -1,42 +1,74 @@
-<div class="sidebar">
-    <!-- Sidebar user (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Alexander Pierce</a>
-      </div>
-    </div>
-
-    <!-- SidebarSearch Form -->
-    <div class="form-inline mt-2">
-        <div class="input-group" data-widget="sidebar-search">
-            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn btn-sidebar">
-                    <i class="fas fa-search fa-fw"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
-            <a href="{{ url('/') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'dashboard')? 'active' : '' }} ">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Dashboard</p>
-          </a>
-        </li>
-        <li class="nav-header">Data Pengguna</li>
-        <li class="nav-item">
-            <a href="{{ url('/profile') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'profile') ? 'active' : '' }}">
-                <i class="nav-icon fas fa-layer-group"></i>
-                <p>Profile</p>
-            </a>
-        </li>
-    </nav>
-    <!-- /.sidebar-menu -->
+<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4" id="sidenav-main">
+  <div class="sidenav-header">
+    <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" id="iconSidenav"></i>
+    <a class="navbar-brand m-0" href="{{ url('/') }}">
+      <img src="{{ asset('adminlte/assets/img/logo-ct-dark.png') }}" width="26" height="26" class="navbar-brand-img h-100" alt="main_logo">
+      <span class="ms-1 font-weight-bold">Your Brand</span>
+    </a>
   </div>
+  <hr class="horizontal dark mt-0">
+  <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+    <ul class="navbar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Pendaftaran</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('tables') ? 'active' : '' }}" href="{{ url('/tables') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Jadwal</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('billing') ? 'active' : '' }}" href="{{ url('/billing') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-credit-card text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Hasil Ujian</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('virtual-reality') ? 'active' : '' }}" href="{{ url('/virtual-reality') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-app text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Surat Pernyataan</span>
+        </a>
+      </li>
+
+      <li class="nav-item mt-3">
+        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('profile') ? 'active' : '' }}" href="{{ url('/profile') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Profile</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->is('login') ? 'active' : '' }}" href="{{ route('login') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Sign In</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+
+</aside>

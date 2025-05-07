@@ -44,46 +44,34 @@ class JadwalController extends Controller
     }
 
     public function show($id)
-    {
-        // Cari data berdasarkan ID
-        $jadwal = collect([
-            (object) ['id_jadwal' => 1, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1', 'file_info' => 'file1.pdf'],
-            (object) ['id_jadwal' => 2, 'tanggal' => '2025-05-10', 'nama' => 'Putra', 'informasi' => 'Ujian TOEIC Sesi 2', 'file_info' => 'file2.pdf'],
-            (object) ['id_jadwal' => 3, 'tanggal' => '2025-05-12', 'nama' => 'Haikal', 'informasi' => 'Ujian TOEIC Sesi 2', 'file_info' => 'file3.pdf'],
-        ])->firstWhere('id_jadwal', $id);
+{
+    $jadwal = (object) ['id_jadwal' => $id, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'];
 
-        // Tambahkan breadcrumb untuk halaman detail
-        $breadcrumb = (object)[
-            'title' => 'Detail Jadwal',
-            'list' => ['Home', 'Jadwal', 'Detail']
-        ];
+    // Tambahkan breadcrumb
+    $breadcrumb = (object)[
+        'title' => 'Detail Jadwal',
+        'list' => ['Home', 'Jadwal', 'Detail']
+    ];
 
-        return view('jadwal.detail', compact('jadwal', 'breadcrumb'));
-    }
+    return view('jadwal.detail', compact('jadwal', 'breadcrumb'));
+}
+public function edit($id)
+{
+    $jadwal = (object) ['id_jadwal' => $id, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'];
 
-    public function edit($id)
-    {
-        // Cari data berdasarkan ID
-        $jadwal = collect([
-            (object) ['id_jadwal' => 1, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1', 'file_info' => 'file1.pdf'],
-            (object) ['id_jadwal' => 2, 'tanggal' => '2025-05-10', 'nama' => 'Putra', 'informasi' => 'Ujian TOEIC Sesi 2', 'file_info' => 'file2.pdf'],
-            (object) ['id_jadwal' => 3, 'tanggal' => '2025-05-12', 'nama' => 'Haikal', 'informasi' => 'Ujian TOEIC Sesi 2', 'file_info' => 'file3.pdf'],
-        ])->firstWhere('id_jadwal', $id);
+    $breadcrumb = (object)[
+        'title' => 'Edit Jadwal',
+        'list' => ['Home', 'Jadwal', 'Edit']
+    ];
 
-        // Tambahkan breadcrumb untuk halaman edit
-        $breadcrumb = (object)[
-            'title' => 'Edit Jadwal',
-            'list' => ['Home', 'Jadwal', 'Edit']
-        ];
+    return view('jadwal.edit', compact('jadwal', 'breadcrumb'));
+}
 
-        return view('jadwal.edit', compact('jadwal', 'breadcrumb'));
-    }
-
-    public function destroy($id)
-    {
-        // Logika untuk menghapus data
-        return redirect()->route('jadwal.index')->with('success', 'Data berhasil dihapus!');
-    }
+public function destroy($id)
+{
+    // Logika untuk menghapus data
+    return response()->json(['success' => true]);
+}
     public function jadwalMahasiswa()
 {
     // Data dummy mahasiswa (misalnya mahasiswa dengan ID 1)

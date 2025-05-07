@@ -84,4 +84,51 @@ class JadwalController extends Controller
         // Logika untuk menghapus data
         return redirect()->route('jadwal.index')->with('success', 'Data berhasil dihapus!');
     }
+    public function jadwalMahasiswa()
+{
+    // Data dummy mahasiswa (misalnya mahasiswa dengan ID 1)
+    $mahasiswaId = 2; // ID mahasiswa yang sedang login (contoh)
+
+    // Data jadwal (dummy)
+    $jadwal = [
+        (object) [
+            'id_jadwal' => 1,
+            'tanggal' => '2025-05-10',
+            'nama' => 'Alex',
+            'informasi' => 'Ujian TOEIC Sesi 1',
+            'file_info' => 'file1.pdf',
+            'mahasiswa_id' => 1 // Jadwal untuk mahasiswa dengan ID 1
+        ],
+        (object) [
+            'id_jadwal' => 2,
+            'tanggal' => '2025-05-10',
+            'nama' => 'Putra',
+            'informasi' => 'Ujian TOEIC Sesi 2',
+            'file_info' => 'file2.pdf',
+            'mahasiswa_id' => 2 // Jadwal untuk mahasiswa dengan ID 2
+        ],
+        (object) [
+            'id_jadwal' => 3,
+            'tanggal' => '2025-05-12',
+            'nama' => 'Haikal',
+            'informasi' => 'Ujian TOEIC Sesi 2',
+            'file_info' => 'file3.pdf',
+            'mahasiswa_id' => 1 // Jadwal untuk mahasiswa dengan ID 1
+        ],
+    ];
+
+    // Filter jadwal berdasarkan mahasiswa yang sedang login
+    $jadwalMahasiswa = array_filter($jadwal, function ($item) use ($mahasiswaId) {
+        return $item->mahasiswa_id == $mahasiswaId;
+    });
+
+    // Tambahkan breadcrumb
+    $breadcrumb = (object)[
+        'title' => 'Jadwal Saya',
+        'list' => ['Home', 'Jadwal Saya']
+    ];
+
+    // Kirim data ke view
+    return view('mahasiswa.jadwal', compact('jadwalMahasiswa', 'breadcrumb'));
+}
 }

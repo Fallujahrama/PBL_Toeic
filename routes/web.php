@@ -23,4 +23,4 @@ Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
 Route::get('/jadwal/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
 Route::get('/jadwal/{id}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
 Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
-
+Route::get('/mahasiswa/jadwal', [JadwalController::class, 'jadwalMahasiswa'])->name('mahasiswa.jadwal');

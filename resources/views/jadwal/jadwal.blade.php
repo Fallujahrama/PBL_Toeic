@@ -4,10 +4,10 @@
 <div class="container mt-5">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb bg-light p-3 rounded">
+        <!-- <ol class="breadcrumb bg-light p-3 rounded">
             <li class="breadcrumb-item"><a href="/" class="text-decoration-none text-primary">Home</a></li>
             <li class="breadcrumb-item active text-dark" aria-current="page">Jadwal</li>
-        </ol>
+        </ol> -->
     </nav>
 
     <div class="text-center mb-4">

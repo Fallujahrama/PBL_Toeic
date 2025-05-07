@@ -39,6 +39,15 @@
                     <p>Lihat Jadwal</p>
                 </a>
             </li>
+
+            <!-- jadwal mhs -->
+            <li class="nav-header">Jadwal mhs</li>
+            <li class="nav-item">
+                <a href="{{ url('/mahasiswa/jadwal') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'jadwal') ? 'active' : ''}}">
+                    <i class="nav-icon far fa-bookmark"></i>
+                    <p>jadwal saya</p>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

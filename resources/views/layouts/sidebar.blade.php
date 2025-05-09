@@ -32,7 +32,7 @@
         </li>
         <li class="nav-header">Data Pengguna</li>
         <li class="nav-item">
-            <a href="{{ url('/profile') }}" class="nav-link {{ ($activeMenu == 'profile') ? 'active' : '' }}">
+            <a href="{{ url('/profile') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'profile') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-user"></i>
                 <p>Profile</p>
             </a>

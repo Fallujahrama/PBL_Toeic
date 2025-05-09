@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::middleware(['auth'])->group(function () {
     // dashboard
     Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/profile', [UserController::class, 'profilePage']);
+    Route::post('/user/editPhoto', [UserController::class, 'editPhoto']);
 });

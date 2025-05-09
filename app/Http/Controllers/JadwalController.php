@@ -57,14 +57,20 @@ class JadwalController extends Controller
 }
 public function edit($id)
 {
-    $jadwal = (object) ['id_jadwal' => $id, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'];
+    $jadwal = collect([
+        (object) ['id_jadwal' => 1, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'],
+        (object) ['id_jadwal' => 2, 'tanggal' => '2025-05-10', 'nama' => 'Putra', 'informasi' => 'Ujian TOEIC Sesi 2'],
+        (object) ['id_jadwal' => 3, 'tanggal' => '2025-05-12', 'nama' => 'Haikal', 'informasi' => 'Ujian TOEIC Sesi 2'],
+    ])->firstWhere('id_jadwal', $id);
 
-    $breadcrumb = (object)[
-        'title' => 'Edit Jadwal',
-        'list' => ['Home', 'Jadwal', 'Edit']
-    ];
+    return response()->json(view('jadwal.edit', compact('jadwal'))->render());
+}
 
-    return view('jadwal.edit', compact('jadwal', 'breadcrumb'));
+public function update(Request $request, $id)
+{
+    // Logika untuk memperbarui data jadwal
+    // Contoh: validasi dan simpan ke database
+    return response()->json(['success' => true, 'message' => 'Data berhasil diperbarui!']);
 }
 
 public function destroy($id)
@@ -75,7 +81,7 @@ public function destroy($id)
     public function jadwalMahasiswa()
 {
     // Data dummy mahasiswa (misalnya mahasiswa dengan ID 1)
-    $mahasiswaId = 2; // ID mahasiswa yang sedang login (contoh)
+    $mahasiswaId = 1; // ID mahasiswa yang sedang login (contoh)
 
     // Data jadwal (dummy)
     $jadwal = [

@@ -37,6 +37,20 @@
                 <p>Profile</p>
             </a>
         </li>
+        <li class="nav-header">Data Kegiatan</li>
+            <li class="nav-item">
+                <a href="{{ route('jadwal.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'jadwal') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-calendar-alt"></i>
+                    <p>Jadwal</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('hasil_ujian.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'hasil_ujian') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-file-alt"></i>
+                    <p>Hasil Ujian</p>
+                </a>
+            </li>
+        </ul>
     </nav>
     <!-- /.sidebar-menu -->
   </div>

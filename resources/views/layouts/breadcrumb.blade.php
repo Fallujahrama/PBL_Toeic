@@ -1,3 +1,4 @@
+@if(isset($breadcrumb) && isset($breadcrumb->list))
 <div class="d-flex justify-content-between align-items-center mb-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
@@ -14,3 +15,4 @@
     </nav>
     <h6 class="font-weight-bolder mb-0">{{ $breadcrumb->title }}</h6>
 </div>
+@endif

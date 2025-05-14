@@ -43,17 +43,15 @@ class JadwalController extends Controller
         return view('jadwal.jadwal', compact('jadwal', 'breadcrumb'));
     }
 
-    public function show($id)
+public function show($id)
 {
-    $jadwal = (object) ['id_jadwal' => $id, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'];
+    $jadwal = collect([
+        (object) ['id_jadwal' => 1, 'tanggal' => '2025-05-10', 'nama' => 'Alex', 'informasi' => 'Ujian TOEIC Sesi 1'],
+        (object) ['id_jadwal' => 2, 'tanggal' => '2025-05-10', 'nama' => 'Putra', 'informasi' => 'Ujian TOEIC Sesi 2'],
+        (object) ['id_jadwal' => 3, 'tanggal' => '2025-05-12', 'nama' => 'Haikal', 'informasi' => 'Ujian TOEIC Sesi 2'],
+    ])->firstWhere('id_jadwal', $id);
 
-    // Tambahkan breadcrumb
-    $breadcrumb = (object)[
-        'title' => 'Detail Jadwal',
-        'list' => ['Home', 'Jadwal', 'Detail']
-    ];
-
-    return view('jadwal.detail', compact('jadwal', 'breadcrumb'));
+    return view('jadwal.detail', compact('jadwal'))->render();
 }
 public function edit($id)
 {
@@ -63,7 +61,14 @@ public function edit($id)
         (object) ['id_jadwal' => 3, 'tanggal' => '2025-05-12', 'nama' => 'Haikal', 'informasi' => 'Ujian TOEIC Sesi 2'],
     ])->firstWhere('id_jadwal', $id);
 
-    return response()->json(view('jadwal.edit', compact('jadwal'))->render());
+    $breadcrumb = (object)[
+    'title' => 'Edit Jadwal',
+    'list' => ['Home', 'Jadwal', 'Edit']
+];
+
+return view('jadwal.edit', compact('jadwal', 'breadcrumb'))->render();
+
+    
 }
 
 public function update(Request $request, $id)

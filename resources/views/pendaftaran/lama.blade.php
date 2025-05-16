@@ -1,6 +1,9 @@
 @extends('layouts.template')
 
 @section('content')
+@if (session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 <div class="card">
     <div class="card-body">
         <form action="{{ route('pendaftaran.lama.store') }}" method="POST" enctype="multipart/form-data">
@@ -52,35 +55,36 @@
         </form>
     </div>
 </div>
+<script>
+    // Update label setiap file input
+    document.querySelectorAll('.custom-file-input').forEach(function(input) {
+        input.addEventListener('change', function (e) {
+            const fileName = e.target.files[0]?.name || 'Browse file';
+            e.target.nextElementSibling.innerText = fileName;
+        });
+    });
+</script>
 @endsection
 
 @push('scripts')
 <script>
-    // Autofill data mahasiswa berdasarkan NIM
-   document.getElementById('nim').addEventListener('blur', function () {
-    const nim = this.value;
+  document.getElementById('nim').addEventListener('blur', function () {
+    const nim = this.value.trim();
+    if (!nim) return;
 
-    if (nim.length > 0) {
-        fetch(`/pendaftaran/lama/get-mahasiswa/${nim}`)
-            .then(response => response.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    const data = result.data;
-                    // Autofill form fields with data received from backend
-                    document.getElementById('nama').value = data.nama || '';
-                    document.getElementById('jurusan').value = data.jurusan || '';
-                    document.getElementById('prodi').value = data.prodi || '';
-                } else {
-                    alert(result.message);  // Inform user if data is not found
-                    document.getElementById('nama').value = '';
-                    document.getElementById('jurusan').value = '';
-                    document.getElementById('prodi').value = '';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-});
+    fetch(`/pendaftaran/lama/get-mahasiswa/${encodeURIComponent(nim)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res.status === 'error') {
+          // Munculkan alert kalau NIM tidak ada
+          alert(res.message);
+        }
+        // kalau success, kita abaikan (atau autofill jika sudah diaktifkan)
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Gagal memeriksa NIM. Silakan ulangi.');
+      });
+  });
 </script>
 @endpush

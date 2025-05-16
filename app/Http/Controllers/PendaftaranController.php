@@ -69,21 +69,26 @@ class PendaftaranController extends Controller
 
     public function getMahasiswa($nim)
     {
-        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        // Cari berdasarkan NIM
+        $m = Mahasiswa::where('nim', $nim)->first();
 
-        if ($mahasiswa) {
+        if (! $m) {
+            // Kembalikan sukses= false agar fetch tetap resolve
             return response()->json([
-                'status' => 'success',
-                'data' => $mahasiswa
-            ]);
+                'status'  => 'error',
+                'message' => "NIM {$nim} belum terdaftar di database."
+            ], 200);
         }
 
         return response()->json([
-            'status' => 'error',
-            'message' => 'Data mahasiswa tidak ditemukan'
-        ]);
+            'status' => 'success',
+            'data'   => [
+                'nama'    => $m->nama,
+                'jurusan' => $m->jurusan,
+                'prodi'   => $m->program_studi,
+            ],
+        ], 200);
     }
-
 
     /**
      * Menampilkan form pendaftaran mahasiswa lama
@@ -158,37 +163,39 @@ class PendaftaranController extends Controller
      */
     public function storeLama(Request $request)
     {
-        // Validasi input mahasiswa lama
+        $nim = $request->input('nim');
+        if (! Mahasiswa::where('nim', $nim)->exists()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "NIM anda belum terdaftar di database.");
+        }
+
         $request->validate([
-            'nim' => 'required|integer|exists:mahasiswa,nim', // Memastikan mahasiswa sudah terdaftar
-            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTP opsional
-            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTM opsional
-            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240', // File Foto opsional
+            'nim'               => 'required|integer',
+            'bukti_pembayaran'  => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktp'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktm'          => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_foto'         => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
         ]);
 
-        // Menyimpan bukti pembayaran
         $buktiPembayaranPath = $request->file('bukti_pembayaran')->store('bukti_pembayaran');
 
-        // Mendapatkan data mahasiswa
-        $mahasiswa = Mahasiswa::where('nim', $request->nim)->first();
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
 
-        // Menyimpan file tambahan jika ada
-        $ktpPath = $request->hasFile('file_ktp') ? $request->file('file_ktp')->store('file_ktp') : null;
-        $ktmPath = $request->hasFile('file_ktm') ? $request->file('file_ktm')->store('file_ktm') : null;
+        $ktpPath  = $request->hasFile('file_ktp')  ? $request->file('file_ktp')->store('file_ktp') : null;
+        $ktmPath  = $request->hasFile('file_ktm')  ? $request->file('file_ktm')->store('file_ktm') : null;
         $fotoPath = $request->hasFile('file_foto') ? $request->file('file_foto')->store('file_foto') : null;
 
-        // Menyimpan data pendaftaran untuk mahasiswa lama
         $pendaftaran = new Pendaftaran();
-        $pendaftaran->nim = $mahasiswa->nim;
+        $pendaftaran->nim                   = $mahasiswa->nim;
         $pendaftaran->file_bukti_pembayaran = $buktiPembayaranPath;
-        $pendaftaran->file_ktp = $ktpPath; // Jika ada, jika tidak null maka akan disimpan
-        $pendaftaran->file_ktm = $ktmPath; // Jika ada, jika tidak null maka akan disimpan
-        $pendaftaran->file_foto = $fotoPath; // Jika ada, jika tidak null maka akan disimpan
+        $pendaftaran->file_ktp              = $ktpPath;
+        $pendaftaran->file_ktm              = $ktmPath;
+        $pendaftaran->file_foto             = $fotoPath;
         $pendaftaran->save();
 
         return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
     }
-
 
 }

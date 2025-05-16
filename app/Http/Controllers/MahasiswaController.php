@@ -10,22 +10,27 @@ class MahasiswaController extends Controller
 
     public function index()
     {
-        // Mendapatkan data untuk breadcrumb dan page title
         $breadcrumb = (object) [
             'title' => 'Data Mahasiswa',
             'list' => ['Home', 'Data Mahasiswa']
         ];
 
-        $page = (object) [
-            'title' => 'Daftar Mahasiswa'
-        ];
+        $activeMenu = 'mahasiswa';
 
-        $activeMenu = 'mahasiswa';  // Menandakan menu aktif
+        // Ambil filter kampus dari request
+        $kampusFilter = request('kampus');
 
-        // Mengambil data mahasiswa yang akan ditampilkan
-        $data = Mahasiswa::select('nim', 'nama', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')->get();
+        // Ambil data mahasiswa sesuai filter kampus
+        $data = Mahasiswa::select('nim', 'nama', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
+            ->when($kampusFilter, function ($query, $kampusFilter) {
+                return $query->where('kampus', $kampusFilter);
+            })
+            ->get();
 
-        // Menampilkan halaman index mahasiswa
-        return view('data_mahasiswa.index', compact('breadcrumb', 'page', 'activeMenu', 'data'));
+        // Ambil daftar kampus unik untuk filter dropdown
+        $kampus = Mahasiswa::select('kampus')->distinct()->get();
+
+        return view('data_mahasiswa.index', compact('breadcrumb', 'activeMenu', 'data', 'kampus', 'kampusFilter'));
     }
+
 }

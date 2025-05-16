@@ -2,50 +2,51 @@
 
 @section('content')
 <div class="card card-outline card-primary">
-   <div class="card-header">
-       <h3 class="card-title">{{ $page->title }}</h3>
-       <div class="card-tools">
-           <a class="btn btn-sm btn-primary mt-1" href="{{ url('mahasiswa/create') }}">Tambah</a>
-       </div>
-   </div>
    <div class="card-body">
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Filter:</label>
-                    <div class="col-3">
-                        <select class="form-control" id="kampus_id" name="kampus_id" required>
-                            <option value="">- Semua Kampus -</option>
-                            @foreach ($kampus as $item)
-                                <option value="{{ $item->kampus }}">{{ $item->kampus }}</option>
-                            @endforeach
-                        </select>
-                        <small class="form-text text-muted">Kampus</small>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <form method="GET" action="{{ url()->current() }}">
+                    <div class="form-group row">
+                         <label class="col-3 control-label col-form-label pt-1">Filter :</label>
+                        <div class="col-9">
+                           <select class="form-control" id="kampus" name="kampus" onchange="this.form.submit()">
+                                <option value="" {{ ($kampusFilter == '') ? 'selected' : '' }}>- Semua Kampus -</option>
+                                @foreach ($kampus ?? [] as $item)
+                                    <option value="{{ $item->kampus }}" {{ ($kampusFilter == $item->kampus) ? 'selected' : '' }}>
+                                        {{ $item->kampus }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Kampus</small>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-        </div>        
-
-        <table class="table table-bordered table-striped table-hover table-sm">
+        </div>
+            
+        <table id="mahasiswaTable" class="table table-bordered table-striped table-hover table-sm">
             <thead>
                 <tr>
                     <th>NIM</th>
                     <th>Nama</th>
-                    <th>Jurusan</th>
-                    <th>Program Studi</th>
+                    <th>
+                        Jurusan
+                        <select class="filter-select" data-column="2">
+                            <option value="">- Semua -</option>
+                        </select>
+                    </th>
+                    <th>
+                        Program Studi
+                        <select class="filter-select" data-column="3">
+                            <option value="">- Semua -</option>
+                        </select>
+                    </th>
                     <th>Kampus</th>
                     <th>No WhatsApp</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($mahasiswa as $mhs)
+                @foreach ($data as $mhs)
                     <tr>
                         <td>{{ $mhs->nim }}</td>
                         <td>{{ $mhs->nama }}</td>
@@ -62,9 +63,60 @@
 @endsection
 
 @push('css')
-<!-- Optional: Custom CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+<style>
+  /* 1. Buat layout tabel fixed dan penuh */
+  #mahasiswaTable {
+    table-layout: fixed;
+    width: 100%;
+  }
+  /* 2. Pastikan setiap kolom (thead th & tbody td) mengambil 1/6 lebar */
+  #mahasiswaTable thead th,
+  #mahasiswaTable tbody td {
+    width: calc(100% / 6);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  /* 3. Dropdown filter kecil tetap rapih */
+  #mahasiswaTable thead th select.filter-select {
+    width: 80px;
+    font-size: 12px;
+    padding: 2px 4px;
+    height: 26px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+</style>
 @endpush
 
+
 @push('js')
-<!-- Optional: Custom JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    var table = $('#mahasiswaTable').DataTable();
+
+    // Isi dropdown filter untuk kolom Jurusan dan Program Studi
+    table.columns([2,3]).every(function() {
+        var column = this;
+        var colIndex = column.index();
+        var select = $('select.filter-select[data-column="'+colIndex+'"]');
+        column.data().unique().sort().each(function(d) {
+            if (d) select.append('<option value="'+d+'">'+d+'</option>');
+        });
+    });
+
+    // Event ketika dropdown filter berubah
+    $('select.filter-select').on('change', function() {
+        var colIndex = $(this).data('column');
+        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        table.column(colIndex)
+             .search(val ? '^'+val+'$' : '', true, false)
+             .draw();
+    });
+});
+</script>
 @endpush

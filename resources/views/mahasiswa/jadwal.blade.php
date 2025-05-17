@@ -22,9 +22,15 @@
                     <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->informasi }}</td>
                     <td>
-                        <a href="{{ asset($item->file_info) }}" class="btn btn-success btn-sm" target="_blank">
+                        @if($item->file_info)
+                        <button type="button"
+                            class="btn btn-success btn-sm btn-file-preview"
+                            data-file="{{ asset($item->file_info) }}">
                             <i class="bi bi-file-earmark"></i> File
-                        </a>
+                        </button>
+                        @else
+                        <span class="text-muted">-</span>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

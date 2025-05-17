@@ -48,6 +48,14 @@
                     <p>jadwal saya</p>
                 </a>
             </li>
+            <!-- Verifikasi Pendaftaran -->
+            <li class="nav-header">Verifikasi Pendaftaran</li>
+            <li class="nav-item">
+                <a href="{{ url('/verifikasi') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'verifikasi') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-check"></i>
+                    <p>Verifikasi Pendaftaran</p>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

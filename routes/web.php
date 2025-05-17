@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\VerifikasiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +27,9 @@ Route::get('/jadwal/{id}/edit', [JadwalController::class, 'edit'])->name('jadwal
 Route::put('/jadwal/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
 Route::delete('/jadwal/{id}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
 Route::get('/mahasiswa/jadwal', [JadwalController::class, 'jadwalMahasiswa'])->name('mahasiswa.jadwal');
+// Rute untuk verifikasi admin
+
+    Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('admin.verifikasi');
+    Route::get('/verifikasi/{id}', [VerifikasiController::class, 'show'])->name('admin.verifikasi.show');
+    Route::post('/verifikasi/{id}/verify', [VerifikasiController::class, 'verify'])->name('admin.verifikasi.verify');
+

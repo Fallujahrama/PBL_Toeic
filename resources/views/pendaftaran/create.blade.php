@@ -30,10 +30,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- Alert for displaying messages -->
-                <div id="alert-container"></div>
-                
-                <form id="pendaftaran-form" enctype="multipart/form-data">
+                <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data" id="pendaftaran-form">
                     @csrf
                     
                     <div class="row">
@@ -42,14 +39,11 @@
                                 <label for="nim" class="form-control-label">NIM</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
-                                    <select name="nim" id="nim" class="form-control">
-                                        <option value="">-- Pilih NIM Mahasiswa --</option>
-                                        @foreach($mahasiswa as $mhs)
-                                            <option value="{{ $mhs->nim }}">{{ $mhs->nim }} - {{ $mhs->nama }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" name="nim" id="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ old('nim') }}" required>
                                 </div>
-                                <small class="text-danger error-text nim_error"></small>
+                                @error('nim')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -64,14 +58,16 @@
                                         <span>KTP</span>
                                     </div>
                                     <div class="document-upload-button">
-                                        <input type="file" name="file_ktp" id="file_ktp" class="document-upload-input" accept="image/jpeg,image/png,image/jpg,application/pdf">
+                                        <input type="file" name="file_ktp" id="file_ktp" class="document-upload-input @error('file_ktp') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
                                         <label for="file_ktp" class="btn btn-outline-primary w-100">
                                             <i class="fas fa-upload me-2"></i>Upload KTP
                                         </label>
                                     </div>
                                 </div>
                                 <small class="text-muted">Format: JPG, PNG, PDF. Maks: 2MB</small>
-                                <small class="text-danger error-text file_ktp_error"></small>
+                                @error('file_ktp')
+                                    <small class="text-danger d-block">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                         
@@ -84,14 +80,16 @@
                                         <span>KTM</span>
                                     </div>
                                     <div class="document-upload-button">
-                                        <input type="file" name="file_ktm" id="file_ktm" class="document-upload-input" accept="image/jpeg,image/png,image/jpg,application/pdf">
+                                        <input type="file" name="file_ktm" id="file_ktm" class="document-upload-input @error('file_ktm') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
                                         <label for="file_ktm" class="btn btn-outline-primary w-100">
                                             <i class="fas fa-upload me-2"></i>Upload KTM
                                         </label>
                                     </div>
                                 </div>
                                 <small class="text-muted">Format: JPG, PNG, PDF. Maks: 2MB</small>
-                                <small class="text-danger error-text file_ktm_error"></small>
+                                @error('file_ktm')
+                                    <small class="text-danger d-block">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                         
@@ -104,14 +102,16 @@
                                         <span>Foto</span>
                                     </div>
                                     <div class="document-upload-button">
-                                        <input type="file" name="file_foto" id="file_foto" class="document-upload-input" accept="image/jpeg,image/png,image/jpg">
+                                        <input type="file" name="file_foto" id="file_foto" class="document-upload-input @error('file_foto') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg" required>
                                         <label for="file_foto" class="btn btn-outline-primary w-100">
                                             <i class="fas fa-upload me-2"></i>Upload Foto
                                         </label>
                                     </div>
                                 </div>
                                 <small class="text-muted">Format: JPG, PNG. Maks: 2MB</small>
-                                <small class="text-danger error-text file_foto_error"></small>
+                                @error('file_foto')
+                                    <small class="text-danger d-block">{{ $message }}</small>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                         <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
-                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Simpan
                         </button>
                     </div>
@@ -188,118 +188,6 @@
                 reader.readAsDataURL(file);
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File dipilih');
             }
-        });
-        
-        // Form submission with AJAX
-        $('#pendaftaran-form').on('submit', function(e) {
-            e.preventDefault();
-            
-            // Reset error messages
-            $('.error-text').text('');
-            
-            // Create FormData object for file uploads
-            let formData = new FormData(this);
-            
-            // Show loading state
-            $('#submit-btn').html('<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...');
-            $('#submit-btn').prop('disabled', true);
-            
-            $.ajax({
-                url: "{{ route('pendaftaran.store') }}",
-                type: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if(response.status) {
-                        // Show success message
-                        $('#alert-container').html(`
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <div class="d-flex">
-                                    <div class="icon icon-shape icon-xs bg-gradient-success text-white rounded-circle shadow me-2">
-                                        <i class="fas fa-check"></i>
-                                    </div>
-                                    <span>${response.message}</span>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        `);
-                        
-                        // Reset form
-                        $('#pendaftaran-form')[0].reset();
-                        $('.document-preview').removeClass('has-preview');
-                        $('#ktp-preview').html(`<i class="fas fa-id-card"></i><span>KTP</span>`);
-                        $('#ktm-preview').html(`<i class="fas fa-address-card"></i><span>KTM</span>`);
-                        $('#foto-preview').html(`<i class="fas fa-user"></i><span>Foto</span>`);
-                        $('label[for="file_ktp"]').html('<i class="fas fa-upload me-2"></i>Upload KTP');
-                        $('label[for="file_ktm"]').html('<i class="fas fa-upload me-2"></i>Upload KTM');
-                        $('label[for="file_foto"]').html('<i class="fas fa-upload me-2"></i>Upload Foto');
-                        
-                        // Scroll to top to see the message
-                        $('html, body').animate({ scrollTop: 0 }, 'slow');
-                        
-                        // Redirect after 2 seconds
-                        setTimeout(function() {
-                            window.location.href = "{{ route('pendaftaran.index') }}";
-                        }, 2000);
-                    } else {
-                        // Show error message
-                        $('#alert-container').html(`
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <div class="d-flex">
-                                    <div class="icon icon-shape icon-xs bg-gradient-danger text-white rounded-circle shadow me-2">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                    <span>${response.message}</span>
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        `);
-                        
-                        // Display validation errors
-                        if(response.errors) {
-                            $.each(response.errors, function(prefix, val) {
-                                $('.'+prefix+'_error').text(val[0]);
-                            });
-                        }
-                        
-                        // Scroll to top to see the message
-                        $('html, body').animate({ scrollTop: 0 }, 'slow');
-                    }
-                    
-                    // Reset button state
-                    $('#submit-btn').html('<i class="fas fa-save me-2"></i>Simpan');
-                    $('#submit-btn').prop('disabled', false);
-                },
-                error: function(xhr) {
-                    // Show error message
-                    $('#alert-container').html(`
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <div class="d-flex">
-                                <div class="icon icon-shape icon-xs bg-gradient-danger text-white rounded-circle shadow me-2">
-                                    <i class="fas fa-times"></i>
-                                </div>
-                                <span>Terjadi kesalahan. Silakan coba lagi.</span>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    `);
-                    
-                    // Display validation errors if any
-                    if(xhr.responseJSON && xhr.responseJSON.errors) {
-                        $.each(xhr.responseJSON.errors, function(prefix, val) {
-                            $('.'+prefix+'_error').text(val[0]);
-                        });
-                    }
-                    
-                    // Scroll to top to see the message
-                    $('html, body').animate({ scrollTop: 0 }, 'slow');
-                    
-                    // Reset button state
-                    $('#submit-btn').html('<i class="fas fa-save me-2"></i>Simpan');
-                    $('#submit-btn').prop('disabled', false);
-                }
-            });
         });
     });
 </script>

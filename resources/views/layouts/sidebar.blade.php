@@ -50,6 +50,18 @@
                     <p>Hasil Ujian</p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('surat_pernyataan.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'surat_pernyataan') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-file-alt"></i>
+                    <p>Surat Pernyataan</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('surat_pernyataan.createMahasiswa') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'upload_surat_pernyataan') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-upload"></i>
+                    <p>Upload Surat Pernyataan</p>
+                </a>
+            </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

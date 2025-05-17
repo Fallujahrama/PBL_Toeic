@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HasilUjianController;
+use App\Http\Controllers\SuratPernyataanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'profilePage']);
     Route::post('/user/editPhoto', [UserController::class, 'editPhoto']);
 
-    Route::resource('notifications', NotifikasiController::class);
-    Route::resource('jadwal', JadwalController::class);
-    Route::resource('hasil_ujian', HasilUjianController::class);
+    Route::middleware(['authorize:AdmUpa'])->group(function () {
+        Route::resource('notifications', NotifikasiController::class);
+        Route::resource('jadwal', JadwalController::class);
+        Route::resource('hasil_ujian', HasilUjianController::class);
+
+        Route::get('surat_pernyataan', [SuratPernyataanController::class, 'index'])->name('surat_pernyataan.index');
+        Route::post('surat_pernyataan/{id}/validate', [SuratPernyataanController::class, 'validateSurat'])->name('surat_pernyataan.validate');
+        Route::post('surat_pernyataan/{id}/reject', [SuratPernyataanController::class, 'rejectSurat'])->name('surat_pernyataan.reject');
+    });
+
+    Route::middleware(['authorize:Mhs'])->group(function () {
+        Route::get('surat_pernyataan/upload', [SuratPernyataanController::class, 'createMahasiswa'])->name('surat_pernyataan.createMahasiswa');
+        Route::post('surat_pernyataan/store', [SuratPernyataanController::class, 'storeMahasiswa'])->name('surat_pernyataan.storeMahasiswa');
+    });
+
 });

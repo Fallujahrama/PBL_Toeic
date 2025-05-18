@@ -22,13 +22,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('notifications', NotifikasiController::class);
 
     // Pendaftaran routes
-    Route::resource('pendaftaran', PendaftaranController::class);
-    Route::get('/pendaftaran/{id}/preview-pdf/{type}', [PendaftaranController::class, 'previewPdf'])->name('pendaftaran.preview-pdf');
-    Route::get('/pendaftaran/{id}/stream-pdf/{type}', [PendaftaranController::class, 'streamPdf'])->name('pendaftaran.stream-pdf');
-    Route::get('/pendaftaran/export', [PendaftaranController::class, 'export'])->name('pendaftaran.export');
-    Route::post('/pendaftaran/import', [PendaftaranController::class, 'import'])->name('pendaftaran.import');
-    Route::post('/pendaftaran/approve/{id}', [PendaftaranController::class, 'approve'])->name('pendaftaran.approve');
-    Route::post('/pendaftaran/reject/{id}', [PendaftaranController::class, 'reject'])->name('pendaftaran.reject');
+    Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index'])->name('index');
+        Route::get('/baru', [PendaftaranController::class, 'formBaru'])->name('baru');
+        Route::post('/baru', [PendaftaranController::class, 'storeBaru'])->name('storeBaru');
+        Route::get('/lama/get-mahasiswa/{nim}', [PendaftaranController::class, 'getMahasiswa']);
+        Route::get('/lama', [PendaftaranController::class, 'formLama'])->name('lama');
+        Route::post('/lama', [PendaftaranController::class, 'storeLama'])->name('lama.store');
+    });
 
     // Jadwal routes
     Route::resource('jadwal', JadwalController::class);

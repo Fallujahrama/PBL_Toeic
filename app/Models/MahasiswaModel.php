@@ -5,24 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Mahasiswa extends Model
+class MahasiswaModel extends Model
 {
     use HasFactory;
 
+    // Menentukan tabel yang digunakan oleh model ini
     protected $table = 'mahasiswa';
-    protected $primaryKey = 'nim';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
+    // Kolom yang dapat diisi
     protected $fillable = [
         'nim',
         'nama',
-        // Add other fields as needed
+        'jurusan',
+        'alamat_asal',
+        'nik',
+        'no_whatsapp',
+        'kampus',
+        'program_studi',
+        'alamat_saat_ini',
     ];
 
-    /**
-     * Get the pendaftaran associated with the mahasiswa.
-     */
+    // Relasi ke tabel pendaftaran
     public function pendaftaran()
     {
         return $this->hasOne(PendaftaranModel::class, 'nim', 'nim');

@@ -3,172 +3,196 @@
 namespace App\Http\Controllers;
 
 use App\Models\PendaftaranModel;
+use App\Models\MahasiswaModel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class PendaftaranController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan halaman utama pendaftaran
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $pendaftaran = PendaftaranModel::latest()->paginate(10);
-        return view('pendaftaran.index', compact('pendaftaran'));
+        // Mendapatkan data yang diperlukan untuk breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Pendaftaran',
+            'list' => ['Home', 'Pendaftaran']
+        ];
+
+        $page = (object) [
+            'title' => 'Pendaftaran Mahasiswa'
+        ];
+
+        $activeMenu = 'pendaftaran';  // Menandakan menu aktif
+
+        // Menampilkan halaman index pendaftaran
+        return view('pendaftaran.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Menampilkan form pendaftaran mahasiswa baru
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function create()
+    public function formBaru()
     {
-        return view('pendaftaran.create');
+        // Mendapatkan data breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Pendaftaran Mahasiswa Baru',
+            'list' => ['Home', 'Pendaftaran', 'Mahasiswa Baru']
+        ];
+
+        $page = (object) [
+            'title' => 'Form Pendaftaran Mahasiswa Baru'
+        ];
+
+        $activeMenu = 'pendaftaran';  // Menandakan menu aktif
+
+        // Menampilkan form pendaftaran untuk mahasiswa baru
+        return view('pendaftaran.baru', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function showPendaftaranLama(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nim' => 'required|string|max:255',
-            'file_ktp' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'file_ktm' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'file_foto' => 'required|file|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        $mahasiswa = null;
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        if ($request->has('nim')) {
+            // Ambil data mahasiswa berdasarkan NIM
+            $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
         }
 
-        // Handle file uploads
-        $file_ktp = $request->file('file_ktp')->store('public/pendaftaran/ktp');
-        $file_ktm = $request->file('file_ktm')->store('public/pendaftaran/ktm');
-        $file_foto = $request->file('file_foto')->store('public/pendaftaran/foto');
-
-        // Create pendaftaran
-        PendaftaranModel::create([
-            'nim' => $request->nim,
-            'file_ktp' => str_replace('public/', '', $file_ktp),
-            'file_ktm' => str_replace('public/', '', $file_ktm),
-            'file_foto' => str_replace('public/', '', $file_foto),
-        ]);
-
-        return redirect()->route('pendaftaran.index')
-            ->with('success', 'Pendaftaran berhasil ditambahkan.');
+        return view('pendaftaran.lama', compact('mahasiswa'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function getMahasiswa($nim)
     {
-        $pendaftaran = PendaftaranModel::findOrFail($id);
-        return view('pendaftaran.show', compact('pendaftaran'));
-    }
+        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $pendaftaran = PendaftaranModel::findOrFail($id);
-        return view('pendaftaran.edit', compact('pendaftaran'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $pendaftaran = PendaftaranModel::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
-            'nim' => 'required|string|max:255',
-            'file_ktp' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'file_ktm' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'file_foto' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        if ($mahasiswa) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $mahasiswa
+            ]);
         }
 
-        // Update NIM
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Data mahasiswa tidak ditemukan'
+        ]);
+    }
+
+
+    /**
+     * Menampilkan form pendaftaran mahasiswa lama
+     *
+     * @return \Illuminate\View\View
+     */
+    public function formLama()
+    {
+        // Mendapatkan data breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Pendaftaran Mahasiswa Lama',
+            'list' => ['Home', 'Pendaftaran', 'Mahasiswa Lama']
+        ];
+
+        $page = (object) [
+            'title' => 'Form Pendaftaran Mahasiswa Lama'
+        ];
+
+        $activeMenu = 'pendaftaran';  // Menandakan menu aktif
+
+        // Menampilkan form pendaftaran untuk mahasiswa lama
+        return view('pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu'));
+    }
+
+    public function storeBaru(Request $request)
+    {
+        // Validasi input mahasiswa baru
+        $request->validate([
+            'nim' => 'required|integer|unique:mahasiswa,nim',  // Validasi NIM di tabel mahasiswa
+            'nama' => 'required|string|max:255',
+            'nik' => 'required|string|max:20',
+            'wa' => 'required|string|max:15',
+            'alamat_asal' => 'required|string',
+            'alamat_sekarang' => 'required|string',
+            'prodi' => 'required|string|max:100',
+            'jurusan' => 'required|string|max:100',
+            'kampus' => 'required|string',
+            'ktp' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'scan_ktm' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'pas_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Menyimpan data mahasiswa tanpa kolom ktp, scan_ktm, pas_foto
+        $mahasiswa = new MahasiswaModel();
+        $mahasiswa->nim = $request->nim;
+        $mahasiswa->nama = $request->nama;
+        $mahasiswa->nik = $request->nik;
+        $mahasiswa->no_whatsapp = $request->wa;
+        $mahasiswa->alamat_asal = $request->alamat_asal;
+        $mahasiswa->alamat_saat_ini = $request->alamat_sekarang;
+        $mahasiswa->program_studi = $request->prodi;
+        $mahasiswa->jurusan = $request->jurusan;
+        $mahasiswa->kampus = $request->kampus;
+        $mahasiswa->user_id = auth()->id(); // This will use the currently logged-in user's ID
+        $mahasiswa->save();
+
+        $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $request->nim;
+        $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('ktp') : null;
+        $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('scan_ktm') : null;
+        $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pas_foto') : null;
 
-        // Handle file uploads if provided
-        if ($request->hasFile('file_ktp')) {
-            // Delete old file
-            Storage::delete('public/' . $pendaftaran->file_ktp);
-            // Upload new file
-            $file_ktp = $request->file('file_ktp')->store('public/pendaftaran/ktp');
-            $pendaftaran->file_ktp = str_replace('public/', '', $file_ktp);
-        }
-
-        if ($request->hasFile('file_ktm')) {
-            // Delete old file
-            Storage::delete('public/' . $pendaftaran->file_ktm);
-            // Upload new file
-            $file_ktm = $request->file('file_ktm')->store('public/pendaftaran/ktm');
-            $pendaftaran->file_ktm = str_replace('public/', '', $file_ktm);
-        }
-
-        if ($request->hasFile('file_foto')) {
-            // Delete old file
-            Storage::delete('public/' . $pendaftaran->file_foto);
-            // Upload new file
-            $file_foto = $request->file('file_foto')->store('public/pendaftaran/foto');
-            $pendaftaran->file_foto = str_replace('public/', '', $file_foto);
-        }
+        // Tambahkan ini untuk file_bukti_pembayaran
+        // $pendaftaran->file_bukti_pembayaran = $request->hasFile('bukti_pembayaran') ? $request->file('bukti_pembayaran')->store('bukti_pembayaran') : null;
 
         $pendaftaran->save();
 
-        return redirect()->route('pendaftaran.index')
-            ->with('success', 'Pendaftaran berhasil diperbarui.');
+        return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Store data pendaftaran mahasiswa lama
      */
-    public function destroy($id)
+    public function storeLama(Request $request)
     {
-        $pendaftaran = PendaftaranModel::findOrFail($id);
+        // Validasi input mahasiswa lama
+        $request->validate([
+            'nim' => 'required|integer|exists:mahasiswa,nim', // Memastikan mahasiswa sudah terdaftar
+            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTP opsional
+            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTM opsional
+            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240', // File Foto opsional
+        ]);
 
-        // Delete files
-        Storage::delete('public/' . $pendaftaran->file_ktp);
-        Storage::delete('public/' . $pendaftaran->file_ktm);
-        Storage::delete('public/' . $pendaftaran->file_foto);
+        // Menyimpan bukti pembayaran
+        // $buktiPembayaranPath = $request->file('bukti_pembayaran')->store('bukti_pembayaran');
 
-        // Delete record
-        $pendaftaran->delete();
+        // Just store the file but don't assign it to the model:
+        if ($request->hasFile('bukti_pembayaran')) {
+            $request->file('bukti_pembayaran')->store('bukti_pembayaran');
+        }
 
-        return redirect()->route('pendaftaran.index')
-            ->with('success', 'Pendaftaran berhasil dihapus.');
+        // Mendapatkan data mahasiswa
+        $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
+
+        // Menyimpan file tambahan jika ada
+        $ktpPath = $request->hasFile('file_ktp') ? $request->file('file_ktp')->store('file_ktp') : null;
+        $ktmPath = $request->hasFile('file_ktm') ? $request->file('file_ktm')->store('file_ktm') : null;
+        $fotoPath = $request->hasFile('file_foto') ? $request->file('file_foto')->store('file_foto') : null;
+
+        // Menyimpan data pendaftaran untuk mahasiswa lama
+        $pendaftaran = new PendaftaranModel();
+        $pendaftaran->nim = $mahasiswa->nim;
+        // $pendaftaran->file_bukti_pembayaran = $buktiPembayaranPath;
+        $pendaftaran->file_ktp = $ktpPath; // Jika ada, jika tidak null maka akan disimpan
+        $pendaftaran->file_ktm = $ktmPath; // Jika ada, jika tidak null maka akan disimpan
+        $pendaftaran->file_foto = $fotoPath; // Jika ada, jika tidak null maka akan disimpan
+        $pendaftaran->save();
+
+        return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
     }
 }

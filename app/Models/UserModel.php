@@ -26,27 +26,4 @@ class UserModel extends Authenticatable
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
-
-    //mendapat nama role
-    public function getRoleName(): string
-    {
-        return $this->level->level_nama;
-    }
-
-    // cek apakah user memiliki role tertentu
-    public function hasRole($role) : bool
-    {
-        return $this->level->level_kode == $role;
-    }
-
-    //mendapat kode role
-    public function getRole()
-    {
-        return $this->level->level_kode;
-    }
-
-    public function mahasiswa()
-    {
-        return $this->hasOne(MahasiswaModel::class, 'nim', 'username'); // Relasi berdasarkan NIM
-    }
 }

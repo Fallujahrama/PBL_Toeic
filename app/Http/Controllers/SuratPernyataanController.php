@@ -3,55 +3,92 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SuratPernyataanModel;
-use App\Models\MahasiswaModel;
+use App\Models\SuratPernyataan;
+use App\Models\Mahasiswa;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class SuratPernyataanController extends Controller
 {
-    // Menampilkan daftar surat pernyataan
     public function index()
     {
-        $suratPernyataan = SuratPernyataanModel::with('mahasiswa')->get();
-        return view('surat_pernyataan.index', compact('suratPernyataan'));
+    // Mendapatkan data yang diperlukan untuk breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Pengajuan Surat Pernyataan',
+            'list' => ['Home', 'Pengajuan Surat Pernyataan']
+        ];
+
+        $page = (object) [
+            'title' => 'Pengajuan Surat Pernyataan'
+        ];
+
+        $activeMenu = 'Surat Pernyataan';  // Menandakan menu aktif
+
+        $userId = auth()->user()->id_user;
+
+        // Ambil data mahasiswa berdasarkan user_id
+        $mahasiswa = \App\Models\Mahasiswa::where('user_id', $userId)->first();
+
+        // Ambil surat berdasarkan nim mahasiswa
+        $surat = SuratPernyataan::where('nim', $mahasiswa->nim)->first();
+
+        return view('surat.index', compact('breadcrumb','page','activeMenu','mahasiswa', 'surat'));
     }
 
-    // Memvalidasi surat pernyataan
-    public function validateSurat($id)
+    public function create()
     {
-        $surat = SuratPernyataanModel::findOrFail($id);
-        $surat->update(['status' => 'valid']);
-        return redirect()->route('surat_pernyataan.index')->with('success', 'Surat pernyataan berhasil divalidasi.');
+        $user = Auth::user();
+        $mahasiswa = \App\Models\Mahasiswa::where('user_id', $user->id_user)->first();
+
+        // Ambil surat terakhir berdasarkan NIM (jika ada)
+        $surat = \App\Models\SuratPernyataan::where('nim', $mahasiswa->nim)->latest()->first();
+
+        return view('surat.create', compact('mahasiswa', 'surat'));
     }
 
-    // Menolak surat pernyataan
-    public function rejectSurat($id)
-    {
-        $surat = SuratPernyataanModel::findOrFail($id);
-        $surat->update(['status' => 'rejected']);
-        return redirect()->route('surat_pernyataan.index')->with('success', 'Surat pernyataan berhasil ditolak.');
-    }
-
-    public function createMahasiswa()
-    {
-        // Ambil data mahasiswa berdasarkan user yang login
-        $mahasiswa = auth()->user()->mahasiswa; // Pastikan relasi user ke mahasiswa sudah ada
-        return view('surat_pernyataan.upload', compact('mahasiswa'));
-    }
-
-    public function storeMahasiswa(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
-            'file_surat_pernyataan' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'file_surat_pernyataan' => 'required|mimes:pdf|max:2048',
+            'nim' => 'required'
         ]);
 
-        $filePath = $request->file('file_surat_pernyataan')->store('surat_pernyataan_files', 'public');
+        // Simpan file
+        $file = $request->file('file_surat_pernyataan');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $file->storeAs('surat', $filename, 'public');
 
-        SuratPernyataanModel::create([
-            'nim' => auth()->user()->username, // Ambil NIM dari user yang login
-            'file_surat_pernyataan' => $filePath,
-            'status' => 'pending', // Default status
+        // Simpan ke database
+        SuratPernyataan::create([
+            'file_surat_pernyataan' => $filename,
+            'status' => 'menunggu',
+            'nim' => $request->nim
         ]);
 
-        return redirect()->route('surat_pernyataan.createMahasiswa')->with('success', 'Surat pernyataan berhasil diupload.');
+        return redirect()->route('surat.index')->with('success', 'Dokumen berhasil diunggah.');
     }
+
+    public function destroy($id)
+    {
+        $surat = SuratPernyataan::findOrFail($id);
+
+            if ($surat->file_surat_pernyataan && Storage::disk('public')->exists('surat/'.$surat->file_surat_pernyataan)) {
+            Storage::disk('public')->delete('surat/'.$surat->file_surat_pernyataan);
+        }
+
+
+        $surat->delete();
+
+        return redirect()->route('surat.index')->with('success', 'Dokumen berhasil dihapus.');
+    }
+
+    public function show($id)
+    {
+        $surat = SuratPernyataan::findOrFail($id);
+        $filePath = Storage::url('surat/' . $surat->file_surat_pernyataan);
+
+        return view('surat.show', compact('filePath'));
+    }
+
 }

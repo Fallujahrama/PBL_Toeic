@@ -16,49 +16,47 @@
      <!-- Theme style -->
      <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
  </head>
- <body class="hold-transition login-page">
-     <div class="login-box">
-         <div class="card card-outline card-primary">
-             <div class="card-header text-center">
-                 <a href="{{ url('/') }}" class="h1">Pendaftaran <b>TOEIC</b></a>
-             </div>
-             <div class="card-body">
-                 <p class="login-box-msg">Silahkan Masukan Username dan Password</p>
+<div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh; background-color: #f0f3f6;">
+  <div class="row w-100" style="max-width: 1000px; height: 90vh; box-shadow: 0 0 15px rgba(0,0,0,0.1); overflow: hidden;">
 
-                 <form action="{{ url('login') }}" method="POST" id="form-login">
-                     @csrf
+    <!-- Kolom kiri: Gambar -->
+    <div class="col-md-6 p-0">
+      <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-100 h-100" style="object-fit: cover;">
+    </div>
 
-                     <div class="input-group mb-3">
-                         <input type="text" id="username" name="username" class="form-control" placeholder="Username">
-                         <div class="input-group-append">
-                             <div class="input-group-text">
-                                 <span class="fas fa-envelope"></span>
-                             </div>
-                         </div>
-                         <small id="error-username" class="error-text text-danger"></small>
-                     </div>
+    <!-- Kolom kanan: Form login -->
+    <div class="col-md-6 d-flex align-items-center justify-content-center bg-white">
+      <div class="w-75">
+        <p class="text-center mb-4">Selamat datang di TOEIC Registration Online !</p>
 
-                     <div class="input-group mb-3">
-                         <input type="password" id="password" name="password" class="form-control" placeholder="Password">
-                         <div class="input-group-append">
-                             <div class="input-group-text">
-                                 <span class="fas fa-lock"></span>
-                             </div>
-                         </div>
-                         <small id="error-password" class="error-text text-danger"></small>
-                     </div>
+        <form action="{{ url('login') }}" method="POST" id="form-login">
+          @csrf
 
-                     <div class="row">
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                        </div>
-                    </div>
+          <div class="input-group mb-3">
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
 
-                 </form>
-             </div>
-         </div>
-     </div>
+          <div class="input-group mb-3">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
 
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
      <!-- jQuery -->
      <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
      <!-- Bootstrap 4 -->

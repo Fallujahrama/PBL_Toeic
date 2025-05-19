@@ -37,32 +37,15 @@
                 <p>Profile</p>
             </a>
         </li>
-        <li class="nav-header">Data Kegiatan</li>
-            <li class="nav-item">
-                <a href="{{ route('jadwal.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'jadwal') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-calendar-alt"></i>
-                    <p>Jadwal</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('hasil_ujian.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'hasil_ujian') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-file-alt"></i>
-                    <p>Hasil Ujian</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('surat_pernyataan.index') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'surat_pernyataan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-file-alt"></i>
-                    <p>Surat Pernyataan</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('surat_pernyataan.createMahasiswa') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'upload_surat_pernyataan') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-upload"></i>
-                    <p>Upload Surat Pernyataan</p>
-                </a>
-            </li>
-        </ul>
+
+        <!-- Menu -->
+        <li class="nav-header">Menu</li>
+        <li class="nav-item">
+            <a href="{{ url('/surat') }}" class="nav-link {{ (isset($activeMenu) && $activeMenu == 'surat') ? 'active' : '' }}">
+                <i class="nav-icon far fa-list-alt"></i>
+                <p>Pengajuan Surat Pernyataan</p>
+            </a>
+        </li>
     </nav>
     <!-- /.sidebar-menu -->
   </div>

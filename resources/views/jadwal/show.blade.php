@@ -199,8 +199,45 @@
 @endsection
 
 @push('css')
-<link href="{{ asset('css/jadwal.css') }}" rel="stylesheet">
 <style>
+    .info-card {
+        background-color: var(--dark-card);
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info-card .card-header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--dark-border);
+    }
+    
+    .info-card .card-body {
+        padding: 1rem;
+    }
+    
+    .profile-info-item {
+        display: flex;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-info-item:hover {
+        background-color: var(--dark-hover);
+    }
+    
+    .profile-info-label {
+        width: 40%;
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+    
+    .profile-info-value {
+        width: 60%;
+    }
+    
     .file-preview-container {
         background-color: var(--dark-card);
         border-radius: 1rem;
@@ -250,6 +287,22 @@
     .doc-filename {
         font-weight: bold;
         text-align: center;
+    }
+    
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    
+    .fade-in-1 { animation-delay: 0.1s; }
+    .fade-in-2 { animation-delay: 0.2s; }
+    .fade-in-3 { animation-delay: 0.3s; }
+    .fade-in-4 { animation-delay: 0.4s; }
+    .fade-in-5 { animation-delay: 0.5s; }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
 @endpush

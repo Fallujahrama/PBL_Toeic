@@ -38,7 +38,7 @@
                             <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
                         </div>
                         @error('nama')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <input type="text" name="nim" id="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ old('nim') }}" required>
                         </div>
                         @error('nim')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                             <input type="text" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik') }}" required>
                         </div>
                         @error('nik')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                             <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa') }}" required>
                         </div>
                         @error('wa')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                             <textarea name="alamat_asal" id="alamat_asal" class="form-control @error('alamat_asal') is-invalid @enderror" required>{{ old('alamat_asal') }}</textarea>
                         </div>
                         @error('alamat_asal')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                             <textarea name="alamat_sekarang" id="alamat_sekarang" class="form-control @error('alamat_sekarang') is-invalid @enderror" required>{{ old('alamat_sekarang') }}</textarea>
                         </div>
                         @error('alamat_sekarang')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                             <input type="text" name="prodi" id="prodi" class="form-control @error('prodi') is-invalid @enderror" value="{{ old('prodi') }}" required>
                         </div>
                         @error('prodi')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                             <input type="text" name="jurusan" id="jurusan" class="form-control @error('jurusan') is-invalid @enderror" value="{{ old('jurusan') }}" required>
                         </div>
                         @error('jurusan')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                             </select>
                         </div>
                         @error('kampus')
-                            <small class="text-danger">{{ $message }}</small>
+                        <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -171,14 +171,14 @@
                             </div>
                             <div class="document-upload-button">
                                 <input type="file" name="ktp" id="ktp" class="document-upload-input @error('ktp') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
-                                <label for="ktp" class="btn btn-outline-primary w-100">
+                                <label for="ktp" class="btn btn-outline-primary w-50 mx-auto d-block">
                                     <i class="fas fa-upload me-2"></i>Upload KTP
                                 </label>
                             </div>
                         </div>
                         <small class="text-muted">Format: JPG, PNG, PDF. Maks: 10MB</small>
                         @error('ktp')
-                            <small class="text-danger d-block">{{ $message }}</small>
+                        <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -193,14 +193,14 @@
                             </div>
                             <div class="document-upload-button">
                                 <input type="file" name="scan_ktm" id="scan_ktm" class="document-upload-input @error('scan_ktm') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
-                                <label for="scan_ktm" class="btn btn-outline-primary w-100">
+                                <label for="scan_ktm" class="btn btn-outline-primary w-50 mx-auto d-block">
                                     <i class="fas fa-upload me-2"></i>Upload KTM
                                 </label>
                             </div>
                         </div>
                         <small class="text-muted">Format: JPG, PNG, PDF. Maks: 10MB</small>
                         @error('scan_ktm')
-                            <small class="text-danger d-block">{{ $message }}</small>
+                        <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -215,14 +215,14 @@
                             </div>
                             <div class="document-upload-button">
                                 <input type="file" name="pas_foto" id="pas_foto" class="document-upload-input @error('pas_foto') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg" required>
-                                <label for="pas_foto" class="btn btn-outline-primary w-100">
+                                <label for="pas_foto" class="btn btn-outline-primary w-50 mx-auto d-block">
                                     <i class="fas fa-upload me-2"></i>Upload Foto
                                 </label>
                             </div>
                         </div>
                         <small class="text-muted">Format: JPG, PNG. Maks: 2MB</small>
                         @error('pas_foto')
-                            <small class="text-danger d-block">{{ $message }}</small>
+                        <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
@@ -267,7 +267,7 @@
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File dipilih');
             }
         });
-        
+
         // Preview for KTM
         $('#scan_ktm').change(function() {
             const file = this.files[0];
@@ -288,7 +288,7 @@
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File dipilih');
             }
         });
-        
+
         // Preview for Foto
         $('#pas_foto').change(function() {
             const file = this.files[0];

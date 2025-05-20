@@ -161,7 +161,25 @@
 @endsection
 
 @push('css')
-<link href="{{ asset('css/jadwal.css') }}" rel="stylesheet">
+<style>
+    .jadwal-row {
+        transition: all 0.3s ease;
+    }
+    
+    .jadwal-row:hover {
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+    
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 @endpush
 
 @push('js')

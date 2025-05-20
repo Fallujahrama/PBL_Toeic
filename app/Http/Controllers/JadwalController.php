@@ -101,26 +101,6 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui.');
     }
 
-    // Download file jadwal - Disabled as per requirement
-    // public function downloadFile($id)
-    // {
-    //     $jadwal = JadwalModel::findOrFail($id);
-        
-    //     if (!$jadwal->file_info) {
-    //         return redirect()->back()->with('error', 'File tidak ditemukan.');
-    //     }
-        
-    //     $filePath = storage_path('app/public/' . $jadwal->file_info);
-        
-    //     if (!file_exists($filePath)) {
-    //         return redirect()->back()->with('error', 'File tidak ditemukan.');
-    //     }
-        
-    //     $fileName = basename($jadwal->file_info);
-        
-    //     return response()->download($filePath, $fileName);
-    // }
-
     // Unified preview method for all document types
     public function previewFile($id)
     {

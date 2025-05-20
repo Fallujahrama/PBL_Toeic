@@ -101,7 +101,54 @@
 @endsection
 
 @push('css')
-<link href="{{ asset('css/jadwal.css') }}" rel="stylesheet">
+<style>
+    .document-upload-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .document-preview {
+        width: 150px;
+        height: 150px;
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: #f8f9fa;
+    }
+    
+    .document-preview.has-preview {
+        border: none;
+        background-color: transparent;
+    }
+    
+    .document-preview i {
+        font-size: 2rem;
+        color: #adb5bd;
+        margin-bottom: 10px;
+    }
+    
+    .document-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .document-upload-button {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .document-upload-input {
+        display: none;
+    }
+</style>
 @endpush
 
 @push('js')

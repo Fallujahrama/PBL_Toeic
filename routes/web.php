@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\HasilUjianController;
+use App\Http\Controllers\VerifikasiController;
 
 Route::get('login', [LoginController::class, 'login'])->name('login');
 Route::post('login', [LoginController::class, 'postlogin']);
@@ -33,7 +36,25 @@ Route::middleware('auth')->group(function () {
 
     // Jadwal routes
     Route::resource('jadwal', JadwalController::class);
-    // Route::get('jadwal/download/{id}', [JadwalController::class, 'downloadFile'])->name('jadwal.download'); // Removed download route
     Route::get('jadwal/preview/{id}', [JadwalController::class, 'previewFile'])->name('jadwal.preview');
     Route::get('jadwal/{id}/data', [JadwalController::class, 'getJadwal'])->name('jadwal.data');
+
+    // Hasil Ujian routes
+    Route::resource('hasil_ujian', HasilUjianController::class);
+
+    // Mahasiswa routes
+    Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
+
+    // Verification routes
+    Route::group(['prefix' => 'verifikasi'], function () {
+        Route::get('/', [VerifikasiController::class, 'index'])->name('verifikasi.index');
+        Route::get('/create', [VerifikasiController::class, 'create'])->name('verifikasi.create');
+        Route::post('/', [VerifikasiController::class, 'store'])->name('verifikasi.store');
+        Route::get('/{id}', [VerifikasiController::class, 'show'])->name('verifikasi.show');
+        Route::get('/{id}/edit', [VerifikasiController::class, 'edit'])->name('verifikasi.edit');
+        Route::put('/{id}', [VerifikasiController::class, 'update'])->name('verifikasi.update');
+        Route::delete('/{id}', [VerifikasiController::class, 'destroy'])->name('verifikasi.destroy');
+        Route::post('/{id}/verify', [VerifikasiController::class, 'verify'])->name('verifikasi.verify');
+        Route::get('/{id}/download/{type}', [VerifikasiController::class, 'downloadFile'])->name('verifikasi.download');
+    });
 });

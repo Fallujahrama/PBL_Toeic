@@ -10,7 +10,7 @@
                 <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
             </li>
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ route('notifications.index') }}">Notifikasi</a>
+                <a class="opacity-5 text-dark" href="{{ route('notifikasi.index') }}">Notifikasi</a>
             </li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tambah</li>
         </ol>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('notifications.store') }}" method="POST" id="notification-form">
+                <form action="{{ route('notifikasi.store') }}" method="POST" id="notification-form">
                     @csrf
                     <div class="row">
                         <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="300">
-                        <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary me-2">
+                        <a href="{{ route('notifikasi.index') }}" class="btn btn-outline-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
                         <button type="submit" class="btn btn-primary">

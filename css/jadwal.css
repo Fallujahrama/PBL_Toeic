@@ -1,0 +1,234 @@
+/* Jadwal specific styles */
+
+.jadwal-row {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.jadwal-row.fade-in {
+    opacity: 1;
+}
+
+
+/* File preview styles */
+
+.document-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.document-preview {
+    height: 150px;
+    border: 2px dashed var(--dark-border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark-hover);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.document-preview i {
+    font-size: 2.5rem;
+    color: var(--dark-text-muted);
+    margin-bottom: 10px;
+}
+
+.document-preview span {
+    color: var(--dark-text-muted);
+    font-size: 0.9rem;
+}
+
+.document-preview.has-preview {
+    border-style: solid;
+    border-color: #3b82f6;
+}
+
+.document-upload-input {
+    display: none;
+}
+
+.document-upload-button label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.document-upload-button label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Calendar icon styles */
+
+.calendar-icon-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--dark-gradient-info);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.calendar-icon {
+    color: white;
+    font-size: 1.2rem;
+}
+
+
+/* PDF preview container */
+
+.pdf-preview-container {
+    width: 100%;
+    height: 600px;
+    border: 1px solid var(--dark-border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.pdf-preview-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+
+/* Document preview styles */
+
+.doc-preview-container {
+    margin-top: 20px;
+}
+
+.doc-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background-color: var(--dark-hover);
+    border-radius: 10px;
+    border: 1px solid var(--dark-border);
+    min-height: 300px;
+}
+
+.doc-icon-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 4rem;
+    background-color: var(--dark-card);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.doc-icon-container i.fa-file-word {
+    color: #3b82f6;
+}
+
+.doc-icon-container i.fa-file {
+    color: #64748b;
+}
+
+.doc-filename {
+    font-size: 1.25rem;
+    color: var(--dark-text);
+    text-align: center;
+    margin: 15px 0;
+    max-width: 80%;
+    word-break: break-all;
+}
+
+
+/* PDF export styles */
+
+.pdf-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pdf-header h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.pdf-header p {
+    font-size: 14px;
+    color: #666;
+}
+
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.pdf-table th,
+.pdf-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.pdf-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.pdf-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pdf-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+
+/* Preview modal styles */
+
+.preview-container {
+    width: 100%;
+    background-color: var(--dark-hover);
+    border-radius: 0 0 0.5rem 0.5rem;
+    overflow: hidden;
+}
+
+.preview-container iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    background-color: white;
+}
+
+.modal-content {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--dark-border);
+}
+
+.modal-title {
+    color: var(--dark-text);
+}
+
+.btn-close {
+    color: var(--dark-text);
+}

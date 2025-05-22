@@ -33,7 +33,7 @@ class VerifikasiController extends Controller
             'title' => 'Verifikasi Pendaftaran TOEIC'
         ];
         
-        return view('verifikasi.index', compact('pendaftarans', 'activeMenu', 'breadcrumb', 'page'));
+        return view('admin.verifikasi.index', compact('pendaftarans', 'activeMenu', 'breadcrumb', 'page'));
     }
 
     /**
@@ -59,7 +59,7 @@ class VerifikasiController extends Controller
             'title' => 'Tambah Pendaftaran TOEIC'
         ];
         
-        return view('verifikasi.create', compact('mahasiswas', 'activeMenu', 'breadcrumb', 'page'));
+        return view('admin.verifikasi.create', compact('mahasiswas', 'activeMenu', 'breadcrumb', 'page'));
     }
 
     /**
@@ -124,7 +124,7 @@ class VerifikasiController extends Controller
             'title' => 'Detail Pendaftaran TOEIC'
         ];
         
-        return view('verifikasi.show', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
+        return view('admin.verifikasi.show', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
     }
 
     /**
@@ -151,7 +151,7 @@ class VerifikasiController extends Controller
             'title' => 'Edit Pendaftaran TOEIC'
         ];
         
-        return view('verifikasi.edit', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
+        return view('admin.verifikasi.edit', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
     }
 
     /**

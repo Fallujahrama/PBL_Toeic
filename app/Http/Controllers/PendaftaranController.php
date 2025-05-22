@@ -28,8 +28,8 @@ class PendaftaranController extends Controller
 
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
-        // Menampilkan halaman index pendaftaran
-        return view('pendaftaran.index', compact('breadcrumb', 'page', 'activeMenu'));
+        // Menampilkan halaman index pendaftaran dengan path yang benar
+        return view('mahasiswa.pendaftaran.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     /**
@@ -37,7 +37,7 @@ class PendaftaranController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function formBaru()
+    public function createBaru()
     {
         // Mendapatkan data breadcrumb dan page title
         $breadcrumb = (object) [
@@ -52,7 +52,7 @@ class PendaftaranController extends Controller
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
         // Menampilkan form pendaftaran untuk mahasiswa baru
-        return view('pendaftaran.baru', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('mahasiswa.pendaftaran.baru', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function showPendaftaranLama(Request $request)
@@ -64,9 +64,15 @@ class PendaftaranController extends Controller
             $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
         }
 
-        return view('pendaftaran.lama', compact('mahasiswa'));
+        return view('mahasiswa.pendaftaran.lama', compact('mahasiswa'));
     }
 
+    /**
+     * Get student data by NIM
+     *
+     * @param string $nim
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getMahasiswa($nim)
     {
         $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
@@ -90,7 +96,7 @@ class PendaftaranController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function formLama()
+    public function createLama()
     {
         // Mendapatkan data breadcrumb dan page title
         $breadcrumb = (object) [
@@ -105,7 +111,7 @@ class PendaftaranController extends Controller
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
         // Menampilkan form pendaftaran untuk mahasiswa lama
-        return view('pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('mahasiswa.pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function storeBaru(Request $request)
@@ -179,10 +185,21 @@ class PendaftaranController extends Controller
         // Mendapatkan data mahasiswa
         $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
 
-        // Menyimpan file tambahan jika ada
-        $ktpPath = $request->hasFile('file_ktp') ? $request->file('file_ktp')->store('file_ktp') : null;
-        $ktmPath = $request->hasFile('file_ktm') ? $request->file('file_ktm')->store('file_ktm') : null;
-        $fotoPath = $request->hasFile('file_foto') ? $request->file('file_foto')->store('file_foto') : null;
+        // Check if the student already has a previous registration to reuse file paths
+        $previousRegistration = PendaftaranModel::where('nim', $request->nim)->latest()->first();
+        
+        // Provide default values for required fields
+        $ktpPath = $request->hasFile('file_ktp') 
+            ? $request->file('file_ktp')->store('file_ktp') 
+            : ($previousRegistration ? $previousRegistration->file_ktp : 'default/default_ktp.jpg');
+        
+        $ktmPath = $request->hasFile('file_ktm') 
+            ? $request->file('file_ktm')->store('file_ktm') 
+            : ($previousRegistration ? $previousRegistration->file_ktm : 'default/default_ktm.jpg');
+        
+        $fotoPath = $request->hasFile('file_foto') 
+            ? $request->file('file_foto')->store('file_foto') 
+            : ($previousRegistration ? $previousRegistration->file_foto : 'default/default_foto.jpg');
 
         // Menyimpan data pendaftaran untuk mahasiswa lama
         $pendaftaran = new PendaftaranModel();

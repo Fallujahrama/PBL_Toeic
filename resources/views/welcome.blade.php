@@ -28,7 +28,7 @@
                 <p class="mb-4 opacity-8">Tingkatkan kemampuan bahasa Inggris Anda dan dapatkan sertifikasi internasional yang diakui di seluruh dunia. Silakan cek jadwal terbaru, persyaratan, dan segera daftarkan dirimu untuk mengikuti tes TOEIC!</p>
                 <div class="d-flex flex-wrap gap-2">
                     @if(Auth::check() && (Auth::user()->level_id == 1 || Auth::user()->level_id == 2))
-                        <a href="{{ route('pendaftaran.index') }}" class="btn btn-light btn-sm mb-0 me-1 pulse">
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-light btn-sm mb-0 me-1 pulse">
                             <i class="fas fa-tachometer-alt me-1"></i> Admin Dashboard
                         </a>
                     @else
@@ -124,7 +124,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('pendaftaran.index') }}'">
+                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('verifikasi.index') }}'">
                                 <i class="fas fa-clipboard-list fa-3x mb-3 text-primary"></i>
                                 <h4>Kelola Pendaftaran</h4>
                                 <p>Verifikasi dan kelola pendaftaran mahasiswa</p>

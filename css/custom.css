@@ -1229,11 +1229,7 @@ body {
     animation: pulse 2s infinite;
 }
 
-
-/* Fix for notification dropdown being overlapped */
-
 .dropdown-notification {
-    position: absolute !important;
     background-color: var(--light-card);
     border: 1px solid var(--light-border);
     border-radius: 0.5rem;
@@ -1241,12 +1237,6 @@ body {
     min-width: 320px !important;
     padding: 0 !important;
     overflow: hidden;
-    z-index: 9999 !important;
-    /* Ensure it's above other elements */
-    right: 0;
-    left: auto;
-    top: 100%;
-    margin-top: 0.5rem;
 }
 
 .dropdown-header {
@@ -1323,26 +1313,6 @@ body {
 
 /* User dropdown styles */
 
-
-/* Fix for user dropdown being overlapped */
-
-.dropdown-user {
-    position: absolute !important;
-    background-color: var(--light-card);
-    border: 1px solid var(--light-border);
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    min-width: 240px;
-    padding: 0;
-    overflow: hidden;
-    z-index: 9999 !important;
-    /* Ensure it's above other elements */
-    right: 0;
-    left: auto;
-    top: 100%;
-    margin-top: 0.5rem;
-}
-
 .user-dropdown {
     display: flex;
     align-items: center;
@@ -1377,6 +1347,16 @@ body {
 .user-name {
     color: var(--light-text);
     font-weight: 500;
+}
+
+.dropdown-user {
+    background-color: var(--light-card);
+    border: 1px solid var(--light-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 240px;
+    padding: 0;
+    overflow: hidden;
 }
 
 .user-header {
@@ -1624,7 +1604,10 @@ body {
     color: #f97316;
 }
 
-* Colorful badges */ .badge-primary {
+
+/* Colorful badges */
+
+.badge-primary {
     background-color: #4f46e5;
 }
 
@@ -1794,29 +1777,4 @@ body {
 
 .shadow-orange {
     box-shadow: 0 5px 15px rgba(249, 115, 22, 0.2) !important;
-}
-
-
-/* Fix for Bootstrap dropdowns */
-
-.dropdown-menu.show {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 9999 !important;
-}
-
-
-/* Ensure navbar has proper z-index */
-
-.navbar-main {
-    z-index: 1030 !important;
-    position: relative !important;
-}
-
-
-/* Fix for dropdown positioning */
-
-.nav-item.dropdown {
-    position: relative !important;
 }

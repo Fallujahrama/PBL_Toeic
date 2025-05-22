@@ -205,6 +205,36 @@
 
 @push('css')
 <link href="{{ asset('css/jadwal.css') }}" rel="stylesheet">
+<style>
+    .alert-danger {
+        color: #842029;
+        background-color: #f8d7da;
+        border-color: #f5c2c7;
+    }
+    
+    .document-preview {
+        height: 150px;
+        border: 2px dashed #ccc;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        overflow: hidden;
+        background-color: rgba(0,0,0,0.03);
+    }
+    
+    .document-preview.has-preview {
+        border-style: solid;
+    }
+    
+    .document-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>
 @endpush
 
 @push('js')
@@ -240,7 +270,8 @@
                         // Show the registration form
                         $('#registration-form').slideDown();
                     } else {
-                        $('#search-result').html('<div class="alert alert-danger mt-2">Student not found. Please check the NIM or register as a new student.</div>');
+                        // Make sure the error message is displayed with the correct alert class
+                        $('#search-result').html('<div class="alert alert-danger mt-2"><i class="fas fa-exclamation-circle me-2"></i>Student not found. Please check the NIM or register as a new student.</div>');
                         $('#registration-form').slideUp();
                     }
                 },

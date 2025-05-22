@@ -2,171 +2,214 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\HasilUjianModel;
-use App\Models\JadwalModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class HasilUjianController extends Controller
 {
     /**
-     * Display a listing of the hasil ujian.
+     * Display a listing of the resource.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // Get all hasil ujian with their related jadwal
-        $hasilUjian = HasilUjianModel::with('jadwal')->get();
-        
-        // Set active menu for sidebar
+        $hasilUjian = HasilUjianModel::orderBy('tanggal', 'desc')->get();
         $activeMenu = 'hasil_ujian';
         
-        return view('hasil_ujian.index', compact('hasilUjian', 'activeMenu'));
+        return view('admin.hasil_ujian.index', compact('hasilUjian', 'activeMenu'));
     }
 
     /**
-     * Show the form for creating a new hasil ujian.
+     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        // Get all jadwal for the dropdown
-        $jadwal = JadwalModel::all();
-        
-        // Set active menu for sidebar
         $activeMenu = 'hasil_ujian';
-        
-        return view('hasil_ujian.create', compact('jadwal', 'activeMenu'));
+        return view('admin.hasil-ujian.create', compact('activeMenu'));
     }
 
     /**
-     * Store a newly created hasil ujian in storage.
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        // Validate the request data
         $request->validate([
             'tanggal' => 'required|date',
-            'file_nilai' => 'required|file|mimes:pdf,doc,docx,xlsx|max:2048',
             'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+            'file_nilai' => 'required|file|mimes:pdf,doc,docx,xlsx|max:2048',
         ]);
 
-        // Store the file in the storage/app/public/hasil_ujian_files directory
-        $filePath = $request->file('file_nilai')->store('hasil_ujian_files', 'public');
-
-        // Create a new hasil ujian record
-        HasilUjianModel::create([
-            'tanggal' => $request->tanggal,
-            'file_nilai' => $filePath,
-            'jadwal_id' => $request->jadwal_id,
-        ]);
-
-        // Redirect back to the index page with a success message
+        $data = $request->only(['tanggal', 'jadwal_id']);
+        
+        if ($request->hasFile('file_nilai')) {
+            $data['file_nilai'] = $request->file('file_nilai')->store('hasil_ujian', 'public');
+        }
+        
+        HasilUjianModel::create($data);
+        
         return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil diupload.');
     }
 
     /**
-     * Display the specified hasil ujian.
+     * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        // Find the hasil ujian by ID
-        $hasilUjian = HasilUjianModel::with('jadwal')->findOrFail($id);
-        
-        // Set active menu for sidebar
+        $hasil_ujian = HasilUjianModel::findOrFail($id);
         $activeMenu = 'hasil_ujian';
         
-        return view('hasil_ujian.show', compact('hasilUjian', 'activeMenu'));
+        return view('admin.hasil-ujian.show', compact('hasil_ujian', 'activeMenu'));
     }
 
     /**
-     * Show the form for editing the specified hasil ujian.
+     * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        // Find the hasil ujian by ID
-        $hasilUjian = HasilUjianModel::findOrFail($id);
-        
-        // Get all jadwal for the dropdown
-        $jadwal = JadwalModel::all();
-        
-        // Set active menu for sidebar
+        $hasil_ujian = HasilUjianModel::findOrFail($id);
         $activeMenu = 'hasil_ujian';
         
-        return view('hasil_ujian.edit', compact('hasilUjian', 'jadwal', 'activeMenu'));
+        return view('admin.hasil-ujian.edit', compact('hasil_ujian', 'activeMenu'));
     }
 
     /**
-     * Update the specified hasil ujian in storage.
+     * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        // Validate the request data
         $request->validate([
             'tanggal' => 'required|date',
-            'file_nilai' => 'nullable|file|mimes:pdf,doc,docx,xlsx|max:2048',
             'jadwal_id' => 'required|exists:jadwal,jadwal_id',
+            'file_nilai' => 'nullable|file|mimes:pdf,doc,docx,xlsx|max:2048',
         ]);
-
-        // Find the hasil ujian by ID
-        $hasilUjian = HasilUjianModel::findOrFail($id);
-
-        // Update the file if a new one is provided
+        
+        $hasil_ujian = HasilUjianModel::findOrFail($id);
+        $data = $request->only(['tanggal', 'jadwal_id']);
+        
         if ($request->hasFile('file_nilai')) {
-            // Delete the old file if it exists
-            if ($hasilUjian->file_nilai && Storage::disk('public')->exists($hasilUjian->file_nilai)) {
-                Storage::disk('public')->delete($hasilUjian->file_nilai);
+            // Delete old file if exists
+            if ($hasil_ujian->file_nilai && Storage::disk('public')->exists($hasil_ujian->file_nilai)) {
+                Storage::disk('public')->delete($hasil_ujian->file_nilai);
             }
             
-            // Store the new file
-            $filePath = $request->file('file_nilai')->store('hasil_ujian_files', 'public');
-            $hasilUjian->file_nilai = $filePath;
+            $data['file_nilai'] = $request->file('file_nilai')->store('hasil_ujian', 'public');
         }
-
-        // Update the other fields
-        $hasilUjian->tanggal = $request->tanggal;
-        $hasilUjian->jadwal_id = $request->jadwal_id;
-        $hasilUjian->save();
-
-        // Redirect back to the index page with a success message
+        
+        $hasil_ujian->update($data);
+        
         return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified hasil ujian from storage.
+     * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        // Find the hasil ujian by ID
-        $hasilUjian = HasilUjianModel::findOrFail($id);
+        $hasil_ujian = HasilUjianModel::findOrFail($id);
+        
+        // Delete file if exists
+        if ($hasil_ujian->file_nilai && Storage::disk('public')->exists($hasil_ujian->file_nilai)) {
+            Storage::disk('public')->delete($hasil_ujian->file_nilai);
+        }
+        
+        $hasil_ujian->delete();
+        
+        return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil dihapus.');
+    }
+    
+    /**
+     * Display a listing of hasil ujian for mahasiswa.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function mahasiswaIndex()
+    {
+        // Mendapatkan data untuk breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Hasil Ujian',
+            'list' => ['Home', 'Hasil Ujian']
+        ];
 
-        // Delete the file if it exists
-        if ($hasilUjian->file_nilai && Storage::disk('public')->exists($hasilUjian->file_nilai)) {
-            Storage::disk('public')->delete($hasilUjian->file_nilai);
+        $page = (object) [
+            'title' => 'Hasil Ujian TOEIC'
+        ];
+
+        $activeMenu = 'hasil_ujian';  // Menandakan menu aktif
+
+        // Get current user's NIM
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
+        
+        if ($mahasiswa) {
+            // Mengambil data hasil ujian yang akan ditampilkan untuk mahasiswa ini
+            $hasil_ujian = HasilUjianModel::whereHas('jadwal', function($query) use ($mahasiswa) {
+                $query->whereHas('pendaftaran', function($q) use ($mahasiswa) {
+                    $q->where('nim', $mahasiswa->nim);
+                });
+            })->orderBy('tanggal', 'desc')->get();
+        } else {
+            $hasil_ujian = collect(); // Empty collection if no mahasiswa record
         }
 
-        // Delete the record
-        $hasilUjian->delete();
+        // Menampilkan halaman index hasil ujian untuk mahasiswa
+        return view('mahasiswa.hasil_ujian.index', compact('breadcrumb', 'page', 'activeMenu', 'hasil_ujian'));
+    }
 
-        // Redirect back to the index page with a success message
-        return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil dihapus.');
+    /**
+     * Display the specified hasil ujian for mahasiswa.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function mahasiswaShow($id)
+    {
+        // Mendapatkan data untuk breadcrumb dan page title
+        $breadcrumb = (object) [
+            'title' => 'Detail Hasil Ujian',
+            'list' => ['Home', 'Hasil Ujian', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail Hasil Ujian TOEIC'
+        ];
+
+        $activeMenu = 'hasil_ujian';  // Menandakan menu aktif
+
+        // Get current user's NIM
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
+        
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.hasil_ujian')->with('error', 'Data mahasiswa tidak ditemukan');
+        }
+
+        // Mengambil data hasil ujian yang akan ditampilkan
+        $hasil_ujian = HasilUjianModel::where('id', $id)
+            ->where('nim', $mahasiswa->nim)
+            ->firstOrFail();
+
+        // Menampilkan halaman detail hasil ujian untuk mahasiswa
+        return view('mahasiswa.hasil_ujian.show', compact('breadcrumb', 'page', 'activeMenu', 'hasil_ujian'));
     }
 }

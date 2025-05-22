@@ -2,31 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\NotifikasiModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotifikasiController extends Controller
 {
-    // Menampilkan daftar notifikasi
+    /*==========================
+     ========== ADMIN ==========
+     ==========================*/
+
+    // Menampilkan daftar notifikasi (admin)
     public function index()
     {
-        $notifications = NotifikasiModel::all();
-        return view('notifications.index', compact('notifications'));
+        $notifications = NotifikasiModel::orderBy('tanggal', 'desc')->get();
+        $activeMenu = 'notifikasi';
+
+        return view('admin.notifications.index', compact('notifications', 'activeMenu'));
     }
 
+    // Menampilkan detail notifikasi (admin)
     public function show($id)
     {
         $notification = NotifikasiModel::findOrFail($id);
-        return view('notifications.show', compact('notification'));
+        $activeMenu = 'notifikasi';
+
+        return view('admin.notifications.show', compact('notification', 'activeMenu'));
     }
 
-    // Menampilkan form untuk membuat notifikasi baru
+    // Form tambah notifikasi (admin)
     public function create()
     {
-        return view('notifications.create');
+        $activeMenu = 'notifikasi';
+        return view('admin.notifications.create', compact('activeMenu'));
     }
 
-    // Menyimpan notifikasi baru
+    // Simpan notifikasi baru (admin)
     public function store(Request $request)
     {
         $request->validate([
@@ -39,14 +50,16 @@ class NotifikasiController extends Controller
         return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
     }
 
-    // Menampilkan form untuk mengedit notifikasi
+    // Form edit notifikasi (admin)
     public function edit($id)
     {
         $notification = NotifikasiModel::findOrFail($id);
-        return view('notifications.edit', compact('notification'));
+        $activeMenu = 'notifikasi';
+
+        return view('admin.notifications.edit', compact('notification', 'activeMenu'));
     }
 
-    // Memperbarui notifikasi
+    // Update notifikasi (admin)
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -60,12 +73,64 @@ class NotifikasiController extends Controller
         return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil diperbarui.');
     }
 
-    // Menghapus notifikasi
+    // Hapus notifikasi (admin)
     public function destroy($id)
     {
         $notification = NotifikasiModel::findOrFail($id);
         $notification->delete();
 
         return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil dihapus.');
+    }
+
+
+    /*==============================
+     ========== MAHASISWA ==========
+     ==============================*/
+
+    // Menampilkan daftar notifikasi untuk mahasiswa
+    public function mahasiswaIndex()
+    {
+        $breadcrumb = (object) [
+            'title' => 'Notifikasi',
+            'list' => ['Home', 'Notifikasi']
+        ];
+
+        $page = (object) [
+            'title' => 'Notifikasi'
+        ];
+
+        $activeMenu = 'notifikasi';
+        $user = Auth::user();
+
+        $notifikasi = NotifikasiModel::orderBy('created_at', 'desc')->get();
+
+        return view('mahasiswa.notifikasi.index', compact('breadcrumb', 'page', 'activeMenu', 'notifikasi'));
+    }
+
+    // Menampilkan detail notifikasi untuk mahasiswa
+    public function mahasiswaShow($id)
+    {
+        $breadcrumb = (object) [
+            'title' => 'Detail Notifikasi',
+            'list' => ['Home', 'Notifikasi', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail Notifikasi'
+        ];
+
+        $activeMenu = 'notifikasi';
+        $user = Auth::user();
+
+        $notifikasi = NotifikasiModel::where('id', $id)->firstOrFail();
+
+        return view('mahasiswa.notifikasi.show', compact('breadcrumb', 'page', 'activeMenu', 'notifikasi'));
+    }
+
+    // Menandai notifikasi sebagai dibaca (AJAX)
+    public function markAsRead($id)
+    {
+        $notifikasi = NotifikasiModel::where('id', $id)->firstOrFail();
+        return response()->json(['success' => true]);
     }
 }

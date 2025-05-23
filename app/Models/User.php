@@ -26,4 +26,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
+
+    // Relasi ke tabel mahasiswa (jika nim berasal dari tabel mahasiswa)
+    public function mahasiswa()
+    {
+        return $this->hasOne(MahasiswaModel::class, 'nim', 'nim');
+    }
 }

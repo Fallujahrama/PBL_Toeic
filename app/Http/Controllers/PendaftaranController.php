@@ -28,8 +28,12 @@ class PendaftaranController extends Controller
 
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
+         // Cek apakah mahasiswa sudah pernah melakukan pendaftaran berdasarkan nim
+        $nim = auth()->user()->nim; // Ambil NIM dari user yang sedang login
+        $hasRegistered = PendaftaranModel::where('nim', $nim)->exists();
+
         // Menampilkan halaman index pendaftaran dengan path yang benar
-        return view('mahasiswa.pendaftaran.index', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('mahasiswa.pendaftaran.index', compact('breadcrumb', 'page', 'activeMenu', 'hasRegistered'));
     }
 
     /**
@@ -39,6 +43,15 @@ class PendaftaranController extends Controller
      */
     public function createBaru()
     {
+        $nim = auth()->user()->username; // Ambil NIM dari user yang sedang login
+
+        // Cek apakah mahasiswa sudah pernah mendaftar berdasarkan nim
+        $hasRegistered = PendaftaranModel::where('nim', $nim)->exists();
+
+        if ($hasRegistered) {
+            return redirect()->route('pendaftaran.index')->with('error', 'You have already registered. Please use Second Registration.');
+        }
+
         // Mendapatkan data breadcrumb dan page title
         $breadcrumb = (object) [
             'title' => 'Pendaftaran Mahasiswa Baru',
@@ -118,7 +131,7 @@ class PendaftaranController extends Controller
     {
         // Validasi input mahasiswa baru
         $request->validate([
-            'nim' => 'required|integer|unique:mahasiswa,nim',  // Validasi NIM di tabel mahasiswa
+            // 'nim' => 'required|integer|unique:mahasiswa,nim',  // Validasi NIM di tabel mahasiswa
             'nama' => 'required|string|max:255',
             'nik' => 'required|string|max:20',
             'wa' => 'required|string|max:15',
@@ -132,9 +145,19 @@ class PendaftaranController extends Controller
             'pas_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+         // Ambil NIM dari user yang sedang login
+        $nim = auth()->user()->username;
+
+        // Cari data mahasiswa berdasarkan NIM
+        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan. Silakan hubungi admin.');
+        }
+
         // Menyimpan data mahasiswa tanpa kolom ktp, scan_ktm, pas_foto
-        $mahasiswa = new MahasiswaModel();
-        $mahasiswa->nim = $request->nim;
+        // $mahasiswa = new MahasiswaModel();
+        // $mahasiswa->nim = auth()->user()->username; // Ambil NIM dari username user yang sedang login
         $mahasiswa->nama = $request->nama;
         $mahasiswa->nik = $request->nik;
         $mahasiswa->no_whatsapp = $request->wa;
@@ -143,14 +166,15 @@ class PendaftaranController extends Controller
         $mahasiswa->program_studi = $request->prodi;
         $mahasiswa->jurusan = $request->jurusan;
         $mahasiswa->kampus = $request->kampus;
-        $mahasiswa->user_id = auth()->id(); // This will use the currently logged-in user's ID
+        // $mahasiswa->user_id = auth()->id(); // This will use the currently logged-in user's ID
         $mahasiswa->save();
 
         $pendaftaran = new PendaftaranModel();
-        $pendaftaran->nim = $request->nim;
+        $pendaftaran->nim = $nim;
         $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('ktp') : null;
         $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('scan_ktm') : null;
         $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pas_foto') : null;
+        $pendaftaran->file_bukti_pembayaran = null; // Tambahkan nilai default
 
         // Tambahkan ini untuk file_bukti_pembayaran
         // $pendaftaran->file_bukti_pembayaran = $request->hasFile('bukti_pembayaran') ? $request->file('bukti_pembayaran')->store('bukti_pembayaran') : null;
@@ -187,18 +211,18 @@ class PendaftaranController extends Controller
 
         // Check if the student already has a previous registration to reuse file paths
         $previousRegistration = PendaftaranModel::where('nim', $request->nim)->latest()->first();
-        
+
         // Provide default values for required fields
-        $ktpPath = $request->hasFile('file_ktp') 
-            ? $request->file('file_ktp')->store('file_ktp') 
+        $ktpPath = $request->hasFile('file_ktp')
+            ? $request->file('file_ktp')->store('file_ktp')
             : ($previousRegistration ? $previousRegistration->file_ktp : 'default/default_ktp.jpg');
-        
-        $ktmPath = $request->hasFile('file_ktm') 
-            ? $request->file('file_ktm')->store('file_ktm') 
+
+        $ktmPath = $request->hasFile('file_ktm')
+            ? $request->file('file_ktm')->store('file_ktm')
             : ($previousRegistration ? $previousRegistration->file_ktm : 'default/default_ktm.jpg');
-        
-        $fotoPath = $request->hasFile('file_foto') 
-            ? $request->file('file_foto')->store('file_foto') 
+
+        $fotoPath = $request->hasFile('file_foto')
+            ? $request->file('file_foto')->store('file_foto')
             : ($previousRegistration ? $previousRegistration->file_foto : 'default/default_foto.jpg');
 
         // Menyimpan data pendaftaran untuk mahasiswa lama

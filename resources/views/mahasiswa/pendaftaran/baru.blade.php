@@ -48,7 +48,7 @@
                         <label for="nim" class="form-control-label">NIM</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                            <input type="text" name="nim" id="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ old('nim') }}" required>
+                            <input type="text" name="nim" id="nim" class="form-control @error('nim') is-invalid @enderror" value="{{ auth()->user()->username }}" readonly>
                         </div>
                         @error('nim')
                         <small class="text-danger">{{ $message }}</small>

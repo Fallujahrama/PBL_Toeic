@@ -17,22 +17,32 @@
         {{ session('success') }}
     </div>
 @endif
-<div class="container-fluid"> 
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-12"> 
-            <div class="card shadow-sm animate-card" data-aos="fade-up"> 
+        <div class="col-12">
+            <div class="card shadow-sm animate-card" data-aos="fade-up">
                 <div class="card-header text-center">
-                    <h2 class="fw-bold">TOEIC Test Registration</h2> 
+                    <h2 class="fw-bold">TOEIC Test Registration</h2>
                     <p>Please select the registration type</p>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <!-- Mahasiswa Baru -->
                         <div class="col-md-6 mb-3" data-aos="fade-right" data-aos-delay="100">
-                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('pendaftaran.baru') }}'">
+                            <div class="card p-4 text-center h-100 shadow-sm animate-card"
+                                 style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer; {{ $hasRegistered ? 'pointer-events: none; opacity: 0.5;' : '' }}"
+                                 onclick="{{ $hasRegistered ? '' : "window.location='" . route('pendaftaran.baru') . "'" }}">
                                 <i class="fas fa-user-plus fa-3x mb-3 text-primary"></i>
                                 <h4>First Registration</h4>
                                 <p>First Registration Form</p>
+                                @if ($hasRegistered)
+                                    <small class="text-danger">You have already registered.</small>
+                                @endif
                             </div>
                         </div>
                         <!-- Mahasiswa Lama -->

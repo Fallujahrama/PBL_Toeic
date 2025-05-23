@@ -20,6 +20,11 @@ class UserModel extends Authenticatable
 
     protected $casts = ['password' => 'hashed'];
 
+    // Relasi ke tabel mahasiswa (jika nim berasal dari tabel mahasiswa)
+    public function mahasiswa()
+    {
+        return $this->hasOne(MahasiswaModel::class, 'nim', 'nim');
+    }
 
     // relasi ke tabel level
     public function level(): BelongsTo

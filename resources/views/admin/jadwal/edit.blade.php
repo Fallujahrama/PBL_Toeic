@@ -33,7 +33,7 @@
                 <form action="{{ route('jadwal.update', $jadwal->jadwal_id) }}" method="POST" enctype="multipart/form-data" id="jadwal-form">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="row">
                         <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
                             <div class="form-group">
@@ -47,7 +47,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
                             <div class="form-group">
                                 <label for="informasi" class="form-control-label">Informasi</label>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
@@ -95,7 +95,7 @@
                                 @if($jadwal->file_info)
                                     <div class="mt-2">
                                         <span class="text-info">File saat ini: </span>
-                                        <a href="{{ route('jadwal.show', $jadwal->jadwal_id) }}" class="text-info">
+                                        <a href="{{ route('jadwal.preview', $jadwal->jadwal_id) }}?t={{ time() }}" class="text-info" target="_blank">
                                             <i class="fas fa-eye me-1"></i>Lihat Detail
                                         </a>
                                     </div>
@@ -106,7 +106,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="400">
                         <a href="{{ route('jadwal.index') }}" class="btn btn-outline-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
@@ -129,7 +129,7 @@
         gap: 20px;
         margin-bottom: 10px;
     }
-    
+
     .document-preview {
         width: 150px;
         height: 150px;
@@ -142,31 +142,31 @@
         overflow: hidden;
         background-color: #f8f9fa;
     }
-    
+
     .document-preview.has-preview {
         border: none;
         background-color: transparent;
     }
-    
+
     .document-preview i {
         font-size: 2rem;
         color: #adb5bd;
         margin-bottom: 10px;
     }
-    
+
     .document-preview img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .document-upload-button {
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    
+
     .document-upload-input {
         display: none;
     }
@@ -181,11 +181,11 @@
             const file = this.files[0];
             if (file) {
                 let icon = '<i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>';
-                
+
                 if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
                     icon = '<i class="fas fa-file-word" style="font-size: 3rem; color: #3b82f6;"></i>';
                 }
-                
+
                 $('#file-preview').html(`
                     ${icon}
                     <span>${file.name}</span>

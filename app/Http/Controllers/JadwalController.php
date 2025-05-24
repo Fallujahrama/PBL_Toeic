@@ -65,13 +65,20 @@ class JadwalController extends Controller
         $jadwal = JadwalModel::findOrFail($id);
         $data = $request->only(['tanggal', 'informasi']);
 
+        // Periksa apakah file baru diunggah
         if ($request->hasFile('file_info')) {
+            // Hapus file lama jika ada
             if ($jadwal->file_info && Storage::disk('public')->exists($jadwal->file_info)) {
                 Storage::disk('public')->delete($jadwal->file_info);
+                \Log::info('File lama dihapus: ' . $jadwal->file_info);
             }
+
+            // Simpan file baru
             $data['file_info'] = $request->file('file_info')->store('jadwal', 'public');
+            \Log::info('File baru diunggah: ' . $data['file_info']);
         }
 
+        // Perbarui data jadwal
         $jadwal->update($data);
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui.');
@@ -94,28 +101,34 @@ class JadwalController extends Controller
     {
         $jadwal = JadwalModel::findOrFail($id);
 
+        // Periksa apakah file ada di database dan storage
         if (!$jadwal->file_info || !Storage::disk('public')->exists($jadwal->file_info)) {
-            abort(404);
+            return redirect()->route('jadwal.index')->with('error', 'File tidak ditemukan.');
         }
 
         $filePath = storage_path('app/public/' . $jadwal->file_info);
-        $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
         $headers = [
             'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"'
         ];
 
-        if ($ext === 'pdf') {
-            return response()->file($filePath, $headers);
-        } elseif (in_array($ext, ['doc', 'docx'])) {
-            return response(
-                '<p>Preview Word tidak tersedia. <a href="' . asset('storage/' . $jadwal->file_info) . '" target="_blank">Unduh file</a></p>',
-                200,
-                ['Content-Type' => 'text/html']
-            );
-        }
+        // Tampilkan file berdasarkan ekstensi
+        switch ($ext) {
+            case 'pdf':
+                return response()->file($filePath, $headers);
 
-        return abort(415, 'Format file tidak didukung.');
+            case 'doc':
+            case 'docx':
+                return response(
+                    '<p>Preview Word tidak tersedia. <a href="' . asset('storage/' . $jadwal->file_info) . '" target="_blank">Unduh file</a></p>',
+                    200,
+                    ['Content-Type' => 'text/html']
+                );
+
+            default:
+                return redirect()->route('jadwal.index')->with('error', 'Format file tidak didukung.');
+        }
     }
 
 
@@ -126,12 +139,12 @@ class JadwalController extends Controller
     public function mahasiswaIndex()
     {
         $breadcrumb = (object) [
-            'title' => 'Jadwal Ujian',
-            'list' => ['Home', 'Jadwal Ujian']
+            'title' => 'Jadwal Kegiatan TOEIC',
+            'list' => ['Home', 'Jadwal Kegiatan TOEIC']
         ];
 
         $page = (object) [
-            'title' => 'Jadwal Ujian TOEIC'
+            'title' => 'Jadwal Kegiatan TOEIC'
         ];
 
         $activeMenu = 'jadwal';
@@ -145,11 +158,11 @@ class JadwalController extends Controller
     {
         $breadcrumb = (object) [
             'title' => 'Detail Jadwal',
-            'list' => ['Home', 'Jadwal Ujian', 'Detail']
+            'list' => ['Home', 'Jadwal Kegiatan', 'Detail']
         ];
 
         $page = (object) [
-            'title' => 'Detail Jadwal Ujian TOEIC'
+            'title' => 'Detail Jadwal Kegiatan TOEIC'
         ];
 
         $activeMenu = 'jadwal';

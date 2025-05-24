@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function () {
 
         // Jadwal routes for students
         Route::get('/mahasiswa/jadwal', [JadwalController::class, 'mahasiswaIndex'])->name('mahasiswa.jadwal');
-        Route::get('/mahasiswa/jadwal/{id}', [JadwalController::class, 'mahasiswaShow'])->name('mahasiswa.jadwal.show');
+        Route::get('/mahasiswa/jadwal/preview/{id}', [JadwalController::class, 'previewFile'])->name('mahasiswa.jadwal.preview');
 
         // Hasil Ujian routes for students
         Route::get('/mahasiswa/hasil-ujian', [HasilUjianController::class, 'mahasiswaIndex'])->name('mahasiswa.hasil_ujian');

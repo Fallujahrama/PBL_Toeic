@@ -44,7 +44,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 @if (session('error'))
                     <div class="alert alert-danger mx-4 mt-3" role="alert" data-aos="fade-up">
                         <div class="d-flex">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="table-responsive p-0 mt-3">
                     <table class="table align-items-center mb-0">
                         <thead>
@@ -90,7 +90,7 @@
                                                 @php
                                                     $extension = pathinfo($item->file_info, PATHINFO_EXTENSION);
                                                 @endphp
-                                                
+
                                                 @if(strtolower($extension) === 'pdf')
                                                     <span class="badge bg-danger">
                                                         <i class="fas fa-file-pdf me-1"></i>PDF
@@ -111,16 +111,16 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('jadwal.show', $item->jadwal_id) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
+                                            <a href="{{ route('jadwal.preview', $item->jadwal_id) }}?t={{ time() }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview File">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a href="{{ route('jadwal.edit', $item->jadwal_id) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn" 
-                                                data-id="{{ $item->jadwal_id }}" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
+                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn"
+                                                data-id="{{ $item->jadwal_id }}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
                                                 title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -165,16 +165,16 @@
     .jadwal-row {
         transition: all 0.3s ease;
     }
-    
+
     .jadwal-row:hover {
         background-color: rgba(0, 0, 0, 0.03);
     }
-    
+
     .fade-in {
         opacity: 0;
         animation: fadeIn 0.5s ease-in-out forwards;
     }
-    
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -190,7 +190,7 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-        
+
         // Delete confirmation
         $('.delete-btn').on('click', function() {
             const id = $(this).data('id');

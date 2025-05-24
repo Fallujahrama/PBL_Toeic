@@ -110,8 +110,11 @@ class PendaftaranController extends Controller
 
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
+        // Get logged-in user's student data
+        $mahasiswa = MahasiswaModel::where('user_id', auth()->id())->first();
+
         // Menampilkan form pendaftaran untuk mahasiswa lama
-        return view('mahasiswa.pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('mahasiswa.pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu', 'mahasiswa'));
     }
 
     public function storeBaru(Request $request)

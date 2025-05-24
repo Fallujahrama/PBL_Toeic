@@ -181,8 +181,8 @@
                   icon: 'success',
                   title: 'Login Successful',
                   text: response.message,
-                  background: '#1f2937',
-                  color: '#e2e8f0',
+                  background: '#ffffff',
+                  color: '#1f2937',
                   confirmButtonColor: '#3b82f6'
                 }).then(() => {
                   window.location = response.redirect;
@@ -198,8 +198,8 @@
                   icon: 'error',
                   title: 'Login Failed',
                   text: response.message,
-                  background: '#1f2937',
-                  color: '#e2e8f0',
+                  background: '#ffffff',
+                  color: '#1f2937',
                   confirmButtonColor: '#3b82f6'
                 });
                 $('button[type="submit"]').html('Sign in');

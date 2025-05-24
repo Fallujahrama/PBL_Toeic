@@ -1229,11 +1229,7 @@ body {
     animation: pulse 2s infinite;
 }
 
-
-/* Fix for notification dropdown being overlapped */
-
 .dropdown-notification {
-    position: absolute !important;
     background-color: var(--light-card);
     border: 1px solid var(--light-border);
     border-radius: 0.5rem;
@@ -1241,12 +1237,6 @@ body {
     min-width: 320px !important;
     padding: 0 !important;
     overflow: hidden;
-    z-index: 9999 !important;
-    /* Ensure it's above other elements */
-    right: 0;
-    left: auto;
-    top: 100%;
-    margin-top: 0.5rem;
 }
 
 .dropdown-header {
@@ -1323,26 +1313,6 @@ body {
 
 /* User dropdown styles */
 
-
-/* Fix for user dropdown being overlapped */
-
-.dropdown-user {
-    position: absolute !important;
-    background-color: var(--light-card);
-    border: 1px solid var(--light-border);
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    min-width: 240px;
-    padding: 0;
-    overflow: hidden;
-    z-index: 9999 !important;
-    /* Ensure it's above other elements */
-    right: 0;
-    left: auto;
-    top: 100%;
-    margin-top: 0.5rem;
-}
-
 .user-dropdown {
     display: flex;
     align-items: center;
@@ -1377,6 +1347,16 @@ body {
 .user-name {
     color: var(--light-text);
     font-weight: 500;
+}
+
+.dropdown-user {
+    background-color: var(--light-card);
+    border: 1px solid var(--light-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 240px;
+    padding: 0;
+    overflow: hidden;
 }
 
 .user-header {
@@ -1624,7 +1604,10 @@ body {
     color: #f97316;
 }
 
-* Colorful badges */ .badge-primary {
+
+/* Colorful badges */
+
+.badge-primary {
     background-color: #4f46e5;
 }
 
@@ -1797,26 +1780,74 @@ body {
 }
 
 
-/* Fix for Bootstrap dropdowns */
+/* Pendaftaran Lama Specific Styles */
 
-.dropdown-menu.show {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 9999 !important;
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.document-preview {
+    height: 150px;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.document-preview.has-preview {
+    border-style: solid;
+}
+
+.document-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 
-/* Ensure navbar has proper z-index */
+/* White info card for pendaftaran lama */
 
-.navbar-main {
-    z-index: 1030 !important;
-    position: relative !important;
+.info-card-white {
+    background: #ffffff !important;
+    border: 1px solid var(--light-border);
+    border-radius: 15px;
+    color: var(--light-text);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+.info-card-white .card-header {
+    background: var(--light-hover);
+    border-bottom: 1px solid var(--light-border);
+    border-radius: 15px 15px 0 0;
+    color: var(--light-text);
+}
 
-/* Fix for dropdown positioning */
+.info-card-white .profile-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light-border);
+}
 
-.nav-item.dropdown {
-    position: relative !important;
+.info-card-white .profile-info-item:last-child {
+    border-bottom: none;
+}
+
+.info-card-white .profile-info-label {
+    font-weight: 600;
+    color: var(--light-text);
+}
+
+.info-card-white .profile-info-value {
+    font-weight: 500;
+    text-align: right;
+    color: var(--light-text);
 }

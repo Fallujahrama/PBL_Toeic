@@ -22,7 +22,7 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::middleware('auth')->group(function () {
     // Common routes for all authenticated users
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::get('/profile', [UserController::class, 'profilePage'])->name('profile');
     
     // Admin routes (AdmUpa and AdmITC)
     Route::middleware(['authorize:AdmUpa,AdmITC'])->group(function () {

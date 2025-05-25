@@ -64,8 +64,18 @@
             <hr class="dropdown-divider">
           </li>
           <li>
-            <a class="dropdown-item text-center view-all" href="{{ route('notifikasi.index') }}">
+            {{-- <a class="dropdown-item text-center view-all" href="{{ route('notifikasi.index') }}">
               <i class="fas fa-list me-1"></i> Lihat Semua Notifikasi
+            </a> --}}
+            @php
+                // Tentukan route berdasarkan role pengguna
+                $user = auth()->user(); // Ambil user yang sedang login
+                $notifikasiRoute = auth()->check() && $user && $user->hasRole('Mhs')
+                    ? route('mahasiswa.notifikasi')
+                    : route('notifikasi.index');
+            @endphp
+            <a class="dropdown-item text-center view-all" href="{{ $notifikasiRoute }}">
+            <i class="fas fa-list me-1"></i> Lihat Semua Notifikasi
             </a>
           </li>
         </ul>

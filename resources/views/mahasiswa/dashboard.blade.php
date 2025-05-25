@@ -22,11 +22,11 @@
                                             </div>
                                             <i class="fas fa-clipboard-list fa-3x"></i>
                                         </div>
-                                        <a href="{{ route('pendaftaran.index') }}" class="btn btn-light mt-3">Lihat Pendaftaran</a>
+                                        <a href="{{ route('pendaftaran.index') }}" class="btn btn-gradient mt-3">Lihat Pendaftaran</a>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4 mb-4">
                                 <div class="card bg-success text-white h-100">
                                     <div class="card-body">
@@ -37,11 +37,11 @@
                                             </div>
                                             <i class="fas fa-calendar-alt fa-3x"></i>
                                         </div>
-                                        <a href="{{ route('mahasiswa.jadwal') }}" class="btn btn-light mt-3">Lihat Jadwal</a>
+                                        <a href="{{ route('mahasiswa.jadwal') }}" class="btn btn-gradient mt-3">Lihat Jadwal</a>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4 mb-4">
                                 <div class="card bg-warning text-white h-100">
                                     <div class="card-body">
@@ -52,12 +52,12 @@
                                             </div>
                                             <i class="fas fa-chart-bar fa-3x"></i>
                                         </div>
-                                        <a href="{{ route('mahasiswa.hasil_ujian') }}" class="btn btn-light mt-3">Lihat Hasil</a>
+                                        <a href="{{ route('mahasiswa.hasil_ujian') }}" class="btn btn-gradient mt-3">Lihat Hasil</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <div class="card">
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header">

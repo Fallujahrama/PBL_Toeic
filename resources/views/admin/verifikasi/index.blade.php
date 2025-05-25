@@ -26,9 +26,9 @@
                         </div>
                         <h5 class="mb-0">Daftar Pendaftaran TOEIC</h5>
                     </div>
-                    <a href="{{ route('verifikasi.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
+                    {{-- <a href="{{ route('verifikasi.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
                         <i class="fas fa-plus me-2"></i>Tambah Pendaftaran
-                    </a>
+                    </a> --}}
                 </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="table-responsive p-0 mt-3">
                     <table class="table align-items-center mb-0">
                         <thead>
@@ -102,10 +102,10 @@
                                             <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn" 
-                                                data-id="{{ $pendaftaran->id_pendaftaran }}" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
+                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn"
+                                                data-id="{{ $pendaftaran->id_pendaftaran }}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
                                                 title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -113,7 +113,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            
+
                             @if(count($pendaftarans) == 0)
                                 <tr>
                                     <td colspan="6" class="text-center py-4">
@@ -164,13 +164,13 @@
         overflow: hidden;
         position: relative;
     }
-    
+
     .avatar-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .avatar-initial {
         width: 100%;
         height: 100%;
@@ -189,7 +189,7 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-        
+
         // Delete confirmation
         $('.delete-btn').on('click', function() {
             const id = $(this).data('id');

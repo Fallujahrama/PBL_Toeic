@@ -198,7 +198,7 @@
                             ->take(5)
                             ->get();
                     @endphp
-                    
+
                     @if($pendingVerifications->isEmpty())
                         <div class="text-center p-4">
                             <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
@@ -238,7 +238,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="text-center mt-3">
                             <a href="{{ route('verifikasi.index') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-list me-2"></i>Lihat Semua
@@ -271,28 +271,30 @@
                             <p class="text-xs text-muted mb-0">{{ Auth::user()->level->level_nama ?? 'Administrator' }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="info-item mb-2">
                         <span class="text-xs text-muted">Username:</span>
                         <span class="text-sm ms-2">{{ Auth::user()->username }}</span>
                     </div>
-                    
+
                     <div class="info-item mb-2">
-                        <span class="text-xs text-muted">Email:</span>
-                        <span class="text-sm ms-2">{{ Auth::user()->email }}</span>
+                        <span class="text-xs text-muted">No. WhatsApp:</span>
+                        <span class="text-sm ms-2">
+                            {{ Auth::user()->admin->no_hp ?? '-' }}
+                        </span>
                     </div>
-                    
+
                     <div class="info-item mb-3">
                         <span class="text-xs text-muted">Login Terakhir:</span>
                         <span class="text-sm ms-2">{{ \Carbon\Carbon::parse(Auth::user()->last_login ?? Auth::user()->created_at)->format('d M Y H:i') }}</span>
                     </div>
-                    
+
                     <a href="{{ route('profile') }}" class="btn btn-sm btn-outline-primary w-100">
                         <i class="fas fa-user-edit me-2"></i>Edit Profil
                     </a>
                 </div>
             </div>
-            
+
             <!-- Recent Notifications -->
             <div class="card card-hover">
                 <div class="card-header pb-0">
@@ -305,7 +307,7 @@
                     @php
                         $recentNotifications = App\Models\NotifikasiModel::latest()->take(3)->get();
                     @endphp
-                    
+
                     @if($recentNotifications->isEmpty())
                         <div class="text-center py-3">
                             <i class="fas fa-bell-slash fa-2x text-muted mb-3"></i>
@@ -324,7 +326,7 @@
                                 <p class="text-xs ms-4 mb-0">{{ Str::limit($notification->pesan, 60) }}</p>
                             </div>
                         @endforeach
-                        
+
                         <div class="text-center mt-3">
                             <a href="{{ route('notifikasi.index') }}" class="btn btn-sm btn-outline-danger w-100">
                                 <i class="fas fa-bell me-2"></i>Lihat Semua Notifikasi
@@ -335,7 +337,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Upcoming Schedule -->
     <div class="row">
         <div class="col-12">
@@ -348,12 +350,12 @@
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     @php
-                        $upcomingSchedules = App\Models\JadwalModel::where('tanggal', '>=', date('Y-m-d'))
+                        $upcomingSchedules = App\Models\JadwalModel::whereDate('tanggal', '>=', \Carbon\Carbon::today())
                             ->orderBy('tanggal', 'asc')
                             ->take(5)
                             ->get();
                     @endphp
-                    
+
                     @if($upcomingSchedules->isEmpty())
                         <div class="text-center p-4">
                             <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
@@ -365,58 +367,40 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Tanggal</th>
-                                        <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">Waktu</th>
-                                        <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">Tempat</th>
-                                        <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">Kuota</th>
                                         <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">Informasi</th>
+                                        <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">File</th>
                                         <th class="text-uppercase text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($upcomingSchedules as $jadwal)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="icon-shape icon-sm bg-gradient-success text-white rounded-circle shadow me-2 d-flex align-items-center justify-content-center">
-                                                        <i class="fas fa-calendar-day"></i>
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d M Y') }}</h6>
-                                                        <p class="text-xs text-secondary mb-0">
-                                                            {{ \Carbon\Carbon::parse($jadwal->tanggal)->diffForHumans() }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $jadwal->waktu_mulai ?? '08:00' }} - {{ $jadwal->waktu_selesai ?? '12:00' }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $jadwal->tempat ?? 'Lab Bahasa' }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $jadwal->kuota ?? '30' }} peserta</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0 text-truncate" style="max-width: 200px;">
-                                                    {{ $jadwal->informasi }}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('jadwal.show', $jadwal->jadwal_id) }}" class="btn btn-link text-info px-3 mb-0">
-                                                    <i class="fas fa-eye text-info me-2"></i>Detail
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                @foreach($upcomingSchedules as $jadwal)
+                                    <tr>
+                                        <td>
+                                            <span class="text-xs font-weight-bold mb-0">
+                                                {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d M Y') }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-xs font-weight-bold mb-0">
+                                                {{ $jadwal->informasi }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if($jadwal->file)
+                                                <a href="{{ asset('storage/'.$jadwal->file) }}" class="btn btn-sm btn-danger" target="_blank">PDF</a>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('jadwal.preview', $jadwal->jadwal_id) }}?t={{ time() }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail Jadwal">
+                                                <i class="fas fa-eye text-info me-2"></i>Detail Jadwal
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
-                        </div>
-                        
-                        <div class="text-center mt-3">
-                            <a href="{{ route('jadwal.index') }}" class="btn btn-sm btn-success">
-                                <i class="fas fa-calendar-alt me-2"></i>Kelola Jadwal
-                            </a>
                         </div>
                     @endif
                 </div>
@@ -435,20 +419,20 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .info-item {
         display: flex;
         align-items: center;
     }
-    
+
     .notification-item {
         transition: all 0.3s ease;
     }
-    
+
     .notification-item:hover {
         background-color: #f8f9fa;
     }
-    
+
     .icon-shape {
         display: inline-flex;
         align-items: center;

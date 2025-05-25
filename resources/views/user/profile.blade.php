@@ -24,6 +24,16 @@
                 </div>
                 <h5 class="mb-0">Profile Pengguna</h5>
             </div>
+            {{-- Tombol Edit Profil
+            @if(auth()->user()->hasRole('Mhs'))
+                <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-edit me-1"></i>Edit Profil
+                </a>
+            @else
+                <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-edit me-1"></i>Edit Profil
+                </a>
+            @endif --}}
 
             <div class="card-body">
                 <div class="row">
@@ -66,7 +76,7 @@
                                 <h6>Data User</h6>
                             </div>
                             <div class="card-body">
-                                <div class="profile-info-item fade-in fade-in-1 mb-3">
+                                <div class="profile-info-item mb-3">
                                     <div class="profile-info-label">
                                         <i class="fas fa-user-circle me-2"></i>Username
                                     </div>
@@ -75,14 +85,51 @@
                                     </div>
                                 </div>
 
-                                <div class="profile-info-item fade-in fade-in-2 mb-3">
-                                    <div class="profile-info-label">
-                                        <i class="fas fa-id-card me-2"></i>Nama
+                                @if(auth()->user()->hasRole('Mhs'))
+                                    {{-- Mahasiswa --}}
+                                    <div class="profile-info-item mb-3">
+                                        <div class="profile-info-label">
+                                            <i class="fas fa-id-card me-2"></i>Nama
+                                        </div>
+                                        <div class="profile-info-value">
+                                            {{ $user->mahasiswa->nama ?? 'Nama Belum Diisi' }}
+                                        </div>
                                     </div>
-                                    <div class="profile-info-value">
-                                        {{ $user->nama ?? 'Nama Belum Diisi' }}
+                                    <div class="profile-info-item mb-3">
+                                        <div class="profile-info-label">
+                                            <i class="fas fa-phone me-2"></i>No. WhatsApp
+                                        </div>
+                                        <div class="profile-info-value">
+                                            {{ $user->mahasiswa->no_whatsapp ?? '-' }}
+                                        </div>
                                     </div>
-                                </div>
+
+                                    <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Edit Profil
+                                    </a>
+                                @else
+                                    {{-- Admin --}}
+                                    <div class="profile-info-item mb-3">
+                                        <div class="profile-info-label">
+                                            <i class="fas fa-id-card me-2"></i>Nama
+                                        </div>
+                                        <div class="profile-info-value">
+                                            {{ $user->admin->nama ?? 'Nama Belum Diisi' }}
+                                        </div>
+                                    </div>
+                                    <div class="profile-info-item mb-3">
+                                        <div class="profile-info-label">
+                                            <i class="fas fa-phone me-2"></i>No. WhatsApp
+                                        </div>
+                                        <div class="profile-info-value">
+                                            {{ $user->admin->no_hp ?? '-' }}
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Edit Profil
+                                    </a>
+                                @endif
 
                             </div>
                         </div>

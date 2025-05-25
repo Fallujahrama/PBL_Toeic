@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('verifikasi', VerifikasiController::class);
         Route::post('/verifikasi/{id}/verify', [VerifikasiController::class, 'verify'])->name('verifikasi.verify');
         Route::get('/verifikasi/{id}/download/{type}', [VerifikasiController::class, 'downloadFile'])->name('verifikasi.download');
+
+        // Profile routes
+        Route::get('/admin/profile/edit', [UserController::class, 'editAdmin'])->name('admin.profile.edit');
+        Route::post('/admin/profile/update', [UserController::class, 'updateAdmin'])->name('admin.profile.update');
     });
 
     // Student routes (Mhs)
@@ -78,5 +82,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/mahasiswa/notifikasi', [NotifikasiController::class, 'mahasiswaIndex'])->name('mahasiswa.notifikasi');
         Route::get('/mahasiswa/notifikasi/{id}', [NotifikasiController::class, 'mahasiswaShow'])->name('mahasiswa.notifikasi.show');
         Route::post('/mahasiswa/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('mahasiswa.notifikasi.read');
+
+        // Profile routes
+        Route::get('/mahasiswa/profile/edit', [UserController::class, 'editMahasiswa'])->name('mahasiswa.profile.edit');
+        Route::post('/mahasiswa/profile/update', [UserController::class, 'updateMahasiswa'])->name('mahasiswa.profile.update');
     });
 });

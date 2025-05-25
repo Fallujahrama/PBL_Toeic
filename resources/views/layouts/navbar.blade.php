@@ -32,7 +32,7 @@
 
       {{-- Notifikasi --}}
       <li class="nav-item dropdown me-3">
-        <a class="nav-link text-body p-0 position-relative" id="dropdownNotifikasi" data-bs-toggle="dropdown" href="#" role="button">
+        <a class="nav-link text-body p-0 position-relative" id="dropdownNotifikasi" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="icon-button">
             <i class="far fa-bell"></i>
             @php $jumlahNotif = NotifikasiModel::count(); @endphp

@@ -18,7 +18,7 @@ class HasilUjianController extends Controller
     {
         $hasilUjian = HasilUjianModel::orderBy('tanggal', 'desc')->get();
         $activeMenu = 'hasil_ujian';
-        
+
         return view('admin.hasil_ujian.index', compact('hasilUjian', 'activeMenu'));
     }
 
@@ -48,13 +48,13 @@ class HasilUjianController extends Controller
         ]);
 
         $data = $request->only(['tanggal', 'jadwal_id']);
-        
+
         if ($request->hasFile('file_nilai')) {
             $data['file_nilai'] = $request->file('file_nilai')->store('hasil_ujian', 'public');
         }
-        
+
         HasilUjianModel::create($data);
-        
+
         return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil diupload.');
     }
 
@@ -68,7 +68,7 @@ class HasilUjianController extends Controller
     {
         $hasil_ujian = HasilUjianModel::findOrFail($id);
         $activeMenu = 'hasil_ujian';
-        
+
         return view('admin.hasil-ujian.show', compact('hasil_ujian', 'activeMenu'));
     }
 
@@ -82,7 +82,7 @@ class HasilUjianController extends Controller
     {
         $hasil_ujian = HasilUjianModel::findOrFail($id);
         $activeMenu = 'hasil_ujian';
-        
+
         return view('admin.hasil-ujian.edit', compact('hasil_ujian', 'activeMenu'));
     }
 
@@ -100,21 +100,21 @@ class HasilUjianController extends Controller
             'jadwal_id' => 'required|exists:jadwal,jadwal_id',
             'file_nilai' => 'nullable|file|mimes:pdf,doc,docx,xlsx|max:2048',
         ]);
-        
+
         $hasil_ujian = HasilUjianModel::findOrFail($id);
         $data = $request->only(['tanggal', 'jadwal_id']);
-        
+
         if ($request->hasFile('file_nilai')) {
             // Delete old file if exists
             if ($hasil_ujian->file_nilai && Storage::disk('public')->exists($hasil_ujian->file_nilai)) {
                 Storage::disk('public')->delete($hasil_ujian->file_nilai);
             }
-            
+
             $data['file_nilai'] = $request->file('file_nilai')->store('hasil_ujian', 'public');
         }
-        
+
         $hasil_ujian->update($data);
-        
+
         return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil diperbarui.');
     }
 
@@ -127,17 +127,17 @@ class HasilUjianController extends Controller
     public function destroy($id)
     {
         $hasil_ujian = HasilUjianModel::findOrFail($id);
-        
+
         // Delete file if exists
         if ($hasil_ujian->file_nilai && Storage::disk('public')->exists($hasil_ujian->file_nilai)) {
             Storage::disk('public')->delete($hasil_ujian->file_nilai);
         }
-        
+
         $hasil_ujian->delete();
-        
+
         return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil dihapus.');
     }
-    
+
     /**
      * Display a listing of hasil ujian for mahasiswa.
      *
@@ -157,20 +157,9 @@ class HasilUjianController extends Controller
 
         $activeMenu = 'hasil_ujian';  // Menandakan menu aktif
 
-        // Get current user's NIM
-        $user = Auth::user();
-        $mahasiswa = $user->mahasiswa;
-        
-        if ($mahasiswa) {
-            // Mengambil data hasil ujian yang akan ditampilkan untuk mahasiswa ini
-            $hasil_ujian = HasilUjianModel::whereHas('jadwal', function($query) use ($mahasiswa) {
-                $query->whereHas('pendaftaran', function($q) use ($mahasiswa) {
-                    $q->where('nim', $mahasiswa->nim);
-                });
-            })->orderBy('tanggal', 'desc')->get();
-        } else {
-            $hasil_ujian = collect(); // Empty collection if no mahasiswa record
-        }
+        // Ambil semua hasil ujian yang ada (file yang diupload admin)
+        $hasil_ujian = HasilUjianModel::with('jadwal')->orderBy('tanggal', 'desc')->get();
+
 
         // Menampilkan halaman index hasil ujian untuk mahasiswa
         return view('mahasiswa.hasil_ujian.index', compact('breadcrumb', 'page', 'activeMenu', 'hasil_ujian'));
@@ -199,7 +188,7 @@ class HasilUjianController extends Controller
         // Get current user's NIM
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
-        
+
         if (!$mahasiswa) {
             return redirect()->route('mahasiswa.hasil_ujian')->with('error', 'Data mahasiswa tidak ditemukan');
         }

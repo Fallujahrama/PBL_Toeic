@@ -132,7 +132,16 @@
                         <label for="jurusan" class="form-control-label">Jurusan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-book"></i></span>
-                            <input type="text" name="jurusan" id="jurusan" class="form-control @error('jurusan') is-invalid @enderror" value="{{ old('jurusan') }}" required>
+                            <select name="jurusan" id="jurusan" class="form-control @error('jurusan') is-invalid @enderror" required>
+                                <option value="">-- Pilih Jurusan --</option>
+                                <option value="Akuntansi" {{ old('jurusan') == 'Akuntansi' ? 'selected' : '' }}>Akuntansi</option>
+                                <option value="Administrasi Niaga" {{ old('jurusan') == 'Administrasi Niaga' ? 'selected' : '' }}>Administrasi Niaga</option>
+                                <option value="Teknik Elektro" {{ old('jurusan') == 'Teknik Elektro' ? 'selected' : '' }}>Teknik Elektro</option>
+                                <option value="Teknik Mesin" {{ old('jurusan') == 'Teknik Mesin' ? 'selected' : '' }}>Teknik Mesin</option>
+                                <option value="Teknik Kimia" {{ old('jurusan') == 'Teknik Kimia' ? 'selected' : '' }}>Teknik Kimia</option>
+                                <option value="Teknik Sipil" {{ old('jurusan') == 'Teknik Sipil' ? 'selected' : '' }}>Teknik Sipil</option>
+                                <option value="Teknologi Informasi" {{ old('jurusan') == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
+                            </select>
                         </div>
                         @error('jurusan')
                         <small class="text-danger">{{ $message }}</small>

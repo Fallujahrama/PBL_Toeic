@@ -131,6 +131,9 @@
                             class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/ktp') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
+                            </a>
                         </div>
                     </div>
                     @endif
@@ -148,6 +151,9 @@
                             <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'ktm']) }}"
                             class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
                                 <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/ktm') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
@@ -167,6 +173,9 @@
                             class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
                                 <i class="fas fa-eye"></i>
                             </a>
+                            <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/foto') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
+                            </a>
                         </div>
                     </div>
                     @endif
@@ -184,6 +193,9 @@
                             <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'bukti']) }}"
                             class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
                                 <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/bukti') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>

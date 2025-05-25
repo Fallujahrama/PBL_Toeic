@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
         // Verification routes
         Route::resource('verifikasi', VerifikasiController::class);
         Route::post('/verifikasi/{id}/verify', [VerifikasiController::class, 'verify'])->name('verifikasi.verify');
+        Route::get('/verifikasi/{id}/preview/{jenis}', [VerifikasiController::class, 'preview'])->name('dokumen.preview');
         Route::get('/verifikasi/{id}/download/{type}', [VerifikasiController::class, 'downloadFile'])->name('verifikasi.download');
 
         // Profile routes

@@ -10,9 +10,9 @@
       </div>
     </a>
   </div>
-  
+
   <hr class="horizontal dark mt-0">
-  
+
   <div class="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       @php
@@ -20,9 +20,9 @@
         $isAdmin = in_array($userRole, ['AdmUpa', 'AdmITC']);
         $isStudent = $userRole === 'Mhs';
       @endphp
-      
+
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('/') || request()->is('admin') || request()->is('mahasiswa') ? 'active' : '' }}" 
+        <a class="nav-link {{ request()->is('admin/dashboard') || request()->is('mahasiswa/dashboard') ? 'active' : '' }}"
            href="{{ $isAdmin ? route('admin.dashboard') : route('mahasiswa.dashboard') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
@@ -43,7 +43,7 @@
       @endif
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*jadwal*') ? 'active' : '' }}" 
+        <a class="nav-link {{ request()->is('*jadwal*') ? 'active' : '' }}"
            href="{{ $isAdmin ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-calendar-alt text-success text-sm opacity-10"></i>
@@ -53,7 +53,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*hasil-ujian*') || request()->is('*hasil_ujian*') ? 'active' : '' }}" 
+        <a class="nav-link {{ request()->is('*hasil-ujian*') || request()->is('*hasil_ujian*') ? 'active' : '' }}"
            href="{{ $isAdmin ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-chart-bar text-info text-sm opacity-10"></i>
@@ -69,14 +69,14 @@
             <i class="fas fa-check-circle text-success text-sm opacity-10"></i>
           </div>
           <span class="nav-link-text ms-1">Verifikasi</span>
-          
+
           @php
             // Count pending verifications
             $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
                 ->orWhereNull('status_verifikasi')
                 ->count();
           @endphp
-          
+
           @if($pendingCount > 0)
             <span class="verification-badge">{{ $pendingCount }}</span>
           @endif
@@ -85,7 +85,7 @@
       @endif
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}" 
+        <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}"
            href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-bell text-danger text-sm opacity-10"></i>
@@ -106,7 +106,7 @@
           <span class="nav-link-text ms-1">Profil</span>
         </a>
       </li>
-      
+
       <li class="nav-item">
         <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -120,7 +120,7 @@
       </li>
     </ul>
   </div>
-  
+
   <div class="sidenav-footer mx-3 mt-3">
     <div class="card card-plain shadow-none" id="sidenavCard">
       <div class="card-body text-center p-3 w-100 pt-0">

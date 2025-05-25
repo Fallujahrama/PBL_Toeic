@@ -34,4 +34,9 @@ class MahasiswaModel extends Model
     {
         return $this->hasOne(PendaftaranModel::class, 'nim', 'nim');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'nim', 'username'); // Relasi berdasarkan nim
+    }
 }

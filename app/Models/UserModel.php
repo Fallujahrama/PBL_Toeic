@@ -23,13 +23,18 @@ class UserModel extends Authenticatable
     // Relasi ke tabel mahasiswa (jika nim berasal dari tabel mahasiswa)
     public function mahasiswa()
     {
-        return $this->hasOne(MahasiswaModel::class, 'nim', 'nim');
+        return $this->hasOne(MahasiswaModel::class, 'nim', 'username');
     }
 
     // relasi ke tabel level
     public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+    }
+
+    public function admin()
+    {
+        return $this->hasOne(AdminModel::class, 'user_id', 'id_user');
     }
 
     // Get the role (level_kode) of the user

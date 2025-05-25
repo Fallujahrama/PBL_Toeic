@@ -80,7 +80,7 @@
                                         <i class="fas fa-id-card me-2"></i>Nama
                                     </div>
                                     <div class="profile-info-value">
-                                        {{ $user->nama }}
+                                        {{ $user->nama ?? 'Nama Belum Diisi' }}
                                     </div>
                                 </div>
 

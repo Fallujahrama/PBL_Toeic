@@ -169,6 +169,11 @@ class PendaftaranController extends Controller
         // $mahasiswa->user_id = auth()->id(); // This will use the currently logged-in user's ID
         $mahasiswa->save();
 
+        // Perbarui nama di tabel m_user
+        $user = auth()->user(); // Ambil data user yang sedang login
+        $user->nama = $request->nama; // Perbarui kolom nama
+        $user->save();
+
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $nim;
         $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('ktp') : null;

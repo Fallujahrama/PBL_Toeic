@@ -31,12 +31,33 @@ class UserSeeder extends Seeder
                 'level_id' => 3,
             ],
             [
-                'username' => '241760002',
+                'username' => '2441760002',
+                'password' => Hash::make('12345'),
+                'level_id' => 3,
+            ],
+            [
+                'username' => '2441760003',
+                'password' => Hash::make('12345'),
+                'level_id' => 3,
+            ],
+            [
+                'username' => '2441760004',
+                'password' => Hash::make('12345'),
+                'level_id' => 3,
+            ],
+            [
+                'username' => '2441760005',
                 'password' => Hash::make('12345'),
                 'level_id' => 3,
             ],
         ];
 
-        DB::table('m_user')->insert($data);
+        foreach ($data as $user) {
+            DB::table('m_user')->updateOrInsert(
+                ['username' => $user['username']], // Kondisi untuk mencocokkan data
+                $user // Data yang akan diperbarui atau ditambahkan
+            );
+        }
+        // DB::table('m_user')->insert($data);
     }
 }

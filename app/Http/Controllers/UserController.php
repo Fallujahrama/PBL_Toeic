@@ -16,6 +16,22 @@ class UserController extends Controller
             return redirect('/login')->with('error', 'Silahkan login terlebih dahulu');
         }
 
+        // Jika admin, ambil nama dari tabel admin
+        if ($user->level_id == 1 || $user->level_id == 2) {
+            $admin = $user->admin()->first(); // Relasi ke tabel admin
+            $user->nama = $admin ? $admin->nama : $user->username; // Gunakan nama admin jika ada
+        }
+
+        // Jika mahasiswa, ambil nama dari tabel mahasiswa
+        if ($user->level_id == 3) {
+            $mahasiswa = $user->mahasiswa; // Relasi ke tabel mahasiswa
+            if ($mahasiswa && $mahasiswa->nama) {
+                $user->nama = $mahasiswa->nama; // Gunakan nama mahasiswa jika ada
+            } else {
+                $user->nama = "Nama Belum Diisi"; // Tampilkan default jika nama tidak ditemukan
+            }
+        }
+
         $breadcrumb = (object) [
             'title' => 'Profile User',
             'list' => ['Home', 'Profile']

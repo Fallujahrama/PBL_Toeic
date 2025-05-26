@@ -23,6 +23,7 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::middleware('auth')->group(function () {
     // Common routes for all authenticated users
     Route::get('/profile', [UserController::class, 'profilePage'])->name('profile');
+    Route::post('/user/editPhoto', [UserController::class, 'editPhoto'])->name('user.editPhoto');
 
     // Admin routes (AdmUpa and AdmITC)
     Route::middleware(['authorize:AdmUpa,AdmITC'])->group(function () {
@@ -31,7 +32,10 @@ Route::middleware('auth')->group(function () {
         })->name('admin.dashboard');
 
         // Notifications routes
-        Route::resource('notifications', NotifikasiController::class);
+        // Route::resource('notifications', NotifikasiController::class);
+        Route::prefix('admin')->group(function () {
+            Route::resource('notifications', NotifikasiController::class);
+        });
         Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
 
         // Jadwal routes
@@ -81,7 +85,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/mahasiswa/hasil-ujian/{id}', [HasilUjianController::class, 'mahasiswaShow'])->name('mahasiswa.hasil_ujian.show');
 
         // Notifications routes for students
-        Route::get('/mahasiswa/notifikasi', [NotifikasiController::class, 'mahasiswaIndex'])->name('mahasiswa.notifikasi');
+        Route::get('/mahasiswa/notifikasi', [NotifikasiController::class, 'mahasiswaIndex'])->name('mahasiswa.notifikasi.index');
         Route::get('/mahasiswa/notifikasi/{id}', [NotifikasiController::class, 'mahasiswaShow'])->name('mahasiswa.notifikasi.show');
         Route::post('/mahasiswa/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('mahasiswa.notifikasi.read');
 

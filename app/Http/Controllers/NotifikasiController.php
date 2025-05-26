@@ -16,7 +16,7 @@ class NotifikasiController extends Controller
     public function index()
     {
         $notifications = NotifikasiModel::orderBy('tanggal', 'desc')->get();
-        $activeMenu = 'notifikasi';
+        $activeMenu = 'notifications';
 
         return view('admin.notifications.index', compact('notifications', 'activeMenu'));
     }
@@ -25,7 +25,7 @@ class NotifikasiController extends Controller
     public function show($id)
     {
         $notification = NotifikasiModel::findOrFail($id);
-        $activeMenu = 'notifikasi';
+        $activeMenu = 'notifications';
 
         return view('admin.notifications.show', compact('notification', 'activeMenu'));
     }
@@ -33,7 +33,7 @@ class NotifikasiController extends Controller
     // Form tambah notifikasi (admin)
     public function create()
     {
-        $activeMenu = 'notifikasi';
+        $activeMenu = 'notifications';
         return view('admin.notifications.create', compact('activeMenu'));
     }
 
@@ -47,14 +47,14 @@ class NotifikasiController extends Controller
 
         NotifikasiModel::create($request->all());
 
-        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
+        return redirect()->route('notifikasi.index')->with('success', 'Notifikasi berhasil ditambahkan.');
     }
 
     // Form edit notifikasi (admin)
     public function edit($id)
     {
         $notification = NotifikasiModel::findOrFail($id);
-        $activeMenu = 'notifikasi';
+        $activeMenu = 'notifications';
 
         return view('admin.notifications.edit', compact('notification', 'activeMenu'));
     }
@@ -70,7 +70,7 @@ class NotifikasiController extends Controller
         $notification = NotifikasiModel::findOrFail($id);
         $notification->update($request->all());
 
-        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil diperbarui.');
+        return redirect()->route('notifikasi.index')->with('success', 'Notifikasi berhasil diperbarui.');
     }
 
     // Hapus notifikasi (admin)
@@ -79,7 +79,7 @@ class NotifikasiController extends Controller
         $notification = NotifikasiModel::findOrFail($id);
         $notification->delete();
 
-        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil dihapus.');
+        return redirect()->route('notifikasi.index')->with('success', 'Notifikasi berhasil dihapus.');
     }
 
 

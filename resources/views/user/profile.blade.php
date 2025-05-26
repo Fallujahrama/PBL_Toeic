@@ -24,16 +24,6 @@
                 </div>
                 <h5 class="mb-0">Profile Pengguna</h5>
             </div>
-            {{-- Tombol Edit Profil
-            @if(auth()->user()->hasRole('Mhs'))
-                <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                    <i class="fas fa-edit me-1"></i>Edit Profil
-                </a>
-            @else
-                <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                    <i class="fas fa-edit me-1"></i>Edit Profil
-                </a>
-            @endif --}}
 
             <div class="card-body">
                 <div class="row">
@@ -49,7 +39,7 @@
                             </div>
 
                             {{-- Form Upload Foto --}}
-                            <form action="{{ url('/user/editPhoto') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+                            <form action="{{ route('user.editPhoto') }}" method="POST" enctype="multipart/form-data" class="mt-3">
                                 @csrf
                                 <div class="form-group">
                                     <div class="input-group">

@@ -71,7 +71,7 @@
                 // Tentukan route berdasarkan role pengguna
                 $user = auth()->user(); // Ambil user yang sedang login
                 $notifikasiRoute = auth()->check() && $user && $user->hasRole('Mhs')
-                    ? route('mahasiswa.notifikasi')
+                    ? route('mahasiswa.notifikasi.index')
                     : route('notifikasi.index');
             @endphp
             <a class="dropdown-item text-center view-all" href="{{ $notifikasiRoute }}">

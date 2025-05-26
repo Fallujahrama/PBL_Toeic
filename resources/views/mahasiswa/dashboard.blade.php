@@ -67,7 +67,7 @@
                                     <div class="card-body">
                                         <div class="list-group">
                                             <!-- Placeholder for notifications -->
-                                            <a href="{{ route('mahasiswa.notifikasi') }}" class="list-group-item list-group-item-action">
+                                            <a href="{{ route('mahasiswa.notifikasi.index') }}" class="list-group-item list-group-item-action">
                                                 <div class="d-flex w-100 justify-content-between">
                                                     <h5 class="mb-1">Lihat semua notifikasi</h5>
                                                     <i class="fas fa-arrow-right"></i>

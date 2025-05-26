@@ -86,7 +86,7 @@
 
       <li class="nav-item">
         <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}"
-           href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi') }}">
+           href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-bell text-danger text-sm opacity-10"></i>
           </div>

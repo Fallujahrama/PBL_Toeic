@@ -59,7 +59,7 @@
                             @foreach ($pendaftarans as $pendaftaran)
                                 <tr class="pendaftaran-row fade-in" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
                                     <td class="ps-4">
-                                        <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->id }}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->id_pendaftaran }}</p>
                                     </td>
                                     <td class="ps-4">
                                         <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->nim }}</p>

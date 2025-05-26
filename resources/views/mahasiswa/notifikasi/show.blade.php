@@ -43,14 +43,14 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="isi" class="form-control-label">Isi Notifikasi</label>
-                                <div class="p-3 border rounded mt-2">
-                                    {!! $notifikasi->isi !!}
+                                <div class="p-3 border rounded mt-2" style="white-space: pre-line">
+                                    {!! nl2br(e($notifikasi->pesan)) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    @if($notifikasi->lampiran_path)
+
+                    {{-- @if($notifikasi->lampiran_path)
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -63,11 +63,11 @@
                             </div>
                         </div>
                     </div>
-                    @endif
-                    
+                    @endif --}}
+
                     <div class="row mt-4">
                         <div class="col-md-12">
-                            <a href="{{ route('mahasiswa.notifikasi') }}" class="btn btn-secondary">Kembali</a>
+                            <a href="{{ route('mahasiswa.notifikasi.index') }}" class="btn btn-secondary">Kembali</a>
                         </div>
                     </div>
                 </div>

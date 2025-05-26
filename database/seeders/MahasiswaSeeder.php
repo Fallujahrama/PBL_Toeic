@@ -29,7 +29,43 @@ class MahasiswaSeeder extends Seeder
             [
                 'nim' => '2441760002',
                 'user_id' => 4,
-                'nama' => 'Mahasiswa B',
+                'nama' => null,
+                'jurusan' => null,
+                'alamat_asal' => null,
+                'nik' => null,
+                'no_whatsapp' => null,
+                'kampus' => null,
+                'program_studi' => null,
+                'alamat_saat_ini' => null,
+            ],
+            [
+                'nim' => '2441760003',
+                'user_id' => 6,
+                'nama' => null,
+                'jurusan' => null,
+                'alamat_asal' => null,
+                'nik' => null,
+                'no_whatsapp' => null,
+                'kampus' => null,
+                'program_studi' => null,
+                'alamat_saat_ini' => null,
+            ],
+            [
+                'nim' => '2441760004',
+                'user_id' => 7,
+                'nama' => null,
+                'jurusan' => null,
+                'alamat_asal' => null,
+                'nik' => null,
+                'no_whatsapp' => null,
+                'kampus' => null,
+                'program_studi' => null,
+                'alamat_saat_ini' => null,
+            ],
+            [
+                'nim' => '2441760005',
+                'user_id' => 8,
+                'nama' => null,
                 'jurusan' => null,
                 'alamat_asal' => null,
                 'nik' => null,
@@ -40,6 +76,12 @@ class MahasiswaSeeder extends Seeder
             ],
         ];
 
-        DB::table('mahasiswa')->insert($data);
+        foreach ($data as $mahasiswa) {
+            DB::table('mahasiswa')->updateOrInsert(
+                ['nim' => $mahasiswa['nim']], // Kondisi untuk mencocokkan data
+                $mahasiswa // Data yang akan diperbarui atau ditambahkan
+            );
+        }
+        // DB::table('mahasiswa')->insert($data);
     }
 }

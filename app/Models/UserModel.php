@@ -20,6 +20,11 @@ class UserModel extends Authenticatable
 
     protected $casts = ['password' => 'hashed'];
 
+    // Relasi ke tabel mahasiswa (jika nim berasal dari tabel mahasiswa)
+    public function mahasiswa()
+    {
+        return $this->hasOne(MahasiswaModel::class, 'nim', 'username');
+    }
 
     // relasi ke tabel level
     public function level(): BelongsTo
@@ -27,26 +32,20 @@ class UserModel extends Authenticatable
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
 
-    //mendapat nama role
-    public function getRoleName(): string
+    public function admin()
     {
-        return $this->level->level_nama;
+        return $this->hasOne(AdminModel::class, 'user_id', 'id_user');
     }
 
-    // cek apakah user memiliki role tertentu
-    public function hasRole($role) : bool
-    {
-        return $this->level->level_kode == $role;
-    }
-
-    //mendapat kode role
+    // Get the role (level_kode) of the user
     public function getRole()
     {
-        return $this->level->level_kode;
+        return $this->level->level_kode ?? null;
     }
 
-    public function mahasiswa()
+    // Check if user has a specific role
+    public function hasRole($role)
     {
-        return $this->hasOne(MahasiswaModel::class, 'nim', 'username'); // Relasi berdasarkan NIM
+        return $this->getRole() === $role;
     }
 }

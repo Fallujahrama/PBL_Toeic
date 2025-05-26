@@ -4,28 +4,50 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AuthorizeUser
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string  ...$roles
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        // $user = $request->user(); // ambil data user yg login
-        // if ($user->hasRole($role)) { // cek apakah user memiliki role yg diinginkan
-        //     return $next($request);
-        // }
-
-        $user_role = $request->user()->getRole();  // Ambil data level_kode dari user yang login
-        if (in_array($user_role, $roles)) { // Cek apakah level_kode user ada di dalam array roles
-            return $next($request); // Jika ada, maka lanjutkan request
+        if (!Auth::check()) {
+            return redirect('login');
         }
 
-        //jika tidak punya role
-        abort(403, 'Forbidden, kamu tidak punya akses ke halaman ini');
+        $user = Auth::user();
+
+        // If user doesn't have a level or level_kode
+        if (!$user->level || !$user->level->level_kode) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // If no specific roles are required, just check if user is authenticated
+        if (empty($roles)) {
+            return $next($request);
+        }
+
+        // Check if user has one of the required roles
+        foreach ($roles as $role) {
+            if ($user->level->level_kode === $role) {
+                return $next($request);
+            }
+        }
+
+        // If user doesn't have any of the required roles, redirect based on their role
+        if (in_array($user->level->level_kode, ['AdmUpa', 'AdmITC'])) {
+            return redirect('/admin/dashboard');
+        } else if ($user->level->level_kode === 'Mhs') {
+            return redirect('/mahasiswa/pendaftaran');
+        }
+
+        abort(403, 'Unauthorized action.');
     }
 }

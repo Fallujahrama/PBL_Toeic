@@ -12,4 +12,9 @@ class JadwalModel extends Model
     protected $table = 'jadwal'; // Nama tabel
     protected $primaryKey = 'jadwal_id'; // Primary key
     protected $fillable = ['tanggal', 'informasi', 'file_info']; // Kolom yang dapat diisi
+
+    public function pendaftaran()
+    {
+        return $this->hasMany(PendaftaranModel::class, 'jadwal_id', 'jadwal_id');
+    }
 }

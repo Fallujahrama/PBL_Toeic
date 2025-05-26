@@ -38,7 +38,6 @@ Route::middleware(['auth'])->group(function () {
     //mengajukan surat pernyataan
     Route::get('/surat', [SuratPernyataanController::class, 'index'])->name('surat.index');
     Route::post('/surat', [SuratPernyataanController::class, 'store'])->name('surat.store');
-    Route::get('/surat/show/{id}', [SuratPernyataanController::class, 'show'])->name('surat.show');
     Route::delete('/surat/{id}', [SuratPernyataanController::class, 'destroy'])->name('surat.destroy');
 
 });

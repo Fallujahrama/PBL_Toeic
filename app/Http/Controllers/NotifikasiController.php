@@ -47,7 +47,7 @@ class NotifikasiController extends Controller
 
         NotifikasiModel::create($request->all());
 
-        return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
+        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
     }
 
     // Form edit notifikasi (admin)
@@ -70,7 +70,7 @@ class NotifikasiController extends Controller
         $notification = NotifikasiModel::findOrFail($id);
         $notification->update($request->all());
 
-        return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil diperbarui.');
+        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil diperbarui.');
     }
 
     // Hapus notifikasi (admin)
@@ -79,7 +79,7 @@ class NotifikasiController extends Controller
         $notification = NotifikasiModel::findOrFail($id);
         $notification->delete();
 
-        return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil dihapus.');
+        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil dihapus.');
     }
 
 

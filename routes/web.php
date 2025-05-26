@@ -31,7 +31,8 @@ Route::middleware('auth')->group(function () {
         })->name('admin.dashboard');
 
         // Notifications routes
-        Route::resource('notifikasi', NotifikasiController::class);
+        Route::resource('notifications', NotifikasiController::class);
+        Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
 
         // Jadwal routes
         Route::resource('jadwal', JadwalController::class);

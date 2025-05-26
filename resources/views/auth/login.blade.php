@@ -6,21 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Login - TOEIC Registration System</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  
+
   <!-- Icons -->
   <link href="{{ asset('adminlte/assets/css/nucleo-icons.css') }}" rel="stylesheet" />
   <link href="{{ asset('adminlte/assets/css/nucleo-svg.css') }}" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  
+
   <!-- CSS -->
   <link id="pagestyle" href="{{ asset('adminlte/assets/css/argon-dashboard.min.css?v=2.1.0') }}" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  
+
   <!-- Custom CSS -->
-  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">  
+  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -126,7 +126,7 @@
       easing: 'ease-in-out',
       once: true
     });
-    
+
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -140,7 +140,7 @@
       }).on('blur', function() {
         $(this).parent().removeClass('focused');
       });
-      
+
       $("#form-login").validate({
         rules: {
           username: {
@@ -181,8 +181,8 @@
                   icon: 'success',
                   title: 'Login Successful',
                   text: response.message,
-                  background: '#1f2937',
-                  color: '#e2e8f0',
+                  background: '#ffffff',
+                  color: '#1f2937',
                   confirmButtonColor: '#3b82f6'
                 }).then(() => {
                   window.location = response.redirect;
@@ -198,8 +198,8 @@
                   icon: 'error',
                   title: 'Login Failed',
                   text: response.message,
-                  background: '#1f2937',
-                  color: '#e2e8f0',
+                  background: '#ffffff',
+                  color: '#1f2937',
                   confirmButtonColor: '#3b82f6'
                 });
                 $('button[type="submit"]').html('Sign in');

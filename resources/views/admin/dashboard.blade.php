@@ -164,7 +164,7 @@
                             </div>
                             <i class="fas fa-chevron-right text-xs"></i>
                         </a>
-                        <a href="{{ route('notifikasi.index') }}" class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center">
+                        <a href="{{ route('notifications.index') }}" class="list-group-item list-group-item-action border-0 d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="d-flex align-items-center">
                                     <div class="icon-shape icon-xs bg-gradient-danger text-white rounded-circle shadow me-2 d-flex align-items-center justify-content-center">

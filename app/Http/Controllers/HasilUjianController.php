@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HasilUjianModel;
+use App\Models\JadwalModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +31,8 @@ class HasilUjianController extends Controller
     public function create()
     {
         $activeMenu = 'hasil_ujian';
-        return view('admin.hasil-ujian.create', compact('activeMenu'));
+        $jadwal = JadwalModel::orderBy('tanggal', 'desc')->get(); // Ambil data jadwal
+        return view('admin.hasil_ujian.create', compact('activeMenu', 'jadwal'));
     }
 
     /**

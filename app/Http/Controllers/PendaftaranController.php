@@ -123,8 +123,11 @@ class PendaftaranController extends Controller
 
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
+        // Get logged-in user's student data
+        $mahasiswa = MahasiswaModel::where('user_id', auth()->id())->first();
+
         // Menampilkan form pendaftaran untuk mahasiswa lama
-        return view('mahasiswa.pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('mahasiswa.pendaftaran.lama', compact('breadcrumb', 'page', 'activeMenu', 'mahasiswa'));
     }
 
     public function storeBaru(Request $request)
@@ -197,7 +200,7 @@ class PendaftaranController extends Controller
         // Validasi input mahasiswa lama
         $request->validate([
             'nim' => 'required|integer|exists:mahasiswa,nim', // Memastikan mahasiswa sudah terdaftar
-            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTP opsional
             'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTM opsional
             'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240', // File Foto opsional
@@ -207,8 +210,8 @@ class PendaftaranController extends Controller
         // $buktiPembayaranPath = $request->file('bukti_pembayaran')->store('bukti_pembayaran');
 
         // Just store the file but don't assign it to the model:
-        if ($request->hasFile('bukti_pembayaran')) {
-            $request->file('bukti_pembayaran')->store('bukti_pembayaran');
+        if ($request->hasFile('file_bukti_pembayaran')) {
+            $request->file('file_bukti_pembayaran')->store('file_bukti_pembayaran');
         }
 
         // Mendapatkan data mahasiswa
@@ -230,13 +233,17 @@ class PendaftaranController extends Controller
             ? $request->file('file_foto')->store('file_foto')
             : ($previousRegistration ? $previousRegistration->file_foto : 'default/default_foto.jpg');
 
+        $buktiPembayaranPath = $request->hasFile('file_bukti_pembayaran')
+            ? $request->file('file_bukti_pembayaran')->store('file_bukti_pembayaran')
+            : ($previousRegistration ? $previousRegistration->file_bukti_pembayaran : 'default/default_bukti_pembayaran.jpg');
+
         // Menyimpan data pendaftaran untuk mahasiswa lama
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $mahasiswa->nim;
-        // $pendaftaran->file_bukti_pembayaran = $buktiPembayaranPath;
         $pendaftaran->file_ktp = $ktpPath; // Jika ada, jika tidak null maka akan disimpan
         $pendaftaran->file_ktm = $ktmPath; // Jika ada, jika tidak null maka akan disimpan
         $pendaftaran->file_foto = $fotoPath; // Jika ada, jika tidak null maka akan disimpan
+        $pendaftaran->file_bukti_pembayaran = $buktiPembayaranPath;
         $pendaftaran->save();
 
         return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');

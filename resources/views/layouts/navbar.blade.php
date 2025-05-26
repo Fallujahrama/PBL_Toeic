@@ -46,7 +46,7 @@
           <div class="notification-list">
             @foreach (NotifikasiModel::latest()->take(5)->get() as $notification)
               <li class="notification-item">
-                <a class="dropdown-item border-radius-md" href="{{ route('notifikasi.show', $notification->id) }}">
+                <a class="dropdown-item border-radius-md" href="{{ route('notifications.show', $notification->id) }}">
                   <div class="d-flex py-1">
                     <div class="notification-icon">
                       <i class="fas fa-bell"></i>

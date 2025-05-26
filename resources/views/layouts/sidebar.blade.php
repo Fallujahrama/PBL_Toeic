@@ -10,20 +10,20 @@
       </div>
     </a>
   </div>
-  
+
   <hr class="horizontal dark mt-0">
-  
+
   <div class="collapse navbar-collapse w-auto h-auto" id="sidenav-collapse-main">
     <ul class="navbar-nav">
       @php
-        $userRole = Auth::user()->level->level_kode ?? null;
-        $isAdmin = in_array($userRole, ['AdmUpa', 'AdmITC']);
-        $isStudent = $userRole === 'Mhs';
+      $userRole = Auth::user()->level->level_kode ?? null;
+      $isAdmin = in_array($userRole, ['AdmUpa', 'AdmITC']);
+      $isStudent = $userRole === 'Mhs';
       @endphp
-      
+
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('/') || request()->is('admin') || request()->is('mahasiswa') ? 'active' : '' }}" 
-           href="{{ $isAdmin ? route('admin.dashboard') : route('mahasiswa.dashboard') }}">
+        <a class="nav-link {{ request()->is('/') || request()->is('admin') || request()->is('mahasiswa') ? 'active' : '' }}"
+          href="{{ $isAdmin ? route('admin.dashboard') : route('mahasiswa.dashboard') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
           </div>
@@ -43,8 +43,8 @@
       @endif
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*jadwal*') ? 'active' : '' }}" 
-           href="{{ $isAdmin ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
+        <a class="nav-link {{ request()->is('*jadwal*') ? 'active' : '' }}"
+          href="{{ $isAdmin ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-calendar-alt text-success text-sm opacity-10"></i>
           </div>
@@ -53,8 +53,8 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*hasil-ujian*') || request()->is('*hasil_ujian*') ? 'active' : '' }}" 
-           href="{{ $isAdmin ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
+        <a class="nav-link {{ request()->is('*hasil-ujian*') || request()->is('*hasil_ujian*') ? 'active' : '' }}"
+          href="{{ $isAdmin ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-chart-bar text-info text-sm opacity-10"></i>
           </div>
@@ -69,30 +69,34 @@
             <i class="fas fa-check-circle text-success text-sm opacity-10"></i>
           </div>
           <span class="nav-link-text ms-1">Verifikasi</span>
-          
+
+
+
           @php
-            // Count pending verifications
-            $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
-                ->orWhereNull('status_verifikasi')
-                ->count();
+          // Count pending verifications
+          $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
+          ->orWhereNull('status_verifikasi')
+          ->count();
           @endphp
-          
+
+
           @if($pendingCount > 0)
-            <span class="verification-badge">{{ $pendingCount }}</span>
+          <span class="verification-badge">{{ $pendingCount }}</span>
           @endif
         </a>
-      </li>
-      @endif
-
       <li class="nav-item">
-        <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}" 
-           href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi') }}">
+        <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}"
+          href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-bell text-danger text-sm opacity-10"></i>
           </div>
           <span class="nav-link-text ms-1">Notifikasi</span>
         </a>
       </li>
+      </li>
+      @endif
+
+
 
       <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Akun</h6>
@@ -106,21 +110,9 @@
           <span class="nav-link-text ms-1">Profil</span>
         </a>
       </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-sign-out-alt text-warning text-sm opacity-10"></i>
-          </div>
-          <span class="nav-link-text ms-1">Logout</span>
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-          @csrf
-        </form>
-      </li>
     </ul>
   </div>
-  
+
   <div class="sidenav-footer mx-3 mt-3">
     <div class="card card-plain shadow-none" id="sidenavCard">
       <div class="card-body text-center p-3 w-100 pt-0">
@@ -130,11 +122,9 @@
         </div>
       </div>
     </div>
-    <a href="{{ $isAdmin ? route('admin.dashboard') : route('mahasiswa.dashboard') }}" class="btn btn-primary btn-sm w-100 mb-3">
-      <i class="fas fa-home me-2"></i> Dashboard
-    </a>
+
     <a class="btn btn-dark btn-sm w-100" href="{{ route('logout') }}"
-       onclick="event.preventDefault(); document.getElementById('logout-form-footer').submit();">
+      onclick="event.preventDefault(); document.getElementById('logout-form-footer').submit();">
       <i class="fas fa-sign-out-alt me-2"></i> Logout
     </a>
     <form id="logout-form-footer" action="{{ route('logout') }}" method="POST" class="d-none">

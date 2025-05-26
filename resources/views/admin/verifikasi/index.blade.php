@@ -96,19 +96,9 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn" 
-                                                data-id="{{ $pendaftaran->id_pendaftaran }}" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
-                                                title="Hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -132,28 +122,6 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Apakah Anda yakin ingin menghapus pendaftaran ini?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                <form id="deleteForm" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Hapus</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 
 @push('css')
@@ -190,12 +158,6 @@
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
         
-        // Delete confirmation
-        $('.delete-btn').on('click', function() {
-            const id = $(this).data('id');
-            $('#deleteForm').attr('action', `{{ url('verifikasi') }}/${id}`);
-            $('#deleteModal').modal('show');
-        });
     });
 </script>
 @endpush

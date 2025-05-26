@@ -47,7 +47,7 @@ class NotifikasiController extends Controller
 
         NotifikasiModel::create($request->all());
 
-        return redirect()->route('notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
+        return redirect()->route('admin.notifications.index')->with('success', 'Notifikasi berhasil ditambahkan.');
     }
 
     // Form edit notifikasi (admin)

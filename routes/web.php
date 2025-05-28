@@ -12,14 +12,19 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\HasilUjianController;
 use App\Http\Controllers\VerifikasiController;
 
+
+// Landing page route
+Route::get('/', function () {
+    return view('landing');
+})->name('landing');
+
 // Authentication routes
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Welcome page
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-
+// Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::middleware('auth')->group(function () {
     // Common routes for all authenticated users
     Route::get('/profile', [UserController::class, 'profilePage'])->name('profile');

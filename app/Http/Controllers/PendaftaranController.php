@@ -310,13 +310,6 @@ class PendaftaranController extends Controller
             'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'file_bukti_pembayaran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
-        ]);
-
-        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
-
-        if (!$mahasiswa) {
-            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
         ];
 
         // Add bukti pembayaran validation only for second registrations
@@ -369,8 +362,6 @@ class PendaftaranController extends Controller
                 }
                 $pendaftaran->file_foto = $request->file('file_foto')->store('pendaftaran/foto', 'public');
             }
-
-            if ($request->hasFile('file_bukti_pembayaran')) {
 
             // Only process bukti pembayaran for second registrations
             if ($isSecondRegistration && $request->hasFile('file_bukti_pembayaran')) {

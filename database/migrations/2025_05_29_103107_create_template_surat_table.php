@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifikasi', function (Blueprint $table) {
-            $table->id();
-            $table->date('tanggal');
-            $table->text('pesan');
+        Schema::create('template_surat', function (Blueprint $table) {
+            $table->id('id_template');
+            $table->string('nama_template');
+            $table->string('file_template');
+            $table->text('deskripsi')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifikasi');
+        Schema::dropIfExists('template_surat');
     }
 };

@@ -32,8 +32,8 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain" data-aos="fade-right">
                 <div class="card-header pb-0 text-start">
-                  <div class="login-logo">
-                    <i class="fas fa-language"></i>
+                  <div class="login-logo text-center mb-3">
+                    <img src="{{ asset('img/Tregon.jpeg') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 100px;">
                   </div>
                   <h4 class="font-weight-bolder text-center">TOEIC Registration</h4>
                   <p class="mb-0 text-center">Enter your credentials to access your account</p>

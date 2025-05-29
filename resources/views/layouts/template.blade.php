@@ -72,7 +72,7 @@
                 easing: 'ease-in-out',
                 once: true
             });
-            
+
             // CSRF Token for AJAX Requests
             $.ajaxSetup({
                 headers: {

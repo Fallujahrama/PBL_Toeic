@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col-lg-4 d-none d-lg-block text-center">
-                <i class="fas fa-language fa-6x opacity-8"></i>
+                <img src="{{ asset('img/Tregon.jpeg') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 150px;">
             </div>
         </div>
     </div>
@@ -108,8 +108,154 @@
             </div>
         </div>
     </div>
+    @elseif(Auth::check() && Auth::user()->level_id == 2)
+    <!-- AdminITC Dashboard - Only shown to AdminITC users -->
+    <div class="row mt-4">
+        <div class="col-12 mb-4" data-aos="fade-up">
+            <div class="card animate-card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <div class="icon icon-shape icon-sm bg-gradient-primary text-white rounded-circle shadow me-2">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h6 class="mb-0">Dashboard Admin ITC</h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="card bg-gradient-primary text-white p-4">
+                                <div class="d-flex">
+                                    <div>
+                                        <h5 class="text-white mb-0 opacity-8">Total Mahasiswa</h5>
+                                        <h2 class="text-white mb-0">{{ \App\Models\MahasiswaModel::count() }}</h2>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="icon icon-shape bg-white text-primary rounded-circle shadow">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="card bg-gradient-success text-white p-4">
+                                <div class="d-flex">
+                                    <div>
+                                        <h5 class="text-white mb-0 opacity-8">Jurusan</h5>
+                                        <h2 class="text-white mb-0">{{ \App\Models\MahasiswaModel::distinct('jurusan')->count('jurusan') }}</h2>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="icon icon-shape bg-white text-success rounded-circle shadow">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-gradient-warning text-white p-4">
+                                <div class="d-flex">
+                                    <div>
+                                        <h5 class="text-white mb-0 opacity-8">Kampus</h5>
+                                        <h2 class="text-white mb-0">{{ \App\Models\MahasiswaModel::distinct('kampus')->count('kampus') }}</h2>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="icon icon-shape bg-white text-warning rounded-circle shadow">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow-sm">
+                                <div class="card-header pb-0">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="mb-0">Akses Cepat Data Mahasiswa</h6>
+                                        <a href="{{ route('admin.mahasiswa.index') }}" class="btn btn-primary btn-sm ms-auto">
+                                            <i class="fas fa-table me-2"></i>Lihat Semua Data
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card p-3 border h-100 animate-card" style="cursor: pointer;" onclick="window.location='{{ route('admin.mahasiswa.index') }}?kampus=Politeknik+Negeri+Padang'">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon icon-shape icon-md bg-gradient-primary text-white rounded-circle shadow me-3">
+                                                        <i class="fas fa-filter"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1">Filter Kampus</h6>
+                                                        <p class="text-sm mb-0">Lihat data mahasiswa berdasarkan kampus</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="card p-3 border h-100 animate-card" style="cursor: pointer;" onclick="window.location='{{ route('admin.mahasiswa.index') }}'">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="icon icon-shape icon-md bg-gradient-success text-white rounded-circle shadow me-3">
+                                                        <i class="fas fa-search"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1">Cari Mahasiswa</h6>
+                                                        <p class="text-sm mb-0">Cari data mahasiswa berdasarkan NIM atau nama</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kampus</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Jumlah Mahasiswa</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach(\App\Models\MahasiswaModel::select('kampus', \DB::raw('count(*) as total'))->groupBy('kampus')->orderBy('total', 'desc')->limit(5)->get() as $kampusData)
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex px-2 py-1">
+                                                            <div class="icon icon-shape icon-sm bg-gradient-primary text-white rounded-circle shadow me-2 d-flex align-items-center justify-content-center">
+                                                                <i class="fas fa-university"></i>
+                                                            </div>
+                                                            <div class="d-flex flex-column justify-content-center">
+                                                                <h6 class="mb-0 text-sm">{{ $kampusData->kampus }}</h6>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-gradient-success">{{ $kampusData->total }} mahasiswa</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('admin.mahasiswa.index') }}?kampus={{ urlencode($kampusData->kampus) }}" class="btn btn-link text-primary mb-0">
+                                                            <i class="fas fa-eye me-2"></i>Lihat
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @else
-    <!-- Admin Dashboard Summary - Only shown to admins -->
+    <!-- Admin Dashboard Summary - Only shown to AdmUpa -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">
             <div class="card animate-card">

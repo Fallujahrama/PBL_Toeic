@@ -32,7 +32,7 @@
             <div class="card-body">
                 <form action="{{ route('hasil_ujian.store') }}" method="POST" enctype="multipart/form-data" id="hasil-ujian-form">
                     @csrf
-                    
+
                     <div class="row">
                         <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
                             <div class="form-group">
@@ -46,7 +46,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
                             <div class="form-group">
                                 <label for="jadwal_id" class="form-control-label">Jadwal</label>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="400">
                         <a href="{{ route('hasil_ujian.index') }}" class="btn btn-outline-secondary me-2">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
@@ -112,9 +112,9 @@
         gap: 20px;
         margin-bottom: 10px;
     }
-    
+
     .document-preview {
-        width: 150px;
+        width: 120px;
         height: 150px;
         border: 2px dashed #ccc;
         border-radius: 10px;
@@ -125,31 +125,31 @@
         overflow: hidden;
         background-color: #f8f9fa;
     }
-    
+
     .document-preview.has-preview {
         border: none;
         background-color: transparent;
     }
-    
+
     .document-preview i {
         font-size: 2rem;
         color: #adb5bd;
         margin-bottom: 10px;
     }
-    
+
     .document-preview img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .document-upload-button {
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    
+
     .document-upload-input {
         display: none;
     }
@@ -162,19 +162,30 @@
         // Set default date to today
         const today = new Date().toISOString().split('T')[0];
         $('#tanggal').val(today);
-        
+
         // Preview for file
         $('#file_nilai').change(function() {
             const file = this.files[0];
             if (file) {
+                const allowed = ['pdf', 'doc', 'docx', 'xlsx'];
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (!allowed.includes(ext)) {
+                    alert('Format file tidak diizinkan! Hanya PDF, DOC, DOCX, XLSX.');
+                    $(this).val(''); // reset input
+                    $('#file-preview').html(`
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF, DOC, DOCX, XLSX</span>
+                    `);
+                    $('#file-preview').removeClass('has-preview');
+                    $(this).next('label').html('<i class="fas fa-upload me-2"></i>Upload File');
+                    return;
+                }
                 let icon = '<i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>';
-                
-                if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                if (ext === 'doc' || ext === 'docx') {
                     icon = '<i class="fas fa-file-word" style="font-size: 3rem; color: #3b82f6;"></i>';
-                } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                } else if (ext === 'xlsx') {
                     icon = '<i class="fas fa-file-excel" style="font-size: 3rem; color: #10b981;"></i>';
                 }
-                
                 $('#file-preview').html(`
                     ${icon}
                     <span>${file.name}</span>

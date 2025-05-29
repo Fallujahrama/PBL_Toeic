@@ -59,6 +59,61 @@
         </div>
     </div>
 
+      <!-- Tabel History Pendaftaran -->
+    @if($registrations->count() > 0)
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-12" data-aos="fade-up" data-aos-delay="500">
+            <div class="card shadow-sm animate-card" style="background-color: var(--dark-card); border: 1px solid var(--dark-border);">
+                <div class="card-header">
+                    <h5><i class="fas fa-history me-2 text-info"></i>Registration History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="registrationTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Registration Date</th>
+                                    <th>Registration Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($registrations as $index => $registration)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $registration->created_at->format('d M Y H:i') }}</td>
+                                    <td>
+                                        @if($index == $registrations->count() - 1)
+                                            <span class="badge bg-primary">First Registration</span>
+                                        @else
+                                            <span class="badge bg-warning">Second Registration</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($registration->created_at != $registration->updated_at)
+                                            <span class="badge bg-info">Updated</span>
+                                        @else
+                                            <span class="badge bg-success">Submitted</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('mahasiswa.data.edit', $registration->nim) }}" class="btn btn-sm btn-outline-warning" title="Edit Data">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Penjelasan di bawah card -->
     <div class="row justify-content-center mt-4">
         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
@@ -74,5 +129,193 @@
             </div>
         </div>
     </div>
+
+  
 </div>
+
+<!-- Modal for Registration Details -->
+<div class="modal fade" id="registrationDetailModal" tabindex="-1" aria-labelledby="registrationDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationDetailModalLabel">Registration Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="registrationDetailContent">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('css')
+<style>
+.table th {
+    background-color: var(--dark-header);
+    color: white;
+    border: none;
+}
+
+.table td {
+    border-color: var(--dark-border);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.animate-card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+@endpush
+
+@push('js')
+<script>
+function viewRegistration(id) {
+    // Show loading state
+    const content = `
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading registration details...</p>
+        </div>
+    `;
+    document.getElementById('registrationDetailContent').innerHTML = content;
+    new bootstrap.Modal(document.getElementById('registrationDetailModal')).show();
+
+    fetch(`/pendaftaran/${id}/show`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                const registration = data.data;
+                const mahasiswa = registration.mahasiswa;
+                const content = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Student Information</h6>
+                            <p><strong>NIM:</strong> ${registration.nim}</p>
+                            ${mahasiswa ? `
+                                <p><strong>Name:</strong> ${mahasiswa.nama}</p>
+                                <p><strong>Study Program:</strong> ${mahasiswa.program_studi}</p>
+                                <p><strong>Department:</strong> ${mahasiswa.jurusan}</p>
+                                <p><strong>Campus:</strong> ${mahasiswa.kampus}</p>
+                            ` : ''}
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-info mb-3"><i class="fas fa-calendar me-2"></i>Registration Details</h6>
+                            <p><strong>Registration Date:</strong> ${new Date(registration.created_at).toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}</p>
+                            <p><strong>Last Updated:</strong> ${new Date(registration.updated_at).toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-success mb-3"><i class="fas fa-file-alt me-2"></i>Uploaded Files</h6>
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <div class="text-center p-2 border rounded">
+                                        <i class="fas fa-id-card fa-2x ${registration.file_ktp ? 'text-success' : 'text-muted'} mb-2"></i>
+                                        <p class="mb-1"><strong>KTP</strong></p>
+                                        <span class="badge ${registration.file_ktp ? 'bg-success' : 'bg-secondary'}">
+                                            ${registration.file_ktp ? 'Uploaded' : 'Not uploaded'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="text-center p-2 border rounded">
+                                        <i class="fas fa-id-badge fa-2x ${registration.file_ktm ? 'text-success' : 'text-muted'} mb-2"></i>
+                                        <p class="mb-1"><strong>KTM</strong></p>
+                                        <span class="badge ${registration.file_ktm ? 'bg-success' : 'bg-secondary'}">
+                                            ${registration.file_ktm ? 'Uploaded' : 'Not uploaded'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="text-center p-2 border rounded">
+                                        <i class="fas fa-user-circle fa-2x ${registration.file_foto ? 'text-success' : 'text-muted'} mb-2"></i>
+                                        <p class="mb-1"><strong>Photo</strong></p>
+                                        <span class="badge ${registration.file_foto ? 'bg-success' : 'bg-secondary'}">
+                                            ${registration.file_foto ? 'Uploaded' : 'Not uploaded'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="text-center p-2 border rounded">
+                                        <i class="fas fa-receipt fa-2x ${registration.file_bukti_pembayaran ? 'text-success' : 'text-muted'} mb-2"></i>
+                                        <p class="mb-1"><strong>Payment Proof</strong></p>
+                                        <span class="badge ${registration.file_bukti_pembayaran ? 'bg-success' : 'bg-secondary'}">
+                                            ${registration.file_bukti_pembayaran ? 'Uploaded' : 'Not uploaded'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('registrationDetailContent').innerHTML = content;
+            } else {
+                throw new Error(data.message || 'Unknown error occurred');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const errorContent = `
+                <div class="text-center text-danger">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h5>Error Loading Details</h5>
+                    <p>${error.message || 'Failed to load registration details. Please try again.'}</p>
+                </div>
+            `;
+            document.getElementById('registrationDetailContent').innerHTML = errorContent;
+        });
+}
+
+// Initialize DataTable if available
+$(document).ready(function() {
+    if ($.fn.DataTable) {
+        $('#registrationTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            order: [[1, 'desc']], // Sort by date descending
+            columnDefs: [
+                { orderable: false, targets: [4] } // Disable sorting for Actions column
+            ]
+        });
+    }
+});
+</script>
+@endpush
 @endsection

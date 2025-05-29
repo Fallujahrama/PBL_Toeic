@@ -16,7 +16,7 @@ class LoginController extends Controller
             if ($user->level && $user->level->level_kode == 'AdmUpa') {
                 return redirect('/admin/dashboard');
             } elseif ($user->level && $user->level->level_kode == 'AdmITC') {
-                return redirect('/');
+                return redirect()->route('welcome');
             } elseif ($user->level && $user->level->level_kode == 'Mhs') {
                 return redirect('/mahasiswa/pendaftaran');
             }
@@ -46,7 +46,7 @@ class LoginController extends Controller
                         if ($levelKode == 'AdmUpa') {
                             $redirectUrl = '/admin/dashboard';
                         } elseif ($levelKode == 'AdmITC') {
-                            $redirectUrl = '/';
+                            $redirectUrl = route('welcome');
                         } elseif ($levelKode == 'Mhs') {
                             $redirectUrl = '/mahasiswa/dashboard';
                         }

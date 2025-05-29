@@ -7,6 +7,7 @@ use App\Models\MahasiswaModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PendaftaranController extends Controller
 {
@@ -203,18 +204,24 @@ class PendaftaranController extends Controller
     {
         // Validasi input mahasiswa lama
         $request->validate([
-            'nim' => 'required|integer|exists:mahasiswa,nim', // Memastikan mahasiswa sudah terdaftar
             'file_bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTP opsional
-            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTM opsional
-            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240', // File Foto opsional
+            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
         ]);
 
-        // Mendapatkan data mahasiswa
-        $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
+        // Get NIM from logged-in user
+        $nim = auth()->user()->username;
+
+        // Get student data
+        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan. Silakan hubungi admin.');
+        }
 
         // Check if the student already has a previous registration to reuse file paths
-        $previousRegistration = PendaftaranModel::where('nim', $request->nim)->latest()->first();
+        $previousRegistration = PendaftaranModel::where('nim', $nim)->latest()->first();
 
         // Provide default values for required fields
         $ktpPath = $request->hasFile('file_ktp')
@@ -235,7 +242,7 @@ class PendaftaranController extends Controller
 
         // Menyimpan data pendaftaran untuk mahasiswa lama
         $pendaftaran = new PendaftaranModel();
-        $pendaftaran->nim = $mahasiswa->nim;
+        $pendaftaran->nim = $nim;
         $pendaftaran->file_ktp = $ktpPath;
         $pendaftaran->file_ktm = $ktmPath;
         $pendaftaran->file_foto = $fotoPath;
@@ -278,15 +285,28 @@ class PendaftaranController extends Controller
      */
     public function updateMahasiswa(Request $request, $nim)
     {
-        $request->validate([
+        // Get the mahasiswa first
+        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
+        // Check if this is a second registration
+        $nim = auth()->user()->username;
+        $registrationCount = PendaftaranModel::where('nim', $nim)->count();
+        $isSecondRegistration = $registrationCount > 1;
+
+        // Base validation rules
+        $validationRules = [
             'nama' => 'required|string|max:255',
             'jurusan' => 'required|string|max:255',
-            'program_studi' => 'required|string|max:255',
+            'prodi' => 'required|string|max:255',
             'kampus' => 'required|string|max:255',
             'alamat_asal' => 'required|string',
-            'alamat_saat_ini' => 'required|string',
-            'nik' => 'required|string|max:16|unique:mahasiswa,nik,' . $nim . ',nim',
-            'no_whatsapp' => 'required|string|max:15',
+            'alamat_sekarang' => 'required|string',
+            'nik' => 'required|string|max:16',
+            'wa' => 'required|string|max:15',
             'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
@@ -297,19 +317,31 @@ class PendaftaranController extends Controller
 
         if (!$mahasiswa) {
             return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
+        ];
+
+        // Add bukti pembayaran validation only for second registrations
+        if ($isSecondRegistration) {
+            $validationRules['file_bukti_pembayaran'] = 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240';
         }
 
-        // Update student data
+        $request->validate($validationRules);
+
+        // Update student data with correct field mapping
         $mahasiswa->update([
             'nama' => $request->nama,
             'jurusan' => $request->jurusan,
-            'program_studi' => $request->program_studi,
+            'program_studi' => $request->prodi, // Form field 'prodi' maps to 'program_studi'
             'kampus' => $request->kampus,
             'alamat_asal' => $request->alamat_asal,
-            'alamat_saat_ini' => $request->alamat_saat_ini,
+            'alamat_saat_ini' => $request->alamat_sekarang, // Form field 'alamat_sekarang' maps to 'alamat_saat_ini'
             'nik' => $request->nik,
-            'no_whatsapp' => $request->no_whatsapp,
+            'no_whatsapp' => $request->wa, // Form field 'wa' maps to 'no_whatsapp'
         ]);
+
+        // Update user name in m_user table
+        $user = auth()->user();
+        $user->nama = $request->nama;
+        $user->save();
 
         // Update registration files if uploaded
         $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
@@ -339,6 +371,9 @@ class PendaftaranController extends Controller
             }
 
             if ($request->hasFile('file_bukti_pembayaran')) {
+
+            // Only process bukti pembayaran for second registrations
+            if ($isSecondRegistration && $request->hasFile('file_bukti_pembayaran')) {
                 // Delete old file if exists
                 if ($pendaftaran->file_bukti_pembayaran && Storage::disk('public')->exists($pendaftaran->file_bukti_pembayaran)) {
                     Storage::disk('public')->delete($pendaftaran->file_bukti_pembayaran);

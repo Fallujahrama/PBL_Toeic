@@ -40,6 +40,13 @@
             </div>
         @endif
 
+        @php
+            // Check if this is a second registration (more than one registration exists)
+            $nim = auth()->user()->username;
+            $registrationCount = App\Models\PendaftaranModel::where('nim', $nim)->count();
+            $isSecondRegistration = $registrationCount > 1;
+        @endphp
+
         <form action="{{ route('mahasiswa.data.update', $mahasiswa->nim) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -87,7 +94,7 @@
                     <div class="form-group">
                         <label for="wa" class="form-control-label">No. WhatsApp</label>
                         <div class="input-group">
-                            <span class="input-group-text"><i class="fab fa-whatsapp"></i></span>
+                            <span class="input-group-text"><i class="fab fa-whatsapp"></i>  +62 </span>
                             <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa', $mahasiswa->no_whatsapp ?? '') }}" required>
                         </div>
                         @error('wa')
@@ -189,7 +196,7 @@
 
             <div class="row">
                 {{-- Scan KTP --}}
-                <div class="col-md-4" data-aos="fade-left" data-aos-delay="200">
+                <div class="col-md-{{ $isSecondRegistration ? '3' : '4' }}" data-aos="fade-left" data-aos-delay="200">
                     <div class="form-group border rounded p-3 shadow-sm">
                         <label for="file_ktp" class="form-control-label fw-semibold">Scan KTP</label>
                         <div class="document-upload-container">
@@ -223,7 +230,7 @@
                 </div>
 
                 {{-- Scan KTM --}}
-                <div class="col-md-4" data-aos="fade-left" data-aos-delay="300">
+                <div class="col-md-{{ $isSecondRegistration ? '3' : '4' }}" data-aos="fade-left" data-aos-delay="300">
                     <div class="form-group border rounded p-3 shadow-sm">
                         <label for="file_ktm" class="form-control-label fw-semibold">Scan KTM</label>
                         <div class="document-upload-container">
@@ -257,7 +264,7 @@
                 </div>
 
                 {{-- Pas Foto --}}
-                <div class="col-md-4" data-aos="fade-left" data-aos-delay="400">
+                <div class="col-md-{{ $isSecondRegistration ? '3' : '4' }}" data-aos="fade-left" data-aos-delay="400">
                     <div class="form-group border rounded p-3 shadow-sm">
                         <label for="file_foto" class="form-control-label fw-semibold">Pas Foto</label>
                         <div class="document-upload-container">
@@ -285,7 +292,54 @@
                         @enderror
                     </div>
                 </div>
+
+                {{-- Bukti Pembayaran - Only for Second Registration --}}
+                @if($isSecondRegistration)
+                <div class="col-md-3" data-aos="fade-left" data-aos-delay="500">
+                    <div class="form-group border rounded p-3 shadow-sm">
+                        <label for="file_bukti_pembayaran" class="form-control-label fw-semibold">Bukti Pembayaran</label>
+                        <div class="document-upload-container">
+                            <div class="document-preview" id="bukti-preview">
+                                @if(isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran)
+                                    <img src="{{ asset('storage/'.$pendaftaran->file_bukti_pembayaran) }}" alt="Bukti Pembayaran Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div style="display: none; flex-direction: column; align-items: center; justify-content: center;">
+                                        <i class="fas fa-file-pdf" style="font-size: 2rem; color: #ef4444;"></i>
+                                        <span>{{ basename($pendaftaran->file_bukti_pembayaran) }}</span>
+                                    </div>
+                                @else
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Bukti Bayar</span>
+                                @endif
+                            </div>
+                            <div class="document-upload-button mt-2">
+                                <input type="file" name="file_bukti_pembayaran" id="file_bukti_pembayaran" class="document-upload-input @error('file_bukti_pembayaran') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf">
+                                <label for="file_bukti_pembayaran" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran ? 'Change Bukti' : 'Upload Bukti' }}
+                                </label>
+                            </div>
+                            @if(isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran)
+                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Current: {{ basename($pendaftaran->file_bukti_pembayaran) }}</small>
+                            @endif
+                        </div>
+                        <small class="text-muted">Format: JPG, PNG, PDF. Max: 10MB</small>
+                        @error('file_bukti_pembayaran')
+                        <small class="text-danger d-block">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                @endif
             </div>
+
+            @if($isSecondRegistration)
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Pendaftaran Kedua:</strong> Anda sedang mengedit pendaftaran kedua. Bukti pembayaran diperlukan untuk pendaftaran ini.
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="800">
                 <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
@@ -359,6 +413,29 @@ $(document).ready(function() {
             $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
         }
     });
+
+    // Preview for Bukti Pembayaran (only if exists and is second registration)
+    @if($isSecondRegistration)
+    $('#file_bukti_pembayaran').change(function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (file.type === 'application/pdf') {
+                    $('#bukti-preview').html(`
+                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+                        <span>${file.name}</span>
+                    `);
+                } else {
+                    $('#bukti-preview').html(`<img src="${e.target.result}" alt="Bukti Pembayaran Preview">`);
+                }
+                $('#bukti-preview').addClass('has-preview');
+            }
+            reader.readAsDataURL(file);
+            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
+        }
+    });
+    @endif
 
     // Click on preview to trigger file input
     $('.document-preview').click(function() {

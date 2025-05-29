@@ -7,6 +7,7 @@ use App\Models\MahasiswaModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PendaftaranController extends Controller
 {
@@ -278,38 +279,56 @@ class PendaftaranController extends Controller
      */
     public function updateMahasiswa(Request $request, $nim)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'jurusan' => 'required|string|max:255',
-            'program_studi' => 'required|string|max:255',
-            'kampus' => 'required|string|max:255',
-            'alamat_asal' => 'required|string',
-            'alamat_saat_ini' => 'required|string',
-            'nik' => 'required|string|max:16|unique:mahasiswa,nik,' . $nim . ',nim',
-            'no_whatsapp' => 'required|string|max:15',
-            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
-            'file_bukti_pembayaran' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
-        ]);
-
+        // Get the mahasiswa first
         $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
         
         if (!$mahasiswa) {
             return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
         }
 
-        // Update student data
+        // Check if this is a second registration
+        $nim = auth()->user()->username;
+        $registrationCount = PendaftaranModel::where('nim', $nim)->count();
+        $isSecondRegistration = $registrationCount > 1;
+
+        // Base validation rules
+        $validationRules = [
+            'nama' => 'required|string|max:255',
+            'jurusan' => 'required|string|max:255',
+            'prodi' => 'required|string|max:255',
+            'kampus' => 'required|string|max:255',
+            'alamat_asal' => 'required|string',
+            'alamat_sekarang' => 'required|string',
+            'nik' => 'required|string|max:16',
+            'wa' => 'required|string|max:15',
+            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
+        ];
+
+        // Add bukti pembayaran validation only for second registrations
+        if ($isSecondRegistration) {
+            $validationRules['file_bukti_pembayaran'] = 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240';
+        }
+
+        $request->validate($validationRules);
+
+        // Update student data with correct field mapping
         $mahasiswa->update([
             'nama' => $request->nama,
             'jurusan' => $request->jurusan,
-            'program_studi' => $request->program_studi,
+            'program_studi' => $request->prodi, // Form field 'prodi' maps to 'program_studi'
             'kampus' => $request->kampus,
             'alamat_asal' => $request->alamat_asal,
-            'alamat_saat_ini' => $request->alamat_saat_ini,
+            'alamat_saat_ini' => $request->alamat_sekarang, // Form field 'alamat_sekarang' maps to 'alamat_saat_ini'
             'nik' => $request->nik,
-            'no_whatsapp' => $request->no_whatsapp,
+            'no_whatsapp' => $request->wa, // Form field 'wa' maps to 'no_whatsapp'
         ]);
+
+        // Update user name in m_user table
+        $user = auth()->user();
+        $user->nama = $request->nama;
+        $user->save();
 
         // Update registration files if uploaded
         $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
@@ -338,7 +357,8 @@ class PendaftaranController extends Controller
                 $pendaftaran->file_foto = $request->file('file_foto')->store('pendaftaran/foto', 'public');
             }
             
-            if ($request->hasFile('file_bukti_pembayaran')) {
+            // Only process bukti pembayaran for second registrations
+            if ($isSecondRegistration && $request->hasFile('file_bukti_pembayaran')) {
                 // Delete old file if exists
                 if ($pendaftaran->file_bukti_pembayaran && Storage::disk('public')->exists($pendaftaran->file_bukti_pembayaran)) {
                     Storage::disk('public')->delete($pendaftaran->file_bukti_pembayaran);

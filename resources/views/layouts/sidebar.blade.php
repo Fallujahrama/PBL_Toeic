@@ -70,11 +70,25 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ strpos($currentUrl, 'verifikasi') !== false ? 'active' : '' }}" href="{{ route('verifikasi.index') }}">
+                <a class="nav-link {{ request()->is('*verifikasi*') ? 'active' : '' }}" href="{{ route('verifikasi.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-check-circle text-success text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Verifikasi</span>
+
+                    @php
+                        try {
+                            $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
+                                ->orWhereNull('status_verifikasi')
+                                ->count();
+                        } catch (Exception $e) {
+                            $pendingCount = 0;
+                        }
+                    @endphp
+
+                    @if($pendingCount > 0)
+                        <span class="verification-badge">{{ $pendingCount }}</span>
+                    @endif
                 </a>
             </li>
             @endif
@@ -144,3 +158,22 @@
         </ul>
     </div>
 </aside>
+
+<style>
+.verification-badge {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    font-weight: bold;
+    min-width: 18px;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+</style>

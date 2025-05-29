@@ -94,7 +94,7 @@
                     <div class="form-group">
                         <label for="wa" class="form-control-label">No. WhatsApp</label>
                         <div class="input-group">
-                            <span class="input-group-text"><i class="fab fa-whatsapp"></i></span>
+                            <span class="input-group-text"><i class="fab fa-whatsapp"></i>  +62 </span>
                             <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa', $mahasiswa->no_whatsapp ?? '') }}" required>
                         </div>
                         @error('wa')

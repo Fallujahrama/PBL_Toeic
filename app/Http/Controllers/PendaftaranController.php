@@ -204,18 +204,24 @@ class PendaftaranController extends Controller
     {
         // Validasi input mahasiswa lama
         $request->validate([
-            'nim' => 'required|integer|exists:mahasiswa,nim', // Memastikan mahasiswa sudah terdaftar
             'file_bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTP opsional
-            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240', // File KTM opsional
-            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240', // File Foto opsional
+            'file_ktp' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_ktm' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'file_foto' => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
         ]);
 
-        // Mendapatkan data mahasiswa
-        $mahasiswa = MahasiswaModel::where('nim', $request->nim)->first();
+        // Get NIM from logged-in user
+        $nim = auth()->user()->username;
+
+        // Get student data
+        $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan. Silakan hubungi admin.');
+        }
 
         // Check if the student already has a previous registration to reuse file paths
-        $previousRegistration = PendaftaranModel::where('nim', $request->nim)->latest()->first();
+        $previousRegistration = PendaftaranModel::where('nim', $nim)->latest()->first();
 
         // Provide default values for required fields
         $ktpPath = $request->hasFile('file_ktp')
@@ -236,7 +242,7 @@ class PendaftaranController extends Controller
 
         // Menyimpan data pendaftaran untuk mahasiswa lama
         $pendaftaran = new PendaftaranModel();
-        $pendaftaran->nim = $mahasiswa->nim;
+        $pendaftaran->nim = $nim;
         $pendaftaran->file_ktp = $ktpPath;
         $pendaftaran->file_ktm = $ktmPath;
         $pendaftaran->file_foto = $fotoPath;

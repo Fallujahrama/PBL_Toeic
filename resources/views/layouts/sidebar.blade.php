@@ -2,11 +2,12 @@
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" id="iconSidenav"></i>
     <a class="navbar-brand m-0" href="{{ url('/') }}">
-      <div class="d-flex align-items-center justify-content-center">
-        <div class="icon-shape icon-sm bg-gradient-primary text-white rounded-circle shadow">
-          <i class="fas fa-language"></i>
+      <div class="d-flex flex-column align-items-center justify-content-center py-3">
+
+        <div class="text-center">
+        <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="sidebar-logo mb-2">
+          <span class="font-weight-bold text-sm">TOEIC Center</span>
         </div>
-        <span class="ms-2 font-weight-bold">TOEIC Center</span>
       </div>
     </a>
   </div>
@@ -27,7 +28,7 @@
       <!-- Dashboard -->
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}" 
-           href="{{ $isAdmin ? route('admin.dashboard') : route('mahasiswa.dashboard') }}">
+           href="{{ $isAdminUpa ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
           </div>
@@ -126,19 +127,6 @@
       </li>
       @endif
 
-      <!-- Notifikasi - For all users -->
-      @if($isAdminUpa || $isStudent)
-      <li class="nav-item">
-        <a class="nav-link {{ request()->is('*notifikasi*') ? 'active' : '' }}"
-           href="{{ $isAdmin ? route('notifikasi.index') : route('mahasiswa.notifikasi') }}">
-          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-bell text-danger text-sm opacity-10"></i>
-          </div>
-          <span class="nav-link-text ms-1">Notifikasi</span>
-        </a>
-      </li>
-      @endif
-
       <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Akun</h6>
       </li>
@@ -190,5 +178,14 @@
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.sidebar-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 </style>

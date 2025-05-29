@@ -264,7 +264,7 @@
                                         </td>
                                         <td>
                                             @if($mhs->no_whatsapp)
-                                                <a href="https://wa.me/{{ $mhs->no_whatsapp }}" target="_blank" 
+                                                <a href="https://wa.me/62{{ $mhs->no_whatsapp }}" target="_blank" 
                                                    class="btn btn-success btn-sm">
                                                     <i class="fab fa-whatsapp me-1"></i>{{ $mhs->no_whatsapp }}
                                                 </a>

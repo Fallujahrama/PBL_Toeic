@@ -20,6 +20,13 @@
         <h6 class="font-weight-bolder mb-0">{{ $breadcrumb->title }}</h6>
     </div>
 
+    <!-- Logo Section -->
+    <div class="text-center mb-4" data-aos="fade-down">
+        <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="img-fluid mb-3" style="max-height: 100px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+        <h2 class="text-primary mb-0">TOEIC Registration Center</h2>
+        <p class="text-muted">Politeknik Negeri Padang</p>
+    </div>
+
     <!-- Welcome Header -->
     <div class="welcome-header card-gradient-primary text-white" data-aos="fade-up">
         <div class="row align-items-center">
@@ -42,7 +49,8 @@
                 </div>
             </div>
             <div class="col-lg-4 d-none d-lg-block text-center">
-                <img src="{{ asset('img/Tregon.jpeg') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 150px;">
+                <div class="logo-container">
+                </div>
             </div>
         </div>
     </div>

@@ -44,7 +44,7 @@
                         <h6 class="mb-1">{{ $pendaftaran->mahasiswa->nama ?? 'Nama tidak tersedia' }}</h6>
                         <p class="text-muted mb-0">{{ $pendaftaran->nim }}</p>
                     </div>
-                    
+
                     <div class="col-md-9" data-aos="fade-left" data-aos-delay="200">
                         <div class="row">
                             <div class="col-md-6">
@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="info-item">
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="info-item">
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <div class="info-item">
@@ -104,7 +104,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6 mb-4">
         <div class="card animate-card h-100" data-aos="fade-up" data-aos-delay="300">
             <div class="card-header pb-0">
@@ -127,13 +127,17 @@
                             <p class="text-muted mb-0">Kartu Tanda Penduduk</p>
                         </div>
                         <div class="document-actions">
+                            <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'ktp']) }}"
+                            class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
+                                <i class="fas fa-eye"></i>
+                            </a>
                             <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/ktp') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($pendaftaran->file_ktm)
                     <div class="document-item">
                         <div class="document-icon">
@@ -144,13 +148,17 @@
                             <p class="text-muted mb-0">Kartu Tanda Mahasiswa</p>
                         </div>
                         <div class="document-actions">
+                            <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'ktm']) }}"
+                            class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
+                                <i class="fas fa-eye"></i>
+                            </a>
                             <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/ktm') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($pendaftaran->file_foto)
                     <div class="document-item">
                         <div class="document-icon">
@@ -161,13 +169,17 @@
                             <p class="text-muted mb-0">Foto Formal Terbaru</p>
                         </div>
                         <div class="document-actions">
+                            <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'foto']) }}"
+                            class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
+                                <i class="fas fa-eye"></i>
+                            </a>
                             <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/foto') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($pendaftaran->file_bukti_pembayaran)
                     <div class="document-item">
                         <div class="document-icon">
@@ -178,13 +190,17 @@
                             <p class="text-muted mb-0">Bukti Transfer Biaya Pendaftaran</p>
                         </div>
                         <div class="document-actions">
+                            <a href="{{ route('dokumen.preview', ['id' => $pendaftaran->id_pendaftaran, 'jenis' => 'bukti']) }}"
+                            class="btn btn-sm btn-info" target="_blank" data-bs-toggle="tooltip" title="Preview File">
+                                <i class="fas fa-eye"></i>
+                            </a>
                             <a href="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/download/bukti') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-download"></i>
                             </a>
                         </div>
                     </div>
                     @endif
-                    
+
                     @if(!$pendaftaran->file_ktp && !$pendaftaran->file_ktm && !$pendaftaran->file_foto && !$pendaftaran->file_bukti_pembayaran)
                     <div class="text-center py-4">
                         <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
@@ -195,7 +211,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6 mb-4">
         <div class="card animate-card h-100" data-aos="fade-up" data-aos-delay="400">
             <div class="card-header pb-0">
@@ -209,7 +225,7 @@
             <div class="card-body">
                 <form action="{{ url('/verifikasi/' . $pendaftaran->id_pendaftaran . '/verify') }}" method="POST">
                     @csrf
-                    
+
                     <div class="mb-4">
                         <label class="form-label">Status Verifikasi</label>
                         <div class="d-flex flex-wrap gap-3">
@@ -233,12 +249,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="keterangan" class="form-label">Keterangan</label>
                         <textarea class="form-control" id="keterangan" name="keterangan" rows="4" placeholder="Tambahkan catatan atau alasan verifikasi (opsional)">{{ $pendaftaran->keterangan }}</textarea>
                     </div>
-                    
+
                     <div class="verification-status-box mb-4">
                         <div class="d-flex align-items-center mb-2">
                             <div class="status-icon me-2">
@@ -275,13 +291,15 @@
                             </div>
                         @endif
                     </div>
-                    
+
                     <div class="d-flex justify-content-between">
                         <div>
                             <a href="{{ url('/verifikasi') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Kembali
                             </a>
-
+                            <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-warning">
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a>
                         </div>
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save me-2"></i>Simpan Verifikasi
@@ -327,13 +345,13 @@
         margin: 0 auto;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    
+
     .profile-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .profile-image-placeholder {
         width: 100%;
         height: 100%;
@@ -344,45 +362,45 @@
         color: #adb5bd;
         border-radius: 50%;
     }
-    
+
     .info-item {
         margin-bottom: 10px;
         padding: 10px;
         border-radius: 8px;
         transition: all 0.3s ease;
     }
-    
+
     .info-item:hover {
         background-color: rgba(0, 0, 0, 0.03);
     }
-    
+
     .info-label {
         font-size: 0.8rem;
         font-weight: 600;
         color: #6c757d;
         margin-bottom: 5px;
     }
-    
+
     .info-value {
         font-size: 0.9rem;
     }
-    
+
     .verification-status-box {
         padding: 15px;
         border-radius: 10px;
         background-color: rgba(0, 0, 0, 0.02);
     }
-    
+
     .status-icon i {
         font-size: 1.5rem;
     }
-    
+
     .document-list {
         display: flex;
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .document-item {
         display: flex;
         align-items: center;
@@ -391,11 +409,11 @@
         background-color: rgba(0, 0, 0, 0.02);
         transition: all 0.3s ease;
     }
-    
+
     .document-item:hover {
         background-color: rgba(0, 0, 0, 0.05);
     }
-    
+
     .document-icon {
         width: 40px;
         height: 40px;
@@ -407,11 +425,11 @@
         margin-right: 15px;
         color: #6c757d;
     }
-    
+
     .document-info {
         flex: 1;
     }
-    
+
     .document-actions {
         display: flex;
         gap: 5px;
@@ -428,9 +446,9 @@
             const statusBox = $('.verification-status-box');
             const statusIcon = $('.status-icon i');
             const statusTitle = $('.status-info h6');
-            
+
             statusBox.removeClass('bg-light-success bg-light-danger bg-light-warning');
-            
+
             if (status === 'approved') {
                 statusBox.addClass('bg-light-success');
                 statusIcon.removeClass('fa-times-circle fa-clock').addClass('fa-check-circle');

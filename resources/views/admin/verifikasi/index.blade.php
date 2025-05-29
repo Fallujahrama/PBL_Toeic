@@ -26,9 +26,9 @@
                         </div>
                         <h5 class="mb-0">Daftar Pendaftaran TOEIC</h5>
                     </div>
-                    <a href="{{ route('verifikasi.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
+                    {{-- <a href="{{ route('verifikasi.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
                         <i class="fas fa-plus me-2"></i>Tambah Pendaftaran
-                    </a>
+                    </a> --}}
                 </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="table-responsive p-0 mt-3">
                     <table class="table align-items-center mb-0">
                         <thead>
@@ -59,7 +59,7 @@
                             @foreach ($pendaftarans as $pendaftaran)
                                 <tr class="pendaftaran-row fade-in" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
                                     <td class="ps-4">
-                                        <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->id }}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->id_pendaftaran }}</p>
                                     </td>
                                     <td class="ps-4">
                                         <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->nim }}</p>
@@ -96,14 +96,24 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn"
+                                                data-id="{{ $pendaftaran->id_pendaftaran }}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
-                            
+
                             @if(count($pendaftarans) == 0)
                                 <tr>
                                     <td colspan="6" class="text-center py-4">
@@ -122,6 +132,28 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus pendaftaran ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('css')
@@ -132,13 +164,13 @@
         overflow: hidden;
         position: relative;
     }
-    
+
     .avatar-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .avatar-initial {
         width: 100%;
         height: 100%;
@@ -157,7 +189,13 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-        
+
+        // Delete confirmation
+        $('.delete-btn').on('click', function() {
+            const id = $(this).data('id');
+            $('#deleteForm').attr('action', `{{ url('verifikasi') }}/${id}`);
+            $('#deleteModal').modal('show');
+        });
     });
 </script>
 @endpush

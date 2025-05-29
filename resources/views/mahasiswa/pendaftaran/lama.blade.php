@@ -39,7 +39,7 @@
     <div class="card-body">
         <form action="{{ route('pendaftaran.lama.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
             <div class="row">
                 <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
                     <div class="info-card-white">
@@ -48,7 +48,7 @@
                         </div>
                         <div class="card-body">
                             <input type="hidden" name="nim" value="{{ $mahasiswa->nim }}">
-                            
+
                             <div class="profile-info-item">
                                 <div class="profile-info-label">
                                     <i class="fas fa-id-card me-2"></i>NIM
@@ -57,7 +57,7 @@
                                     {{ $mahasiswa->nim }}
                                 </div>
                             </div>
-                            
+
                             <div class="profile-info-item">
                                 <div class="profile-info-label">
                                     <i class="fas fa-user me-2"></i>Nama
@@ -66,7 +66,7 @@
                                     {{ $mahasiswa->nama }}
                                 </div>
                             </div>
-                            
+
                             <div class="profile-info-item">
                                 <div class="profile-info-label">
                                     <i class="fas fa-building me-2"></i>Jurusan
@@ -75,7 +75,7 @@
                                     {{ $mahasiswa->jurusan }}
                                 </div>
                             </div>
-                            
+
                             <div class="profile-info-item">
                                 <div class="profile-info-label">
                                     <i class="fas fa-graduation-cap me-2"></i>Program Studi
@@ -84,7 +84,7 @@
                                     {{ $mahasiswa->program_studi }}
                                 </div>
                             </div>
-                            
+
                             <div class="profile-info-item">
                                 <div class="profile-info-label">
                                     <i class="fas fa-university me-2"></i>Kampus
@@ -96,37 +96,37 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
                     <div class="form-group">
-                        <label for="bukti_pembayaran" class="form-control-label">Bukti Pembayaran (Required)</label>
+                        <label for="file_bukti_pembayaran" class="form-control-label">Bukti Pembayaran (Required)</label>
                         <div class="document-upload-container">
                             <div class="document-preview" id="payment-preview">
                                 <i class="fas fa-receipt"></i>
                                 <span>Payment Proof</span>
                             </div>
                             <div class="document-upload-button">
-                                <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="document-upload-input @error('bukti_pembayaran') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
-                                <label for="bukti_pembayaran" class="btn btn-outline-warning w-100">
+                                <input type="file" name="file_bukti_pembayaran" id="file_bukti_pembayaran" class="document-upload-input @error('file_bukti_pembayaran') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf" required>
+                                <label for="file_bukti_pembayaran" class="btn btn-outline-warning w-100">
                                     <i class="fas fa-upload me-2"></i>Upload Payment Proof
                                 </label>
                             </div>
                         </div>
                         <small class="text-muted">Format: JPG, PNG, PDF. Max: 10MB</small>
-                        @error('bukti_pembayaran')
+                        @error('file_bukti_pembayaran')
                             <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mt-4">
                 <div class="col-12" data-aos="fade-up" data-aos-delay="300">
                     <div class="card p-3" style="background-color: var(--dark-hover); border: 1px solid var(--dark-border);">
                         <div class="card-body">
                             <h6 class="mb-3"><i class="fas fa-info-circle me-2"></i>Additional Documents (Optional)</h6>
                             <p class="text-muted mb-4">If you need to update your documents, you can upload them below. Leave empty if you don't want to update.</p>
-                            
+
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -148,7 +148,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="file_ktm" class="form-control-label">KTM</label>
@@ -169,7 +169,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="file_foto" class="form-control-label">Photo</label>
@@ -197,7 +197,7 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="400">
-                <a href="{{ url('pendaftaran') }}" class="btn btn-outline-secondary me-2">
+                <a href="{{ url('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
                 <button type="submit" class="btn btn-warning">
@@ -213,8 +213,8 @@
 @push('js')
 <script>
     $(document).ready(function() {
-        // Preview for payment proof
-        $('#bukti_pembayaran').change(function() {
+        // Preview for payment proof - FIXED SELECTOR
+        $('#file_bukti_pembayaran').change(function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -225,7 +225,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#payment-preview').html(`<img src="${e.target.result}" alt="Payment Preview">`);
+                        $('#payment-preview').html(`<img src="${e.target.result}" alt="Payment Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#payment-preview').addClass('has-preview');
                 }
@@ -233,7 +233,7 @@
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File selected');
             }
         });
-        
+
         // Preview for KTP
         $('#file_ktp').change(function() {
             const file = this.files[0];
@@ -246,7 +246,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#ktp-preview').html(`<img src="${e.target.result}" alt="KTP Preview">`);
+                        $('#ktp-preview').html(`<img src="${e.target.result}" alt="KTP Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#ktp-preview').addClass('has-preview');
                 }
@@ -254,7 +254,7 @@
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File selected');
             }
         });
-        
+
         // Preview for KTM
         $('#file_ktm').change(function() {
             const file = this.files[0];
@@ -267,7 +267,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#ktm-preview').html(`<img src="${e.target.result}" alt="KTM Preview">`);
+                        $('#ktm-preview').html(`<img src="${e.target.result}" alt="KTM Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#ktm-preview').addClass('has-preview');
                 }
@@ -275,14 +275,14 @@
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File selected');
             }
         });
-        
+
         // Preview for Photo
         $('#file_foto').change(function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#foto-preview').html(`<img src="${e.target.result}" alt="Photo Preview">`);
+                    $('#foto-preview').html(`<img src="${e.target.result}" alt="Photo Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     $('#foto-preview').addClass('has-preview');
                 }
                 reader.readAsDataURL(file);

@@ -13,7 +13,7 @@
                 <div class="card-body px-0 pt-0 pb-2">
                     @if($hasil_ujian->isEmpty())
                         <div class="text-center p-4">
-                            <p>Anda belum memiliki hasil ujian TOEIC.</p>
+                            <p>Belum ada hasil ujian TOEIC saat ini</p>
                         </div>
                     @else
                         <div class="table-responsive p-0">

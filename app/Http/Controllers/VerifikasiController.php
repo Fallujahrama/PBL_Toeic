@@ -19,10 +19,10 @@ class VerifikasiController extends Controller
     {
         // Get all registrations with their related student data
         $pendaftarans = PendaftaranModel::with('mahasiswa')->get();
-        
+
         // Set active menu for sidebar
         $activeMenu = 'verifikasi';
-        
+
         // Data for breadcrumb
         $breadcrumb = (object) [
             'title' => 'Verifikasi Pendaftaran',
@@ -32,7 +32,7 @@ class VerifikasiController extends Controller
         $page = (object) [
             'title' => 'Verifikasi Pendaftaran TOEIC'
         ];
-        
+
         return view('admin.verifikasi.index', compact('pendaftarans', 'activeMenu', 'breadcrumb', 'page'));
     }
 
@@ -45,10 +45,10 @@ class VerifikasiController extends Controller
     {
         // Get all students who don't have a registration record yet
         $mahasiswas = MahasiswaModel::whereDoesntHave('pendaftaran')->get();
-        
+
         // Set active menu for sidebar
         $activeMenu = 'verifikasi';
-        
+
         // Data for breadcrumb
         $breadcrumb = (object) [
             'title' => 'Tambah Pendaftaran',
@@ -58,7 +58,7 @@ class VerifikasiController extends Controller
         $page = (object) [
             'title' => 'Tambah Pendaftaran TOEIC'
         ];
-        
+
         return view('admin.verifikasi.create', compact('mahasiswas', 'activeMenu', 'breadcrumb', 'page'));
     }
 
@@ -110,10 +110,10 @@ class VerifikasiController extends Controller
     {
         // Find the registration by ID with its related student data
         $pendaftaran = PendaftaranModel::with('mahasiswa')->where('id_pendaftaran', $id)->firstOrFail();
-        
+
         // Set active menu for sidebar
         $activeMenu = 'verifikasi';
-        
+
         // Data for breadcrumb
         $breadcrumb = (object) [
             'title' => 'Detail Pendaftaran',
@@ -123,7 +123,7 @@ class VerifikasiController extends Controller
         $page = (object) [
             'title' => 'Detail Pendaftaran TOEIC'
         ];
-        
+
         return view('admin.verifikasi.show', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
     }
 
@@ -137,10 +137,10 @@ class VerifikasiController extends Controller
     {
         // Find the registration by ID with its related student data
         $pendaftaran = PendaftaranModel::with('mahasiswa')->where('id_pendaftaran', $id)->firstOrFail();
-        
+
         // Set active menu for sidebar
         $activeMenu = 'verifikasi';
-        
+
         // Data for breadcrumb
         $breadcrumb = (object) [
             'title' => 'Edit Pendaftaran',
@@ -150,7 +150,7 @@ class VerifikasiController extends Controller
         $page = (object) [
             'title' => 'Edit Pendaftaran TOEIC'
         ];
-        
+
         return view('admin.verifikasi.edit', compact('pendaftaran', 'activeMenu', 'breadcrumb', 'page'));
     }
 
@@ -174,7 +174,7 @@ class VerifikasiController extends Controller
 
         // Find the registration by ID
         $pendaftaran = PendaftaranModel::where('id_pendaftaran', $id)->firstOrFail();
-        
+
         // Update files if uploaded
         if ($request->hasFile('file_ktp')) {
             // Delete old file if exists
@@ -183,7 +183,7 @@ class VerifikasiController extends Controller
             }
             $pendaftaran->file_ktp = $request->file('file_ktp')->store('ktp');
         }
-        
+
         if ($request->hasFile('file_ktm')) {
             // Delete old file if exists
             if ($pendaftaran->file_ktm && Storage::exists($pendaftaran->file_ktm)) {
@@ -191,7 +191,7 @@ class VerifikasiController extends Controller
             }
             $pendaftaran->file_ktm = $request->file('file_ktm')->store('scan_ktm');
         }
-        
+
         if ($request->hasFile('file_foto')) {
             // Delete old file if exists
             if ($pendaftaran->file_foto && Storage::exists($pendaftaran->file_foto)) {
@@ -199,7 +199,7 @@ class VerifikasiController extends Controller
             }
             $pendaftaran->file_foto = $request->file('file_foto')->store('pas_foto');
         }
-        
+
         // Update other fields using direct DB update to ensure we use the correct primary key
         DB::table('pendaftaran')
             ->where('id_pendaftaran', $id)
@@ -244,7 +244,7 @@ class VerifikasiController extends Controller
         return redirect()->route('verifikasi.index')
             ->with('success', 'Status pendaftaran berhasil diperbarui');
     }
-    
+
     /**
      * Remove the specified verification record from storage.
      *
@@ -255,26 +255,58 @@ class VerifikasiController extends Controller
     {
         // Find the registration by ID
         $pendaftaran = PendaftaranModel::where('id_pendaftaran', $id)->firstOrFail();
-        
+
         // Delete files if they exist
         if ($pendaftaran->file_ktp && Storage::exists($pendaftaran->file_ktp)) {
             Storage::delete($pendaftaran->file_ktp);
         }
-        
+
         if ($pendaftaran->file_ktm && Storage::exists($pendaftaran->file_ktm)) {
             Storage::delete($pendaftaran->file_ktm);
         }
-        
+
         if ($pendaftaran->file_foto && Storage::exists($pendaftaran->file_foto)) {
             Storage::delete($pendaftaran->file_foto);
         }
-        
+
         // Delete the registration record using DB facade to ensure we use the correct primary key
         DB::table('pendaftaran')->where('id_pendaftaran', $id)->delete();
-        
+
         // Redirect to verification list with success message
         return redirect()->route('verifikasi.index')
             ->with('success', 'Pendaftaran berhasil dihapus');
+    }
+
+    // Preview File
+    public function preview($id, $jenis)
+    {
+        $pendaftaran = \App\Models\PendaftaranModel::where('id_pendaftaran', $id)->firstOrFail();
+
+        switch ($jenis) {
+            case 'ktp':
+                $file = $pendaftaran->file_ktp;
+                break;
+            case 'ktm':
+                $file = $pendaftaran->file_ktm;
+                break;
+            case 'foto':
+                $file = $pendaftaran->file_foto;
+                break;
+            case 'bukti':
+                $file = $pendaftaran->file_bukti_pembayaran ?? null;
+                break;
+            default:
+                abort(404, 'File tidak ditemukan');
+        }
+
+        if (!$file || !\Storage::exists($file)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $mime = \Storage::mimeType($file);
+        $content = \Storage::get($file);
+
+        return response($content)->header('Content-Type', $mime);
     }
 
     /**
@@ -287,7 +319,7 @@ class VerifikasiController extends Controller
     public function downloadFile($id, $type)
     {
         $pendaftaran = PendaftaranModel::where('id_pendaftaran', $id)->firstOrFail();
-        
+
         $fileColumn = '';
         switch ($type) {
             case 'ktp':
@@ -302,17 +334,17 @@ class VerifikasiController extends Controller
             default:
                 abort(404, 'File tidak ditemukan');
         }
-        
+
         if (!$pendaftaran->$fileColumn) {
             abort(404, 'File tidak ditemukan');
         }
-        
+
         $path = storage_path('app/' . $pendaftaran->$fileColumn);
-        
+
         if (!file_exists($path)) {
             abort(404, 'File tidak ditemukan');
         }
-        
+
         return response()->download($path);
     }
 }

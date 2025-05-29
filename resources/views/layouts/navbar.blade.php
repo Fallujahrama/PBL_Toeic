@@ -32,7 +32,7 @@
 
       {{-- Notifikasi --}}
       <li class="nav-item dropdown me-3">
-        <a class="nav-link text-body p-0 position-relative" id="dropdownNotifikasi" data-bs-toggle="dropdown" href="#" role="button">
+        <a class="nav-link text-body p-0 position-relative" id="dropdownNotifikasi" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="icon-button">
             <i class="far fa-bell"></i>
             @php $jumlahNotif = NotifikasiModel::count(); @endphp
@@ -46,7 +46,7 @@
           <div class="notification-list">
             @foreach (NotifikasiModel::latest()->take(5)->get() as $notification)
               <li class="notification-item">
-                <a class="dropdown-item border-radius-md" href="{{ route('notifikasi.show', $notification->id) }}">
+                <a class="dropdown-item border-radius-md" href="{{ route('notifications.show', $notification->id) }}">
                   <div class="d-flex py-1">
                     <div class="notification-icon">
                       <i class="fas fa-bell"></i>
@@ -64,8 +64,18 @@
             <hr class="dropdown-divider">
           </li>
           <li>
-            <a class="dropdown-item text-center view-all" href="{{ route('notifikasi.index') }}">
+            {{-- <a class="dropdown-item text-center view-all" href="{{ route('notifikasi.index') }}">
               <i class="fas fa-list me-1"></i> Lihat Semua Notifikasi
+            </a> --}}
+            @php
+                // Tentukan route berdasarkan role pengguna
+                $user = auth()->user(); // Ambil user yang sedang login
+                $notifikasiRoute = auth()->check() && $user && $user->hasRole('Mhs')
+                    ? route('mahasiswa.notifikasi.index')
+                    : route('notifikasi.index');
+            @endphp
+            <a class="dropdown-item text-center view-all" href="{{ $notifikasiRoute }}">
+            <i class="fas fa-list me-1"></i> Lihat Semua Notifikasi
             </a>
           </li>
         </ul>
@@ -80,7 +90,7 @@
               alt="User Image">
           </div>
           <span class="d-none d-lg-inline ms-2 user-name">
-            {{ auth()->check() ? auth()->user()->nama : 'Guest' }}
+            {{ auth()->check() ? auth()->user()->username : 'Guest' }}
           </span>
         </a>
         @if(auth()->check())

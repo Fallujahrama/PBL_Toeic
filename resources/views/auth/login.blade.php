@@ -6,21 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Login - TOEIC Registration System</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  
+
   <!-- Icons -->
   <link href="{{ asset('adminlte/assets/css/nucleo-icons.css') }}" rel="stylesheet" />
   <link href="{{ asset('adminlte/assets/css/nucleo-svg.css') }}" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  
+
   <!-- CSS -->
   <link id="pagestyle" href="{{ asset('adminlte/assets/css/argon-dashboard.min.css?v=2.1.0') }}" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  
+
   <!-- Custom CSS -->
-  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">  
+  <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -32,8 +32,8 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain" data-aos="fade-right">
                 <div class="card-header pb-0 text-start">
-                  <div class="login-logo">
-                    <i class="fas fa-language"></i>
+                  <div class="login-logo text-center mb-3">
+                    <img src="{{ asset('img/Tregon.jpeg') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 100px;">
                   </div>
                   <h4 class="font-weight-bolder text-center">TOEIC Registration</h4>
                   <p class="mb-0 text-center">Enter your credentials to access your account</p>
@@ -126,7 +126,7 @@
       easing: 'ease-in-out',
       once: true
     });
-    
+
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -140,7 +140,7 @@
       }).on('blur', function() {
         $(this).parent().removeClass('focused');
       });
-      
+
       $("#form-login").validate({
         rules: {
           username: {

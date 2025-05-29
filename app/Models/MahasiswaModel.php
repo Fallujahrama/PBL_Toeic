@@ -10,7 +10,10 @@ class MahasiswaModel extends Model
     use HasFactory;
 
     // Menentukan tabel yang digunakan oleh model ini
-    protected $table = 'mahasiswa';
+    protected $table = 'mahasiswa'; // Nama tabel
+    protected $primaryKey = 'nim'; // Primary key adalah 'nim'
+    public $incrementing = false; // Karena 'nim' bukan auto-increment
+    protected $keyType = 'string'; // Tipe data primary key adalah string
 
     // Kolom yang dapat diisi
     protected $fillable = [
@@ -29,5 +32,16 @@ class MahasiswaModel extends Model
     public function pendaftaran()
     {
         return $this->hasOne(PendaftaranModel::class, 'nim', 'nim');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'nim', 'username'); // Relasi berdasarkan nim
+    }
+
+    // Relasi ke surat pernyataan
+    public function suratPernyataan()
+    {
+        return $this->hasMany(SuratPernyataanModel::class, 'nim', 'nim');
     }
 }

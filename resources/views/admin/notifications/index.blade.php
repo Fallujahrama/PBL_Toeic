@@ -26,7 +26,7 @@
                         </div>
                         <h5 class="mb-0">Daftar Notifikasi</h5>
                     </div>
-                    <a href="{{ route('notifikasi.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
+                    <a href="{{ route('notifications.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
                         <i class="fas fa-plus me-2"></i>Tambah Notifikasi
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="table-responsive p-0 mt-3">
                     <table class="table align-items-center mb-0">
                         <thead>
@@ -74,13 +74,13 @@
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('notifikasi.show', $notification->id) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
+                                            <a href="{{ route('notifications.show', $notification->id) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('notifikasi.edit', $notification->id) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <a href="{{ route('notifications.edit', $notification->id) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('notifikasi.destroy', $notification->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('notifications.destroy', $notification->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-link text-danger px-2 mb-0" onclick="return confirm('Yakin ingin menghapus?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus">

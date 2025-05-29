@@ -1,144 +1,6 @@
-/* =================================================================
-   CRITICAL Z-INDEX FIXES FOR NAVBAR OVERLAPPING ISSUES
-   ================================================================= */
+/* Colorful Light Theme Variables */
 
-
-/* Fix for navbar overlapping issues - CRITICAL Z-INDEX FIXES */
-
-
-/* Navbar positioning and z-index hierarchy */
-
-.navbar-main {
-    position: relative !important;
-    z-index: 1030 !important;
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 1rem;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-
-/* Navbar items positioning */
-
-.navbar-nav {
-    position: relative;
-    z-index: 1031;
-}
-
-.navbar-nav .nav-item {
-    position: relative;
-    z-index: 1032;
-}
-
-
-/* Notification dropdown fixes */
-
-.nav-item.dropdown {
-    position: relative;
-    z-index: 1040;
-}
-
-.dropdown-notification {
-    position: absolute !important;
-    z-index: 1050 !important;
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    background-color: var(--light-card) !important;
-    border: 1px solid var(--light-border) !important;
-    border-radius: 0.5rem !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-    min-width: 320px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    margin-top: 0.5rem !important;
-}
-
-
-/* User dropdown fixes */
-
-.dropdown-user {
-    position: absolute !important;
-    z-index: 1050 !important;
-    top: 100% !important;
-    right: 0 !important;
-    left: auto !important;
-    background-color: var(--light-card) !important;
-    border: 1px solid var(--light-border) !important;
-    border-radius: 0.5rem !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-    min-width: 240px !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    margin-top: 0.5rem !important;
-}
-
-
-/* Icon button positioning */
-
-.icon-button {
-    position: relative;
-    z-index: 1035;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--light-hover);
-    color: var(--light-text);
-    transition: all 0.3s ease;
-}
-
-
-/* User dropdown trigger */
-
-.user-dropdown {
-    position: relative;
-    z-index: 1035;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-
-/* Ensure dropdowns appear above all content */
-
-.dropdown-menu.show {
-    z-index: 1050 !important;
-    display: block !important;
-}
-
-
-/* Main content positioning to prevent overlap */
-
-.main-content {
-    position: relative;
-    z-index: 1;
-    background-color: var(--light-bg);
-}
-
-
-/* Ensure modals are above everything */
-
-.modal {
-    z-index: 1055 !important;
-}
-
-.modal-backdrop {
-    z-index: 1050 !important;
-}
-
-
-/* =================================================================
-     COLORFUL LIGHT THEME VARIABLES
-     ================================================================= */
-
- :root {
+:root {
     --light-bg: #f8fafc;
     --light-card: #ffffff;
     --light-sidebar: #ffffff;
@@ -165,13 +27,9 @@ body {
 }
 
 
-/* =================================================================
-     SIDEBAR ANIMATIONS
-     ================================================================= */
+/* Sidebar Animations - FIXED ACTIVE STATE */
 
 .sidenav {
-    position: fixed;
-    z-index: 1020;
     transition: all 0.3s ease-in-out;
     background-color: var(--light-sidebar) !important;
     border-right: 1px solid var(--light-border);
@@ -193,15 +51,56 @@ body {
     color: var(--light-text-muted);
 }
 
-.sidenav .nav-link:hover {
+
+/* FIXED: Active state has higher specificity and won't be overridden by hover */
+
+.sidenav .nav-link.active {
+    background: var(--gradient-primary) !important;
+    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4) !important;
+    color: white !important;
+    transform: translateX(5px);
+}
+
+.sidenav .nav-link.active .nav-link-text {
+    color: white !important;
+    font-weight: 600;
+}
+
+.sidenav .nav-link.active .icon-shape {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+.sidenav .nav-link.active i {
+    color: white !important;
+}
+
+
+/* Hover state only applies to non-active items */
+
+.sidenav .nav-link:not(.active):hover {
     background-color: rgba(79, 70, 229, 0.1);
     transform: translateX(5px);
     color: var(--light-text);
 }
 
-.sidenav .nav-link.active {
-    background: var(--gradient-primary);
-    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+
+/* Badge for verification count */
+
+.verification-badge {
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 14px;
+    z-index: 10;
 }
 
 .icon-shape {
@@ -218,16 +117,6 @@ body {
 .icon-shape svg {
     font-size: 1rem;
     line-height: 1;
-}
-
-.sidenav .nav-link.active .icon-shape {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
-}
-
-.sidenav .nav-link.active .nav-link-text {
-    color: white !important;
-    font-weight: 600;
 }
 
 .sidenav-header {
@@ -257,70 +146,7 @@ body {
 }
 
 
-/* =================================================================
-     VERIFICATION BADGE
-     ================================================================= */
-
-.verification-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--gradient-danger);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 50px;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-    animation: pulse 2s infinite;
-    z-index: 15 !important;
-    border: 2px solid white;
-}
-
-.sidenav .nav-link:hover .verification-badge {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6);
-}
-
-.sidenav .nav-link.active .verification-badge {
-    background: rgba(255, 255, 255, 0.9);
-    color: #ef4444;
-    border-color: rgba(255, 255, 255, 0.9);
-}
-
-
-/* =================================================================
-     NOTIFICATION BADGE
-     ================================================================= */
-
-.notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    z-index: 1055 !important;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--gradient-warning);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 6px rgba(245, 158, 11, 0.3);
-    animation: pulse 2s infinite;
-}
-
-
-/* =================================================================
-     RIPPLE EFFECT
-     ================================================================= */
+/* Ripple Effect */
 
 .ripple {
     position: absolute;
@@ -339,9 +165,7 @@ body {
 }
 
 
-/* =================================================================
-     SUBMENU ANIMATION
-     ================================================================= */
+/* Submenu Animation */
 
 .submenu {
     max-height: 0;
@@ -354,13 +178,409 @@ body {
 }
 
 
-/* =================================================================
-     CARD STYLING
-     ================================================================= */
+/* Enhanced Dashboard Cards - More Stable Layout */
+
+.dashboard-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+}
+
+.dashboard-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    z-index: 1;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-decoration: none !important;
+    color: white !important;
+}
+
+.dashboard-card .card-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.dashboard-card.card-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dashboard-card.card-success {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.dashboard-card.card-warning {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.dashboard-card.card-info {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.dashboard-card.card-purple {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.dashboard-card.card-orange {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+
+/* Dashboard Card Content Layout */
+
+.dashboard-card-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboard-card-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    margin-left: 1rem;
+    flex-shrink: 0;
+}
+
+.dashboard-card-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.dashboard-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white !important;
+}
+
+.dashboard-card-desc {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+    color: white !important;
+}
+
+.dashboard-card-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white !important;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none !important;
+}
+
+.dashboard-card-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: white !important;
+}
+
+
+/* Dashboard Stats - More Stable */
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-primary);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stat-card-info {
+    flex: 1;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-left: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+
+.stat-label {
+    color: var(--light-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.stat-meta {
+    font-size: 0.8rem;
+    color: var(--light-text-muted);
+}
+
+
+/* Quick Actions - Improved Layout */
+
+.quick-action-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--light-border);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+}
+
+.quick-action-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+    color: white;
+}
+
+.quick-action-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--light-text);
+}
+
+.quick-action-desc {
+    font-size: 0.85rem;
+    color: var(--light-text-muted);
+    line-height: 1.4;
+}
+
+
+/* Activity Items - Better Alignment */
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    min-height: 70px;
+}
+
+.activity-item:hover {
+    background-color: var(--light-hover);
+    border-color: var(--light-border);
+}
+
+.activity-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.activity-icon i {
+    font-size: 1.2rem;
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-content h6 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--light-text);
+}
+
+.activity-content p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--light-text-muted);
+    word-wrap: break-word;
+}
+
+.activity-time {
+    font-size: 0.75rem;
+    color: var(--light-text-muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+
+/* Profile Avatar - Centered */
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 600;
+}
+
+.avatar-xl {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+}
+
+
+/* Icon Shapes - Perfect Centering */
+
+.icon-shape {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.icon-lg {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+}
+
+.icon-xs {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+}
+
+
+/* Responsive Improvements */
+
+@media (max-width: 768px) {
+    .dashboard-card {
+        min-height: 160px;
+        padding: 1.5rem;
+    }
+    .dashboard-card-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .dashboard-card-icon {
+        margin: 1rem 0 0 0;
+        width: 60px;
+        height: 60px;
+    }
+    .dashboard-card-icon i {
+        font-size: 2rem;
+    }
+    .stat-card-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .stat-icon {
+        margin: 0 0 1rem 0;
+    }
+}
+
+
+/* Enhance card styling */
 
 .card {
-    position: relative;
-    z-index: 5;
     transition: all 0.3s ease;
     border: none;
     overflow: hidden;
@@ -378,7 +598,6 @@ body {
 
 .animate-card:hover,
 .card-hover {
-    z-index: 10;
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     border-color: rgba(79, 70, 229, 0.2);
@@ -421,9 +640,67 @@ body {
 }
 
 
-/* =================================================================
-     WELCOME PAGE SPECIFIC STYLES
-     ================================================================= */
+/* Perbaikan untuk teks di dalam card */
+
+.card-title {
+    color: #212529 !important;
+    /* Warna teks gelap untuk kontras */
+    font-weight: bold;
+    /* Tambahkan ketebalan teks */
+}
+
+.card-text {
+    color: #495057 !important;
+    /* Warna abu-abu gelap untuk deskripsi */
+}
+
+
+/* Tambahkan gaya untuk tombol agar lebih terlihat */
+
+.card .btn-light {
+    color: #212529 !important;
+    /* Warna teks tombol */
+    background-color: #f8f9fa !important;
+    /* Warna latar belakang tombol */
+    border: 1px solid #dee2e6 !important;
+    /* Tambahkan border */
+}
+
+
+/* Tambahkan gradasi untuk tombol */
+
+.btn-gradient {
+    background: linear-gradient(310deg, #4f46e5 0%, #3b82f6 100%);
+    color: white !important;
+    border: none;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(79, 70, 229, 0.4);
+}
+
+
+/* Gaya untuk badge counter notifikasi */
+
+.verification-badge {
+    background-color: #ff6b6b;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 12px;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+
+/* Welcome Page Specific Styles */
 
 .welcome-header {
     position: relative;
@@ -504,9 +781,7 @@ body {
 }
 
 
-/* =================================================================
-     COUNTER CARD STYLING
-     ================================================================= */
+/* Improve counter card styling */
 
 .counter-card {
     text-align: center;
@@ -595,9 +870,7 @@ body {
 }
 
 
-/* =================================================================
-     TIMELINE
-     ================================================================= */
+/* Timeline */
 
 .timeline {
     position: relative;
@@ -616,7 +889,6 @@ body {
 
 .timeline-item {
     position: relative;
-    z-index: 5;
     padding-bottom: 1.5rem;
 }
 
@@ -632,7 +904,6 @@ body {
     border-radius: 50%;
     background: #4f46e5;
     top: 4px;
-    z-index: 10;
 }
 
 .timeline-content {
@@ -652,9 +923,7 @@ body {
 }
 
 
-/* =================================================================
-     LIST GROUP
-     ================================================================= */
+/* List Group */
 
 .list-group-item {
     background-color: transparent !important;
@@ -663,14 +932,7 @@ body {
 }
 
 
-/* =================================================================
-     BREADCRUMB
-     ================================================================= */
-
-.breadcrumb {
-    position: relative;
-    z-index: 10;
-}
+/* Breadcrumb */
 
 .breadcrumb-item,
 .breadcrumb-item a,
@@ -683,14 +945,7 @@ body {
 }
 
 
-/* =================================================================
-     BUTTON STYLING WITH GLOW EFFECTS
-     ================================================================= */
-
-.btn {
-    position: relative;
-    z-index: 5;
-}
+/* Add glow effects to buttons */
 
 .btn-primary,
 .btn-success,
@@ -748,7 +1003,7 @@ body {
 .btn-warning {
     background: var(--gradient-warning);
     border: none;
-    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
     transition: all 0.3s ease;
 }
 
@@ -758,11 +1013,6 @@ body {
 .btn-warning:hover {
     transform: translateY(-3px);
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
-}
-
-.btn-warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(245, 158, 11, 0.4);
 }
 
 .btn-outline-primary,
@@ -780,43 +1030,35 @@ body {
     background-color: var(--light-hover);
 }
 
-.btn-outline-secondary {
-    color: var(--light-text);
-    border-color: var(--light-border);
+
+/* Main Content */
+
+.main-content {
+    background-color: var(--light-bg);
+}
+
+
+/* Improve navbar styling */
+
+.navbar-main {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
     transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
-
-.btn-outline-secondary:hover {
-    background-color: var(--light-hover);
-    color: var(--light-text);
-    transform: translateY(-2px);
-}
-
-.btn-link {
-    transition: all 0.3s ease;
-}
-
-.btn-link:hover {
-    transform: translateY(-2px);
-}
-
-
-/* =================================================================
-     NAVBAR STYLING
-     ================================================================= */
 
 .navbar-main .text-body {
     color: var(--light-text) !important;
 }
 
 
-/* =================================================================
-     FOOTER STYLING
-     ================================================================= */
+/* Enhance footer styling */
 
 .footer {
-    position: relative;
-    z-index: 5;
     background-color: transparent !important;
     padding: 1.5rem 0;
     border-top: 1px solid var(--light-border);
@@ -841,9 +1083,7 @@ body {
 }
 
 
-/* =================================================================
-     ANIMATIONS
-     ================================================================= */
+/* Animations */
 
 @keyframes fadeIn {
     from {
@@ -896,9 +1136,7 @@ body {
 }
 
 
-/* =================================================================
-     LIGHT MODE SPECIFIC OVERRIDES
-     ================================================================= */
+/* Light mode specific overrides */
 
 .bg-gray-100 {
     background-color: var(--light-bg) !important;
@@ -977,9 +1215,7 @@ body {
 }
 
 
-/* =================================================================
-     SIDENAV CARD
-     ================================================================= */
+/* Sidenav card */
 
 #sidenavCard {
     background-color: var(--light-card) !important;
@@ -991,9 +1227,7 @@ body {
 }
 
 
-/* =================================================================
-     LOGIN PAGE STYLES
-     ================================================================= */
+/* Login Page Styles */
 
 .card-plain {
     background-color: var(--light-card);
@@ -1023,7 +1257,6 @@ body {
     border-color: #4f46e5;
     color: var(--light-text);
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
-    z-index: 10;
 }
 
 .form-control::placeholder {
@@ -1034,14 +1267,89 @@ body {
     color: var(--light-text);
 }
 
+
+/* Add glow effects to buttons */
+
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::after,
+.btn-success::after,
+.btn-info::after,
+.btn-warning::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.btn-primary:hover::after,
+.btn-success:hover::after,
+.btn-info:hover::after,
+.btn-warning:hover::after {
+    opacity: 1;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    border: none;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background: var(--gradient-success);
+    border: none;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-info {
+    background: var(--gradient-info);
+    border: none;
+    box-shadow: 0 4px 10px rgba(6, 182, 212, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-warning {
+    background: var(--gradient-warning);
+    border: none;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-warning:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
 .text-danger {
     color: #ef4444 !important;
 }
 
+
+/* Notifikasi error */
+
 .alert-danger {
-    background-color: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    color: #000000 !important;
+    background-color: #f8d7da !important;
+    border-color: #f5c6cb !important;
+    font-weight: bold;
 }
 
 .login-side-image {
@@ -1089,9 +1397,7 @@ body {
 }
 
 
-/* =================================================================
-     FLOATING LABELS
-     ================================================================= */
+/* Floating labels */
 
 .form-floating {
     position: relative;
@@ -1129,9 +1435,7 @@ body {
 }
 
 
-/* =================================================================
-     CUSTOM CHECKBOX
-     ================================================================= */
+/* Custom checkbox */
 
 .form-check-input {
     background-color: var(--light-hover);
@@ -1144,9 +1448,7 @@ body {
 }
 
 
-/* =================================================================
-     RESPONSIVE ADJUSTMENTS
-     ================================================================= */
+/* Responsive adjustments */
 
 @media (max-width: 992px) {
     .login-side-image {
@@ -1155,9 +1457,7 @@ body {
 }
 
 
-/* =================================================================
-     TEXT GRADIENT
-     ================================================================= */
+/* Text gradient */
 
 .text-gradient {
     background: var(--gradient-primary);
@@ -1166,17 +1466,21 @@ body {
 }
 
 
-/* =================================================================
-     PROFILE PAGE SPECIFIC STYLES
-     ================================================================= */
+/* Purple color for file signature icon */
+
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+
+/* Profile page specific styles */
 
 .profile-image-container {
-    position: relative;
-    z-index: 10;
     width: 200px;
     height: 200px;
     border-radius: 50%;
     overflow: hidden;
+    position: relative;
     margin: 0 auto;
     border: 3px solid var(--light-border);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -1208,7 +1512,6 @@ body {
     opacity: 0;
     transition: all 0.3s ease;
     cursor: pointer;
-    z-index: 15;
 }
 
 .profile-image-overlay i {
@@ -1245,9 +1548,7 @@ body {
 }
 
 
-/* =================================================================
-     NOTIFICATION PAGE STYLES
-     ================================================================= */
+/* Notification page styles */
 
 .notification-detail-card {
     background-color: var(--light-card);
@@ -1277,9 +1578,7 @@ body {
 }
 
 
-/* =================================================================
-     TABLE STYLES
-     ================================================================= */
+/* Table styles */
 
 .table {
     color: var(--light-text) !important;
@@ -1309,9 +1608,7 @@ body {
 }
 
 
-/* =================================================================
-     FORM STYLES
-     ================================================================= */
+/* Form styles */
 
 .form-control-label {
     color: var(--light-text);
@@ -1323,16 +1620,50 @@ body {
     margin-bottom: 1.5rem;
 }
 
+
+/* Notifikasi sukses */
+
 .alert-success {
-    background-color: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    color: #155724 !important;
+    background-color: #d4edda !important;
+    border-color: #c3e6cb !important;
+    font-weight: bold;
 }
 
 
-/* =================================================================
-     TEXT COLORS
-     ================================================================= */
+/* Button styles */
+
+.btn-warning {
+    background: var(--gradient-warning);
+    border: none;
+    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(245, 158, 11, 0.4);
+}
+
+.btn-outline-secondary {
+    color: var(--light-text);
+    border-color: var(--light-border);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--light-hover);
+    color: var(--light-text);
+    transform: translateY(-2px);
+}
+
+.btn-link {
+    transition: all 0.3s ease;
+}
+
+.btn-link:hover {
+    transform: translateY(-2px);
+}
 
 .text-info {
     color: #06b6d4 !important;
@@ -1347,9 +1678,35 @@ body {
 }
 
 
-/* =================================================================
-     NOTIFICATION DROPDOWN STYLES
-     ================================================================= */
+/* Improve navbar styling */
+
+.navbar-main {
+    background-color: var(--light-card) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-main .text-body {
+    color: var(--light-text) !important;
+}
+
+
+/* Notification dropdown styles */
+
+.icon-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--light-hover);
+    color: var(--light-text);
+    transition: all 0.3s ease;
+}
 
 .icon-button:hover {
     background-color: rgba(79, 70, 229, 0.1);
@@ -1358,6 +1715,44 @@ body {
 
 .icon-button i {
     font-size: 1.2rem;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gradient-warning);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px rgba(245, 158, 11, 0.3);
+    animation: pulse 2s infinite;
+}
+
+
+/* Fix for notification dropdown being overlapped */
+
+.dropdown-notification {
+    position: absolute !important;
+    background-color: var(--light-card);
+    border: 1px solid var(--light-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 320px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    z-index: 9999 !important;
+    /* Ensure it's above other elements */
+    right: 0;
+    left: auto;
+    top: 100%;
+    margin-top: 0.5rem;
 }
 
 .dropdown-header {
@@ -1392,6 +1787,18 @@ body {
     color: var(--light-text);
 }
 
+.notification-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    color: white;
+}
+
 .notification-message {
     font-size: 0.875rem;
     color: var(--light-text);
@@ -1420,9 +1827,33 @@ body {
 }
 
 
-/* =================================================================
-     USER DROPDOWN STYLES
-     ================================================================= */
+/* User dropdown styles */
+
+
+/* Fix for user dropdown being overlapped */
+
+.dropdown-user {
+    position: absolute !important;
+    background-color: var(--light-card);
+    border: 1px solid var(--light-border);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    min-width: 240px;
+    padding: 0;
+    overflow: hidden;
+    z-index: 9999 !important;
+    /* Ensure it's above other elements */
+    right: 0;
+    left: auto;
+    top: 100%;
+    margin-top: 0.5rem;
+}
+
+.user-dropdown {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
 
 .user-dropdown:hover {
     color: var(--light-text);
@@ -1514,9 +1945,7 @@ body {
 }
 
 
-/* =================================================================
-     PENDAFTARAN STYLES
-     ================================================================= */
+/* Pendaftaran Styles */
 
 .document-upload-container {
     display: flex;
@@ -1525,7 +1954,7 @@ body {
 }
 
 .document-preview {
-    height: 150px;
+    height: 150%;
     border: 2px dashed var(--light-border);
     border-radius: 10px;
     display: flex;
@@ -1535,7 +1964,6 @@ body {
     background-color: var(--light-hover);
     transition: all 0.3s ease;
     overflow: hidden;
-    margin-bottom: 10px;
 }
 
 .document-preview i {
@@ -1550,12 +1978,9 @@ body {
 }
 
 .document-preview img {
-    width: 100%;
+    width: 50%;
     height: 100%;
     object-fit: cover;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
 }
 
 .document-preview.has-preview {
@@ -1566,6 +1991,9 @@ body {
 .document-upload-input {
     display: none;
 }
+
+
+/* Document cards for detail view */
 
 .document-card {
     background-color: var(--light-hover);
@@ -1607,9 +2035,15 @@ body {
     color: var(--light-text);
 }
 
+
+/* Pendaftaran index page styles */
+
 .pendaftaran-row {
     opacity: 0;
 }
+
+
+/* Process cards */
 
 .process-card {
     background-color: #ffffff;
@@ -1624,6 +2058,9 @@ body {
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     border-color: rgba(79, 70, 229, 0.3);
 }
+
+
+/* FAQ items */
 
 .faq-item {
     background-color: #ffffff;
@@ -1640,9 +2077,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL BACKGROUNDS FOR PROCESS STEPS
-     ================================================================= */
+/* Colorful backgrounds for process steps */
 
 .bg-step-1 {
     background: linear-gradient(310deg, #4f46e5 0%, #818cf8 100%);
@@ -1661,9 +2096,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL ICONS
-     ================================================================= */
+/* Colorful icons */
 
 .icon-primary {
     color: #4f46e5;
@@ -1698,9 +2131,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL BADGES
-     ================================================================= */
+/* Colorful badges */
 
 .badge-primary {
     background-color: #4f46e5;
@@ -1735,9 +2166,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL BORDERS
-     ================================================================= */
+/* Colorful borders */
 
 .border-primary {
     border-color: #4f46e5 !important;
@@ -1772,9 +2201,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL TEXT
-     ================================================================= */
+/* Colorful text */
 
 .text-primary {
     color: #4f46e5 !important;
@@ -1782,6 +2209,18 @@ body {
 
 .text-success {
     color: #10b981 !important;
+}
+
+.text-info {
+    color: #06b6d4 !important;
+}
+
+.text-warning {
+    color: #f59e0b !important;
+}
+
+.text-danger {
+    color: #ef4444 !important;
 }
 
 .text-purple {
@@ -1797,9 +2236,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL BACKGROUNDS
-     ================================================================= */
+/* Colorful backgrounds */
 
 .bg-primary-light {
     background-color: rgba(79, 70, 229, 0.1) !important;
@@ -1834,9 +2271,7 @@ body {
 }
 
 
-/* =================================================================
-     COLORFUL SHADOWS
-     ================================================================= */
+/* Colorful shadows */
 
 .shadow-primary {
     box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2) !important;
@@ -1871,53 +2306,398 @@ body {
 }
 
 
-/* =================================================================
-     WHITE INFO CARD FOR PENDAFTARAN LAMA
-     ================================================================= */
+/* Fix for Bootstrap dropdowns */
 
-.info-card-white {
-    background: #ffffff !important;
-    border: 1px solid var(--light-border);
-    border-radius: 15px;
-    color: var(--light-text);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.info-card-white .card-header {
-    background: var(--light-hover);
-    border-bottom: 1px solid var(--light-border);
-    border-radius: 15px 15px 0 0;
-    color: var(--light-text);
-}
-
-.info-card-white .profile-info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--light-border);
-}
-
-.info-card-white .profile-info-item:last-child {
-    border-bottom: none;
-}
-
-.info-card-white .profile-info-label {
-    font-weight: 600;
-    color: var(--light-text);
-}
-
-.info-card-white .profile-info-value {
-    font-weight: 500;
-    text-align: right;
-    color: var(--light-text);
+.dropdown-menu.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 9999 !important;
 }
 
 
-/* =================================================================
-     DROPDOWN MENU POSITIONING
-     ================================================================= */
+/* Ensure navbar has proper z-index */
 
-.dropdown-menu {
+.navbar-main {
+    z-index: 1030 !important;
+    position: relative !important;
+}
+
+
+/* Fix for dropdown positioning */
+
+.nav-item.dropdown {
+    position: relative !important;
+}
+
+
+/* Sidebar Toggle Functionality */
+
+.sidebar-toggle-container {
+    position: absolute;
+    top: 15px;
+    right: -15px;
     z-index: 1000;
+}
+
+.sidebar-toggle-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+}
+
+.sidebar-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+}
+
+.sidebar-toggle-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+
+/* Sidebar Collapsed State */
+
+.sidenav.sidebar-collapsed {
+    width: 80px !important;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .sidenav-header .navbar-brand span {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .nav-link-text {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .verification-badge {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .sidenav-footer {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .nav-item h6 {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidenav.sidebar-collapsed .nav-link {
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.sidenav.sidebar-collapsed .icon-shape {
+    margin-right: 0 !important;
+}
+
+
+/* Main Content Adjustment */
+
+.main-content {
+    margin-left: 17rem;
+    transition: all 0.3s ease;
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 6rem;
+    transition: all 0.3s ease;
+}
+
+
+/* Responsive Behavior */
+
+@media (max-width: 1199px) {
+    .main-content {
+        margin-left: 17rem;
+    }
+    .main-content.sidebar-collapsed {
+        margin-left: 6rem;
+    }
+}
+
+@media (max-width: 991px) {
+    .main-content {
+        margin-left: 0;
+    }
+    .main-content.sidebar-collapsed {
+        margin-left: 0;
+    }
+    .sidenav {
+        transform: translateX(-100%);
+        transition: all 0.3s ease;
+    }
+    .sidenav.sidebar-collapsed {
+        transform: translateX(-100%);
+        width: 250px !important;
+    }
+    .sidenav:not(.sidebar-collapsed) {
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 9999;
+        background: var(--gradient-primary);
+    }
+    .sidenav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 9998;
+        transform: translateX(-100%);
+        width: 250px !important;
+    }
+    .sidenav:not(.sidebar-collapsed) {
+        transform: translateX(0);
+    }
+    .sidenav.sidebar-collapsed {
+        transform: translateX(-100%);
+    }
+    /* Overlay for mobile */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9997;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+
+/* Tooltip for collapsed sidebar */
+
+.sidenav.sidebar-collapsed .nav-link {
+    position: relative;
+}
+
+.sidenav.sidebar-collapsed .nav-link::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+    z-index: 1000;
+}
+
+.sidenav.sidebar-collapsed .nav-link:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* Smooth transitions for all elements */
+
+.sidenav * {
+    transition: all 0.3s ease;
+}
+
+
+/* Fix for icon alignment in collapsed state */
+
+.sidenav.sidebar-collapsed .icon-shape {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+/* Animation for toggle button icon */
+
+.sidebar-toggle-btn i {
+    transition: all 0.3s ease;
+}
+
+
+/* Ensure proper spacing in collapsed state */
+
+.sidenav.sidebar-collapsed .nav-item {
+    margin: 3px 5px;
+}
+
+
+/* Hide text elements smoothly */
+
+.sidenav .nav-link-text,
+.sidenav .verification-badge,
+.sidenav .sidenav-footer,
+.sidenav .navbar-brand span {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+
+/* Registration Form Specific Styles */
+
+.animate-card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.document-upload-container {
+    text-align: center;
+}
+
+.document-preview {
+    width: 320px;
+    height: 320px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.document-preview.photo-preview {
+    border-radius: 50%;
+}
+
+.document-preview:hover {
+    border-color: #17a2b8;
+    background: #e3f2fd;
+}
+
+.document-preview i {
+    font-size: 2rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.document-preview span {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.document-preview.has-preview {
+    border-color: #28a745;
+    background: #f8fff9;
+}
+
+.document-preview.has-preview i {
+    color: #28a745;
+}
+
+.document-preview.has-preview span {
+    color: #28a745;
+}
+
+.document-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.document-preview.photo-preview img {
+    border-radius: 50%;
+}
+
+.document-upload-input {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group-text {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.btn-outline-info:hover {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-outline-warning:hover {
+    color: #fff;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+.icon-shape {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(87deg, #fb6340 0, #fbb140 100%);
 }

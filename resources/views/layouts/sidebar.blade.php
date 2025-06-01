@@ -1,16 +1,22 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4" id="sidenav-main">
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" id="iconSidenav"></i>
-    <a class="navbar-brand m-0" href="{{ url('/') }}">
-      <div class="d-flex flex-column align-items-center justify-content-center py-3">
-
-        <div class="text-center">
-        <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="sidebar-logo mb-2">
-          <span class="font-weight-bold text-sm">TOEIC Center</span>
+    @php
+        $dashboardRoute = Auth::check() ?
+            (Auth::user()->level->level_kode === 'AdmUpa' ? route('admin.dashboard') :
+             (Auth::user()->level->level_kode === 'AdmITC' ? route('welcome') :
+              route('mahasiswa.dashboard'))) :
+            route('welcome');
+    @endphp
+    <a class="navbar-brand m-0" href="{{ $dashboardRoute }}">
+        <div class="d-flex flex-column align-items-center justify-content-center py-3">
+            <div class="text-center">
+                <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="sidebar-logo mb-2">
+                <span class="font-weight-bold text-sm">TOEIC Center</span>
+            </div>
         </div>
-      </div>
     </a>
-  </div>
+</div>
 
   <hr class="horizontal dark mt-0">
 
@@ -27,7 +33,7 @@
 
       <!-- Dashboard -->
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}"
            href="{{ $isAdminUpa ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
@@ -39,7 +45,7 @@
       <!-- Data Mahasiswa - Only for AdminITC -->
       @if($isAdminITC)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}"
            href="{{ route('admin.mahasiswa.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-users text-success text-sm opacity-10"></i>
@@ -52,7 +58,7 @@
       <!-- Student Pendaftaran - Only for Students -->
       @if($isStudent)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}"
            href="{{ route('pendaftaran.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-clipboard-list text-warning text-sm opacity-10"></i>
@@ -91,7 +97,7 @@
       <!-- Surat Pernyataan - Only for AdmUpa and Students -->
       @if($isAdminUpa || $isStudent)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}"
            href="{{ $isAdminUpa ? route('admin.surat-pernyataan.index') : route('mahasiswa.surat-pernyataan.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-file-signature text-danger text-sm opacity-10"></i>

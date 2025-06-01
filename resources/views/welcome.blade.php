@@ -24,7 +24,7 @@
     <div class="text-center mb-4" data-aos="fade-down">
         <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="img-fluid mb-3" style="max-height: 100px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
         <h2 class="text-primary mb-0">TOEIC Registration Center</h2>
-        <p class="text-muted">Politeknik Negeri Padang</p>
+        <p class="text-muted">Politeknik Negeri Malang</p>
     </div>
 
     <!-- Welcome Header -->
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-12">
                             <div class="card shadow-sm">
@@ -192,7 +192,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
-                                            <div class="card p-3 border h-100 animate-card" style="cursor: pointer;" onclick="window.location='{{ route('admin.mahasiswa.index') }}?kampus=Politeknik+Negeri+Padang'">
+                                            <div class="card p-3 border h-100 animate-card" style="cursor: pointer;" onclick="window.location='{{ route('admin.mahasiswa.index') }}?kampus=Politeknik+Negeri+Malang'">
                                                 <div class="d-flex align-items-center">
                                                     <div class="icon icon-shape icon-md bg-gradient-primary text-white rounded-circle shadow me-3">
                                                         <i class="fas fa-filter"></i>
@@ -218,7 +218,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="table-responsive mt-3">
                                         <table class="table table-hover">
                                             <thead>
@@ -292,7 +292,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('mahasiswa.index') }}'">
+                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('mahasiswa.dashboard') }}'">
                                 <i class="fas fa-users fa-3x mb-3 text-success"></i>
                                 <h4>Data Mahasiswa</h4>
                                 <p>Lihat dan kelola data mahasiswa</p>

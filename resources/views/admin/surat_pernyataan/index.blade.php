@@ -3,10 +3,81 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
+        <!-- Card Template Surat -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Template Surat Pernyataan</h6>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadTemplateModal">
+                        <i class="fas fa-upload me-2"></i>Upload Template
+                    </button>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Template</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">File</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($templates as $template)
+                                <tr>
+                                    <td class="ps-4">
+                                        <p class="text-sm mb-0">{{ $template->nama_template }}</p>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-sm bg-{{ $template->status === 'aktif' ? 'success' : 'secondary' }}">
+                                            {{ $template->status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ asset('storage/templates/' . $template->file_template) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye me-1"></i> Preview
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('admin.surat-pernyataan.toggle-status', $template->id_template) }}"
+                                            method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-{{ $template->status === 'aktif' ? 'warning' : 'success' }}">
+                                                <i class="fas fa-{{ $template->status === 'aktif' ? 'times' : 'check' }} me-1"></i>
+                                                {{ $template->status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <p class="text-sm mb-0">Belum ada template surat yang diunggah</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>{{ $page->title }}</h6>
+                    <h6>Daftar Surat Pernyataan</h6>
+                    @if(count($suratPernyataan) > 0)
+                    <a href="{{ route('admin.surat-pernyataan.download-all') }}"
+                        class="btn btn-sm btn-success">
+                            <i class="fas fa-download me-2"></i>Download Semua Surat
+                    </a>
+                    @endif
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     @if(session('success'))
@@ -119,6 +190,57 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Upload Template -->
+<div class="modal fade" id="uploadTemplateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('admin.surat-pernyataan.upload-template') }}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Template Surat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Template</label>
+                        <input type="text"
+                               name="nama_template"
+                               class="form-control @error('nama_template') is-invalid @enderror"
+                               required>
+                        @error('nama_template')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File Template (PDF)</label>
+                        <input type="file"
+                               name="file_template"
+                               class="form-control @error('file_template') is-invalid @enderror"
+                               accept=".pdf"
+                               required>
+                        @error('file_template')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Maksimal 2MB</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="deskripsi"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -18,8 +18,9 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Welcome page
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+// Landing page route
+Route::get('/', function () {
+    return view('landing');})->name('landing');
 
 Route::middleware('auth')->group(function () {
     // Common routes for all authenticated users
@@ -56,21 +57,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/profile/edit', [UserController::class, 'editAdmin'])->name('admin.profile.edit');
         Route::post('/admin/profile/update', [UserController::class, 'updateAdmin'])->name('admin.profile.update');
 
-        // Routes untuk Surat Pernyataan - Admin
-        Route::prefix('admin')->name('admin.')->group(function () {
-            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'adminIndex'])->name('surat-pernyataan.index');
-            Route::get('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'adminShow'])->name('surat-pernyataan.show');
-            Route::patch('/surat-pernyataan/{id}/validate', [SuratPernyataanController::class, 'validateSurat'])->name('surat-pernyataan.validate');
-            Route::patch('/surat-pernyataan/{id}/reject', [SuratPernyataanController::class, 'reject'])->name('surat-pernyataan.reject');
-        });
-
         Route::resource('surat-pernyataan', SuratPernyataanController::class);
 
         // Routes untuk Template Surat - Admin
         Route::prefix('admin')->name('admin.')->group(function () {
-            Route::post('/template/upload', [SuratPernyataanController::class, 'uploadTemplate'])->name('template.upload');
-            Route::delete('/template/{id}', [SuratPernyataanController::class, 'deleteTemplate'])->name('template.delete');
-            Route::patch('/template/{id}/toggle-status', [SuratPernyataanController::class, 'toggleTemplateStatus'])->name('template.toggle-status');
+            // Surat Pernyataan routes
+            Route::get('/surat-pernyataan/download-all', [SuratPernyataanController::class, 'downloadAll'])->name('surat-pernyataan.download-all');
+            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'adminIndex'])->name('surat-pernyataan.index');
+            Route::get('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'adminShow'])->name('surat-pernyataan.show');
+            Route::patch('/surat-pernyataan/{id}/validate', [SuratPernyataanController::class, 'validateSurat'])->name('surat-pernyataan.validate');
+            Route::patch('/surat-pernyataan/{id}/reject', [SuratPernyataanController::class, 'reject'])->name('surat-pernyataan.reject');
+
+            // Template routes
+            Route::post('/surat-pernyataan/upload-template', [SuratPernyataanController::class, 'uploadTemplate'])->name('surat-pernyataan.upload-template');
+            Route::patch('/surat-pernyataan/template/{id}/toggle-status', [SuratPernyataanController::class, 'toggleStatus'])->name('surat-pernyataan.toggle-status');
         });
     });
 

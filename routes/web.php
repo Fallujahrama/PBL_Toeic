@@ -18,9 +18,13 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'postlogin'])->name('postlogin');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Welcome page
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+
 // Landing page route
 Route::get('/', function () {
     return view('landing');})->name('landing');
+Route::get('/welcome', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::middleware('auth')->group(function () {
     // Common routes for all authenticated users

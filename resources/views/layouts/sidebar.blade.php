@@ -4,9 +4,9 @@
     @php
         $dashboardRoute = Auth::check() ?
             (Auth::user()->level->level_kode === 'AdmUpa' ? route('admin.dashboard') :
-             (Auth::user()->level->level_kode === 'AdmITC' ? route('welcome') :
+             (Auth::user()->level->level_kode === 'AdmITC' ? route('admin.mahasiswa.index') :
               route('mahasiswa.dashboard'))) :
-            route('welcome');
+            route('landing');
     @endphp
     <a class="navbar-brand m-0" href="{{ $dashboardRoute }}">
         <div class="d-flex flex-column align-items-center justify-content-center py-3">

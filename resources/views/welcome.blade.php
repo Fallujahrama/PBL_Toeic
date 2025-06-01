@@ -116,7 +116,7 @@
             </div>
         </div>
     </div>
-    @elseif(Auth::check() && Auth::user()->level_id == 2)
+    @elseif(Auth::check() && Auth::user()->level->level_kode == 'AdmITC')
     <!-- AdminITC Dashboard - Only shown to AdminITC users -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">
@@ -262,7 +262,7 @@
             </div>
         </div>
     </div>
-    @else
+    @elseif(Auth::check() && Auth::user()->level->level_kode == 'AdmUpa')
     <!-- Admin Dashboard Summary - Only shown to AdmUpa -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">

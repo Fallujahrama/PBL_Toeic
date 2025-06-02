@@ -15,7 +15,6 @@ class MahasiswaModel extends Model
     public $incrementing = false; // Karena 'nim' bukan auto-increment
     protected $keyType = 'string'; // Tipe data primary key adalah string
 
-
     // Kolom yang dapat diisi
     protected $fillable = [
         'nim',
@@ -38,5 +37,11 @@ class MahasiswaModel extends Model
     public function user()
     {
         return $this->belongsTo(UserModel::class, 'nim', 'username'); // Relasi berdasarkan nim
+    }
+
+    // Relasi ke surat pernyataan
+    public function suratPernyataan()
+    {
+        return $this->hasMany(SuratPernyataanModel::class, 'nim', 'nim');
     }
 }

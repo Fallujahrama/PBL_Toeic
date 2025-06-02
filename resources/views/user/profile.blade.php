@@ -39,20 +39,23 @@
                             </div>
 
                             {{-- Form Upload Foto --}}
-                            <form action="{{ route('user.editPhoto') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+                            <form action="{{ route('user.editPhoto') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                <div class="form-group">
-                                    <div class="input-group">
+                                <div class="document-upload-container">
+
+                                    <div class="document-upload-button">
                                         <input type="file" class="form-control d-none" id="foto_profil" name="foto_profil" accept="image/*">
                                         <label for="foto_profil" class="btn btn-outline-primary w-100 mb-0">
                                             <i class="fas fa-upload me-2"></i>Pilih Foto
                                         </label>
                                     </div>
-                                    @error('foto_profil')
-                                    <small class="text-danger">{{ $message }}</small>
-                                    @enderror
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100 mt-2">
+
+                                @error('foto_profil')
+                                <small class="text-danger d-block mt-2">{{ $message }}</small>
+                                @enderror
+
+                                <button type="submit" class="btn btn-primary w-100 mt-3">
                                     <i class="fas fa-save me-2"></i>Update Foto
                                 </button>
                             </form>
@@ -76,49 +79,49 @@
                                 </div>
 
                                 @if(auth()->user()->hasRole('Mhs'))
-                                    {{-- Mahasiswa --}}
-                                    <div class="profile-info-item mb-3">
-                                        <div class="profile-info-label">
-                                            <i class="fas fa-id-card me-2"></i>Nama
-                                        </div>
-                                        <div class="profile-info-value">
-                                            {{ $user->mahasiswa->nama ?? 'Nama Belum Diisi' }}
-                                        </div>
+                                {{-- Mahasiswa --}}
+                                <div class="profile-info-item mb-3">
+                                    <div class="profile-info-label">
+                                        <i class="fas fa-id-card me-2"></i>Nama
                                     </div>
-                                    <div class="profile-info-item mb-3">
-                                        <div class="profile-info-label">
-                                            <i class="fas fa-phone me-2"></i>No. WhatsApp
-                                        </div>
-                                        <div class="profile-info-value">
-                                            {{ $user->mahasiswa->no_whatsapp ?? '-' }}
-                                        </div>
+                                    <div class="profile-info-value">
+                                        {{ $user->mahasiswa->nama ?? 'Nama Belum Diisi' }}
                                     </div>
+                                </div>
+                                <div class="profile-info-item mb-3">
+                                    <div class="profile-info-label">
+                                        <i class="fas fa-phone me-2"></i>No. WhatsApp
+                                    </div>
+                                    <div class="profile-info-value">
+                                        {{ $user->mahasiswa->no_whatsapp ?? '-' }}
+                                    </div>
+                                </div>
 
-                                    <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-edit me-1"></i>Edit Profil
-                                    </a>
+                                <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                </a>
                                 @else
-                                    {{-- Admin --}}
-                                    <div class="profile-info-item mb-3">
-                                        <div class="profile-info-label">
-                                            <i class="fas fa-id-card me-2"></i>Nama
-                                        </div>
-                                        <div class="profile-info-value">
-                                            {{ $user->admin->nama ?? 'Nama Belum Diisi' }}
-                                        </div>
+                                {{-- Admin --}}
+                                <div class="profile-info-item mb-3">
+                                    <div class="profile-info-label">
+                                        <i class="fas fa-id-card me-2"></i>Nama
                                     </div>
-                                    <div class="profile-info-item mb-3">
-                                        <div class="profile-info-label">
-                                            <i class="fas fa-phone me-2"></i>No. WhatsApp
-                                        </div>
-                                        <div class="profile-info-value">
-                                            {{ $user->admin->no_hp ?? '-' }}
-                                        </div>
+                                    <div class="profile-info-value">
+                                        {{ $user->admin->nama ?? 'Nama Belum Diisi' }}
                                     </div>
+                                </div>
+                                <div class="profile-info-item mb-3">
+                                    <div class="profile-info-label">
+                                        <i class="fas fa-phone me-2"></i>No. WhatsApp
+                                    </div>
+                                    <div class="profile-info-value">
+                                        {{ $user->admin->no_hp ?? '-' }}
+                                    </div>
+                                </div>
 
-                                    <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-edit me-1"></i>Edit Profil
-                                    </a>
+                                <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                </a>
                                 @endif
 
                             </div>

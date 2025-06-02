@@ -90,7 +90,7 @@
               alt="User Image">
           </div>
           <span class="d-none d-lg-inline ms-2 user-name">
-            {{ auth()->check() ? auth()->user()->nama : 'Guest' }}
+            {{ auth()->check() ? auth()->user()->username : 'Guest' }}
           </span>
         </a>
         @if(auth()->check())

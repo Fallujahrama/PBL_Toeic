@@ -9,11 +9,17 @@ class SuratPernyataanModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'surat_pernyataan'; // Nama tabel
-    protected $primaryKey = 'id_surat_pernyataan'; // Primary key
-    protected $fillable = ['file_surat_pernyataan', 'status', 'nim']; // Kolom yang dapat diisi
+    protected $table = 'surat_pernyataan';
+    protected $primaryKey = 'id_surat_pernyataan';
+    public $timestamps = true;
 
-    // Relasi ke tabel mahasiswa
+    protected $fillable = [
+        'file_surat_pernyataan',
+        'status',
+        'nim'
+    ];
+
+    // Relasi ke mahasiswa
     public function mahasiswa()
     {
         return $this->belongsTo(MahasiswaModel::class, 'nim', 'nim');

@@ -32,17 +32,19 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain" data-aos="fade-right">
                 <div class="card-header pb-0 text-start">
-                  <div class="login-logo">
-                    <i class="fas fa-language"></i>
+                  <div class="login-logo text-center mb-3">
+                    <a href="{{ route('landing') }}">
+                        <img src="{{ asset('img/Tregon.png') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 100px;">
+                    </a>
                   </div>
                   <h4 class="font-weight-bolder text-center">TOEIC Registration</h4>
                   <p class="mb-0 text-center">Enter your credentials to access your account</p>
                 </div>
                 <div class="card-body">
                   @if ($errors->any())
-                    <div class="alert alert-danger">
-                      {{ $errors->first() }}
-                    </div>
+                  <div class="alert alert-danger">
+                    {{ $errors->first() }}
+                  </div>
                   @endif
                   <form action="{{ url('login') }}" method="POST" id="form-login">
                     @csrf
@@ -56,20 +58,13 @@
                       <label for="password">Password</label>
                       <span class="text-danger error-text" id="error-password"></span>
                     </div>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
-                      <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0 pulse">Sign in</button>
+                        <a href="{{ route('landing') }}" class="btn btn-link text-secondary mt-2 slide-up">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Landing Page
+                        </a>
                     </div>
                   </form>
-                </div>
-                <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-4 text-sm mx-auto">
-                    Don't have an account?
-                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Contact administrator</a>
-                  </p>
                 </div>
               </div>
             </div>

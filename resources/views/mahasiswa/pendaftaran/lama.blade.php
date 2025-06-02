@@ -197,7 +197,7 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="400">
-                <a href="{{ url('pendaftaran') }}" class="btn btn-outline-secondary me-2">
+                <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
                 <button type="submit" class="btn btn-warning">
@@ -213,8 +213,8 @@
 @push('js')
 <script>
     $(document).ready(function() {
-        // Preview for payment proof
-        $('#bukti_pembayaran').change(function() {
+        // Preview for payment proof - FIXED SELECTOR
+        $('#file_bukti_pembayaran').change(function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -225,7 +225,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#payment-preview').html(`<img src="${e.target.result}" alt="Payment Preview">`);
+                        $('#payment-preview').html(`<img src="${e.target.result}" alt="Payment Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#payment-preview').addClass('has-preview');
                 }
@@ -246,7 +246,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#ktp-preview').html(`<img src="${e.target.result}" alt="KTP Preview">`);
+                        $('#ktp-preview').html(`<img src="${e.target.result}" alt="KTP Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#ktp-preview').addClass('has-preview');
                 }
@@ -267,7 +267,7 @@
                             <span>${file.name}</span>
                         `);
                     } else {
-                        $('#ktm-preview').html(`<img src="${e.target.result}" alt="KTM Preview">`);
+                        $('#ktm-preview').html(`<img src="${e.target.result}" alt="KTM Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     }
                     $('#ktm-preview').addClass('has-preview');
                 }
@@ -282,7 +282,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#foto-preview').html(`<img src="${e.target.result}" alt="Photo Preview">`);
+                    $('#foto-preview').html(`<img src="${e.target.result}" alt="Photo Preview" style="width: 100%; height: 100%; object-fit: contain;">`);
                     $('#foto-preview').addClass('has-preview');
                 }
                 reader.readAsDataURL(file);

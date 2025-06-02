@@ -10,9 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8 text-center text-lg-start">
                             <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
-                                <div class="icon icon-shape bg-white text-primary rounded-circle shadow me-3 d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-users"></i>
-                                </div>
+                            
                                 <div>
                                     <h3 class="text-white mb-1">Data Mahasiswa</h3>
                                     <p class="text-white opacity-8 mb-0">Kelola dan pantau data mahasiswa TOEIC</p>

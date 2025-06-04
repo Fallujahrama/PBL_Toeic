@@ -16,11 +16,16 @@ class AdminSeeder extends Seeder
         $data = [
             [
                 'user_id' => 1,
+                'nama' => 'SuperAdmin',
+                'no_hp' => '08000000000',
+            ],
+            [
+                'user_id' => 2,
                 'nama' => 'AdminUPA',
                 'no_hp' => '08111111111',
             ],
             [
-                'user_id' => 2,
+                'user_id' => 3,
                 'nama' => 'AdminITC',
                 'no_hp' => '08222222222',
             ],

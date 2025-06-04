@@ -29,7 +29,7 @@ class MahasiswaController extends Controller
         $kampusFilter = request('kampus');
 
         // Mengambil data mahasiswa dengan filter kampus jika ada
-        $data = MahasiswaModel::select('nim', 'nama', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
+        $data = MahasiswaModel::select('nim', 'nama', 'nik', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
             ->when($kampusFilter, function ($query, $kampusFilter) {
                 return $query->where('kampus', $kampusFilter);
             })

@@ -42,12 +42,12 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="table-responsive p-0 mt-3">
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">ID</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">No</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Tanggal</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Jadwal</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">File</th>
@@ -77,13 +77,16 @@
                                         </a>
                                     </td>
                                     <td class="align-middle text-center">
+                                        <a href="{{ route('hasil_ujian.edit', $item->id_hasil) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                         <form action="{{ route('hasil_ujian.destroy', $item->id_hasil) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn" 
-                                                data-id="{{ $item->id_hasil }}" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-placement="top" 
+                                            <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn"
+                                                data-id="{{ $item->id_hasil }}"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
                                                 title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -128,16 +131,16 @@
     .hasil-row {
         transition: all 0.3s ease;
     }
-    
+
     .hasil-row:hover {
         background-color: rgba(0, 0, 0, 0.03);
     }
-    
+
     .fade-in {
         opacity: 0;
         animation: fadeIn 0.5s ease-in-out forwards;
     }
-    
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -153,7 +156,7 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-        
+
         // Delete confirmation
         $('.delete-btn').on('click', function() {
             const id = $(this).data('id');

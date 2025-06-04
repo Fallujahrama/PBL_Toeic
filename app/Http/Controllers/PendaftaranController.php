@@ -182,8 +182,15 @@ class PendaftaranController extends Controller
         $user->nama = $request->nama; // Perbarui kolom nama
         $user->save();
 
+        // Get registration count for this student
+        $registrationCount = PendaftaranModel::where('nim', $nim)->count();
+        $isFirstRegistration = $registrationCount === 0;
+
+        // Menyimpan data pendaftaran untuk mahasiswa baru
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $nim;
+
+        // Handle file uploads
         if ($request->hasFile('ktp')) {
             $file = $request->file('ktp');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -201,17 +208,26 @@ class PendaftaranController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $pendaftaran->file_foto = $file->storeAs('pendaftaran/foto', $filename, 'public');
         }
-        // $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('pendaftaran/ktp', 'public') : null;
-        // $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('pendaftaran/ktm', 'public') : null;
-        // $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pendaftaran/foto', 'public') : null;
-        $pendaftaran->file_bukti_pembayaran = null; // Tambahkan nilai default
 
-        // Tambahkan ini untuk file_bukti_pembayaran
-        // $pendaftaran->file_bukti_pembayaran = $request->hasFile('bukti_pembayaran') ? $request->file('bukti_pembayaran')->store('bukti_pembayaran') : null;
+        // Set file_bukti_pembayaran explicitly to null for first registration
+        if ($isFirstRegistration) {
+            $pendaftaran->file_bukti_pembayaran = null;
+            // Add this line to make the column nullable for first registration
+            DB::statement('ALTER TABLE pendaftaran MODIFY file_bukti_pembayaran VARCHAR(255) NULL');
+        } else {
+            if ($request->hasFile('bukti_pembayaran')) {
+                $file = $request->file('bukti_pembayaran');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $pendaftaran->file_bukti_pembayaran = $file->storeAs('pendaftaran/bukti_pembayaran', $filename, 'public');
+            }
+        }
 
-        $pendaftaran->save();
-
-        return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
+        try {
+            $pendaftaran->save();
+            return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan pendaftaran. Silakan coba lagi.');
+        }
     }
 
     /**

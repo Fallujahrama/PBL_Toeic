@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
             // Template routes
             Route::post('/surat-pernyataan/upload-template', [SuratPernyataanController::class, 'uploadTemplate'])->name('surat-pernyataan.upload-template');
             Route::patch('/surat-pernyataan/template/{id}/toggle-status', [SuratPernyataanController::class, 'toggleStatus'])->name('surat-pernyataan.toggle-status');
+            Route::delete('/surat-pernyataan/template/{id}', [SuratPernyataanController::class, 'deleteTemplate'])->name('surat-pernyataan.delete-template');
         });
     });
 

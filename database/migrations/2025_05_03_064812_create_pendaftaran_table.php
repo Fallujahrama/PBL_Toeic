@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('file_ktp');
             $table->string('file_ktm');
             $table->string('file_foto');
-            $table->string('file_bukti_pembayaran');
+            $table->string('file_bukti_pembayaran')->nullable();
             $table->string('nim')->index();
             $table->foreign('nim')->references('nim')->on('mahasiswa');
             $table->timestamps();

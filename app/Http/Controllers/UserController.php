@@ -103,10 +103,13 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $request->validate([
-            // 'username' => 'required|string|max:50|unique:m_user,username,' . $user->id_user . ',id_user',
             'nama' => 'required|string',
-            'no_hp' => 'required|string',
+            'no_hp' => 'required|numeric|digits_between:10,15', // Ubah validasi',
             'password' => 'nullable|string|min:6|confirmed',
+        ], [
+            // Pesan error kustom
+            'no_hp.numeric' => 'Nomor WhatsApp harus berupa angka',
+            'no_hp.digits_between' => 'Nomor WhatsApp harus antara 10-15 digit'
         ]);
 
         // Update user
@@ -138,8 +141,12 @@ class UserController extends Controller
         $user = auth()->user();
         $request->validate([
             'nama' => 'required|string',
-            'no_whatsapp' => 'required|string',
+            'no_whatsapp' => 'required|numeric|digits_between:10,15', // Ubah validasi',
             'password' => 'nullable|string|min:6|confirmed',
+        ], [
+            // Pesan error kustom
+            'no_whatsapp.numeric' => 'Nomor WhatsApp harus berupa angka',
+            'no_whatsapp.digits_between' => 'Nomor WhatsApp harus antara 10-15 digit'
         ]);
 
         // Update user
@@ -162,7 +169,7 @@ class UserController extends Controller
     public function adminIndex()
     {
         $users = UserModel::with('level')->paginate(10);
-        
+
         $breadcrumb = (object) [
             'title' => 'Manajemen User',
             'list' => ['Home', 'Admin', 'Users']
@@ -180,7 +187,7 @@ class UserController extends Controller
     public function create()
     {
         $levels = \App\Models\LevelModel::all();
-        
+
         $breadcrumb = (object) [
             'title' => 'Tambah User',
             'list' => ['Home', 'Admin', 'Users', 'Create']
@@ -236,7 +243,7 @@ class UserController extends Controller
             Log::info('User after creation (fresh from DB):', $createdUser->toArray());
 
             // Create related records based on user level
-            if ($validatedData['level_id'] == 1 || $validatedData['level_id'] == 2 || $validatedData['level_id'] == 4) { 
+            if ($validatedData['level_id'] == 1 || $validatedData['level_id'] == 2 || $validatedData['level_id'] == 4) {
                 // Admin UPA, Admin ITC, or Super Admin
                 $admin = AdminModel::create([
                     'user_id' => $user->id_user,
@@ -244,7 +251,7 @@ class UserController extends Controller
                     'no_hp' => '-'
                 ]);
                 Log::info('Admin record created:', $admin->toArray());
-            } elseif ($validatedData['level_id'] == 3) { 
+            } elseif ($validatedData['level_id'] == 3) {
                 // Mahasiswa - create basic record
                 $mahasiswa = MahasiswaModel::create([
                     'nim' => $validatedData['username'],
@@ -262,10 +269,10 @@ class UserController extends Controller
             }
 
             DB::commit();
-            
+
             Log::info('=== USER CREATION SUCCESS ===');
             return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
-            
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             Log::error('Validation error:', $e->errors());
@@ -281,7 +288,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = UserModel::with('level')->findOrFail($id);
-        
+
         $breadcrumb = (object) [
             'title' => 'Detail User',
             'list' => ['Home', 'Admin', 'Users', 'Detail']
@@ -300,7 +307,7 @@ class UserController extends Controller
     {
         $user = UserModel::findOrFail($id);
         $levels = \App\Models\LevelModel::all();
-        
+
         $breadcrumb = (object) [
             'title' => 'Edit User',
             'list' => ['Home', 'Admin', 'Users', 'Edit']
@@ -319,9 +326,9 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             $user = UserModel::findOrFail($id);
-            
+
             $request->validate([
                 'nama' => 'required|string|max:255',
                 'username' => 'required|string|max:255|unique:m_user,username,' . $id . ',id_user',
@@ -333,13 +340,13 @@ class UserController extends Controller
             $user->nama = $request->nama;
             $user->username = $request->username;
             $user->level_id = $request->level_id;
-            
+
             if ($request->filled('password')) {
                 $user->password = Hash::make($request->password);
             }
-            
+
             $user->save();
-            
+
             // Update related records based on user level
             if ($user->level_id == 1 || $user->level_id == 2 || $user->level_id == 4) { // Admin UPA, Admin ITC, or Super Admin
                 $admin = AdminModel::where('user_id', $user->id_user)->first();
@@ -365,15 +372,15 @@ class UserController extends Controller
                         $mahasiswa->user_id = $user->id_user;
                     }
                 }
-                
+
                 if ($mahasiswa) {
                     $mahasiswa->nama = $request->nama;
                     $mahasiswa->save();
                 }
             }
-            
+
             DB::commit();
-            
+
             return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -385,47 +392,47 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             $user = UserModel::findOrFail($id);
-            
+
             // Prevent deleting own account
             if ($user->id_user == auth()->id()) {
                 return redirect()->route('admin.users.index')->with('error', 'Tidak dapat menghapus akun sendiri');
             }
-            
+
             // Find mahasiswa record by user_id or username
             $mahasiswa = MahasiswaModel::where('user_id', $id)->first();
             if (!$mahasiswa) {
                 $mahasiswa = MahasiswaModel::where('nim', $user->username)->first();
             }
-            
+
             if ($mahasiswa) {
                 // Delete all related pendaftaran records first
                 PendaftaranModel::where('nim', $mahasiswa->nim)->delete();
-                
+
                 // Delete all related surat pernyataan records
                 SuratPernyataanModel::where('nim', $mahasiswa->nim)->delete();
-                
+
                 // Delete mahasiswa record
                 $mahasiswa->delete();
             }
-            
+
             // Check if user has related admin records
             $admin = AdminModel::where('user_id', $id)->first();
             if ($admin) {
                 $admin->delete();
             }
-            
+
             // Delete user's profile photo if exists
             if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
                 Storage::disk('public')->delete($user->foto_profil);
             }
-            
+
             // Finally delete the user
             $user->delete();
-            
+
             DB::commit();
-            
+
             return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus');
         } catch (\Exception $e) {
             DB::rollBack();

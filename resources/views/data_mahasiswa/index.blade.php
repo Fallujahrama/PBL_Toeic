@@ -41,7 +41,7 @@
             $kampusStats = $data->groupBy('kampus')->map->count();
             $jurusanStats = $data->groupBy('jurusan')->map->count();
         @endphp
-        
+
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
             <div class="card animate-card">
                 <div class="card-body p-3">
@@ -209,15 +209,15 @@
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-book me-1"></i>Jurusan
-                                        <select class="filter-select ms-2" data-column="2">
+                                        {{-- <select class="filter-select ms-2" data-column="2">
                                             <option value="">Semua</option>
-                                        </select>
+                                        </select> --}}
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-graduation-cap me-1"></i>Program Studi
-                                        <select class="filter-select ms-2" data-column="3">
+                                        {{-- <select class="filter-select ms-2" data-column="3">
                                             <option value="">Semua</option>
-                                        </select>
+                                        </select> --}}
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-university me-1"></i>Kampus
@@ -244,7 +244,7 @@
                                             <div class="d-flex flex-column">
                                                 <h6 class="mb-0 text-sm font-weight-bold">{{ $mhs->nama }}</h6>
                                                 <p class="text-xs text-secondary mb-0">
-                                                    <i class="fas fa-id-badge me-1"></i>NIK: {{ $mhs->nik ?? 'N/A' }}
+                                                    <i class="fas fa-id-badge me-1"></i>NIK: {{ $mhs->nik !== null ? $mhs->nik : 'N/A' }}
                                                 </p>
                                             </div>
                                         </td>
@@ -264,7 +264,7 @@
                                         </td>
                                         <td>
                                             @if($mhs->no_whatsapp)
-                                                <a href="https://wa.me/62{{ $mhs->no_whatsapp }}" target="_blank" 
+                                                <a href="https://wa.me/62{{ $mhs->no_whatsapp }}" target="_blank"
                                                    class="btn btn-success btn-sm">
                                                     <i class="fab fa-whatsapp me-1"></i>{{ $mhs->no_whatsapp }}
                                                 </a>
@@ -294,7 +294,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .card-background-overlay {
         position: absolute;
         top: 0;
@@ -311,7 +311,7 @@
         border: none;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
-    
+
     .animate-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -321,7 +321,7 @@
         border-radius: 10px;
         overflow: hidden;
     }
-    
+
     #mahasiswaTable thead th {
         background: linear-gradient(310deg, #f8f9fa 0%, #e9ecef 100%);
         border: none;
@@ -329,18 +329,18 @@
         font-size: 11px;
         letter-spacing: 0.5px;
     }
-    
+
     #mahasiswaTable tbody tr {
         border-bottom: 1px solid #f0f2f5;
         transition: all 0.3s ease;
     }
-    
+
     #mahasiswaTable tbody tr:hover {
         background-color: #f8f9fa;
         transform: scale(1.01);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    
+
     .filter-select {
         width: 80px;
         font-size: 10px;
@@ -350,14 +350,14 @@
         border-radius: 4px;
         background: white;
     }
-    
+
     .btn-group .btn {
         margin: 0 1px;
         border-radius: 6px !important;
         padding: 6px 10px;
         font-size: 12px;
     }
-    
+
     .avatar {
         display: flex;
         align-items: center;
@@ -365,18 +365,18 @@
         width: 32px;
         height: 32px;
     }
-    
+
     .badge {
         font-size: 11px;
         padding: 6px 12px;
         border-radius: 8px;
     }
-    
+
     .mahasiswa-row {
         opacity: 0;
         animation: fadeInUp 0.5s ease forwards;
     }
-    
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -387,38 +387,38 @@
             transform: translateY(0);
         }
     }
-    
+
     .form-select, .form-control {
         border-radius: 8px;
         border: 1px solid #e0e6ed;
         padding: 10px 15px;
         transition: all 0.3s ease;
     }
-    
+
     .form-select:focus, .form-control:focus {
         border-color: #4f46e5;
         box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
     }
-    
+
     .input-group-text {
         background: #f8f9fa;
         border: 1px solid #e0e6ed;
         border-right: none;
         border-radius: 8px 0 0 8px;
     }
-    
+
     .btn-outline-white {
         border: 2px solid rgba(255, 255, 255, 0.3);
         color: white;
         transition: all 0.3s ease;
     }
-    
+
     .btn-outline-white:hover {
         background: rgba(255, 255, 255, 0.2);
         border-color: white;
         color: white;
     }
-    
+
     /* New styles for better icon centering */
     .icon-circle {
         width: 50px;
@@ -430,7 +430,7 @@
         margin-left: auto;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     }
-    
+
     .icon-circle i {
         font-size: 20px;
         color: white;
@@ -467,15 +467,28 @@ $(document).ready(function() {
                 "previous": "Sebelumnya"
             }
         },
-        "dom": '<"row"<"col-sm-6"l><"col-sm-6"f>>rtip',
-        "drawCallback": function() {
-            // Animate rows
-            $('.mahasiswa-row').each(function(index) {
-                $(this).css('animation-delay', (index * 0.1) + 's');
+        "initComplete": function () {
+            // Initialize filters for Jurusan and Program Studi
+            this.api().columns([2, 3]).every(function () {
+                var column = this;
+                var select = $('select[data-column="' + column.index() + '"]');
+
+                // Clear existing options
+                select.empty().append('<option value="">Semua</option>');
+
+                // Add new options
+                column.data().unique().sort().each(function (d) {
+                    if (d && d !== 'null' && d !== 'NULL') {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    }
+                });
+
+                // Handle filter changes
+                select.on('change', function () {
+                    var val = $(this).val();
+                    column.search(val ? val : '', true, false).draw();
+                });
             });
-            
-            // Initialize tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
         }
     });
 
@@ -487,28 +500,6 @@ $(document).ready(function() {
     // Page length change
     $('#pageLength').on('change', function() {
         table.page.len(this.value).draw();
-    });
-
-    // Populate filter dropdowns
-    table.columns([2,3]).every(function() {
-        var column = this;
-        var colIndex = column.index();
-        var select = $('select.filter-select[data-column="'+colIndex+'"]');
-        
-        column.data().unique().sort().each(function(d) {
-            if (d) {
-                select.append('<option value="'+d+'">'+d+'</option>');
-            }
-        });
-    });
-
-    // Filter dropdown change events
-    $('select.filter-select').on('change', function() {
-        var colIndex = $(this).data('column');
-        var val = $.fn.dataTable.util.escapeRegex($(this).val());
-        table.column(colIndex)
-             .search(val ? '^'+val+'$' : '', true, false)
-             .draw();
     });
 });
 

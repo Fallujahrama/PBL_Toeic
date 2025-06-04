@@ -94,9 +94,11 @@
                     <div class="form-group">
                         <label for="wa" class="form-control-label">No. WhatsApp</label>
                         <div class="input-group">
-                            <span class="input-group-text"><i class="fab fa-whatsapp"></i>  +62 </span>
-                            <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa', $mahasiswa->no_whatsapp ?? '') }}" required>
+                            <span class="input-group-text"><i class="fab fa-whatsapp"></i></span>
+                            <span class="input-group-text bg-light">+62</span>
+                            <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa', str_replace('+62', '', $mahasiswa->no_whatsapp ?? '')) }}" placeholder="8123456789" required>
                         </div>
+                        <small class="text-muted">Contoh: 8123456789 (tanpa +62)</small>
                         @error('wa')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -443,6 +445,49 @@ $(document).ready(function() {
         const input = container.find('input[type="file"]');
         input.click();
     });
+});
+
+// WhatsApp number formatting
+$('#wa').on('input', function() {
+    let value = $(this).val();
+    // Remove any non-digit characters
+    value = value.replace(/\D/g, '');
+    // Remove leading 62 if user types it
+    if (value.startsWith('62')) {
+        value = value.substring(2);
+    }
+    // Remove leading 0 if user types it
+    if (value.startsWith('0')) {
+        value = value.substring(1);
+    }
+    // Limit to reasonable length (max 13 digits after +62)
+    if (value.length > 13) {
+        value = value.substring(0, 13);
+    }
+    $(this).val(value);
+});
+
+// Format display on blur
+$('#wa').on('blur', function() {
+    let value = $(this).val();
+    if (value && !value.startsWith('8')) {
+        // If doesn't start with 8, add it
+        if (value.length > 0) {
+            $(this).val('8' + value);
+        }
+    }
+});
+
+// Clean existing value on page load
+$(document).ready(function() {
+    let currentValue = $('#wa').val();
+    if (currentValue) {
+        // Remove +62 prefix if exists
+        currentValue = currentValue.replace(/^\+?62/, '');
+        // Remove leading 0 if exists
+        currentValue = currentValue.replace(/^0/, '');
+        $('#wa').val(currentValue);
+    }
 });
 </script>
 @endpush

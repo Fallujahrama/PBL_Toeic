@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="stat-card border-start border-success border-4">
                 <div class="stat-card-content">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="stat-card border-start border-warning border-4">
                 <div class="stat-card-content">
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-3 col-md-6">
             <div class="stat-card border-start border-info border-4">
                 <div class="stat-card-content">
@@ -136,7 +136,7 @@
                                 </div>
                             </a>
                         </div>
-                        
+
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ route('jadwal.index') }}" class="quick-action-card text-decoration-none">
                                 <div class="quick-action-content">
@@ -153,7 +153,7 @@
                                 </div>
                             </a>
                         </div>
-                        
+
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ route('hasil_ujian.index') }}" class="quick-action-card text-decoration-none">
                                 <div class="quick-action-content">
@@ -170,7 +170,7 @@
                                 </div>
                             </a>
                         </div>
-                        
+
                         <div class="col-lg-3 col-md-6">
                             <a href="{{ route('admin.surat-pernyataan.index') }}" class="quick-action-card text-decoration-none">
                                 <div class="quick-action-content">
@@ -568,7 +568,7 @@
         $('.stat-number').each(function() {
             const $this = $(this);
             const countTo = parseInt($this.text());
-            
+
             $({ countNum: 0 }).animate({
                 countNum: countTo
             }, {

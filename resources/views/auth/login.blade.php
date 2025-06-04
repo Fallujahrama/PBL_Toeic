@@ -33,7 +33,9 @@
               <div class="card card-plain" data-aos="fade-right">
                 <div class="card-header pb-0 text-start">
                   <div class="login-logo text-center mb-3">
-                    <img src="{{ asset('img/Tregon.png') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 100px;">
+                    <a href="{{ route('landing') }}">
+                        <img src="{{ asset('img/Tregon.png') }}" alt="Tregon Logo" class="img-fluid" style="max-height: 100px;">
+                    </a>
                   </div>
                   <h4 class="font-weight-bolder text-center">TOEIC Registration</h4>
                   <p class="mb-0 text-center">Enter your credentials to access your account</p>
@@ -58,6 +60,9 @@
                     </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0 pulse">Sign in</button>
+                        <a href="{{ route('landing') }}" class="btn btn-link text-secondary mt-2 slide-up">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Landing Page
+                        </a>
                     </div>
                   </form>
                 </div>

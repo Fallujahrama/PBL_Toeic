@@ -33,7 +33,7 @@ class PendaftaranController extends Controller
          // Cek apakah mahasiswa sudah pernah melakukan pendaftaran berdasarkan nim
         $nim = auth()->user()->username; // Ubah dari nim ke username
         $hasRegistered = PendaftaranModel::where('nim', $nim)->exists();
-        
+
         // Get registration history
         $registrations = $this->getRegistrationHistory();
 
@@ -258,7 +258,7 @@ class PendaftaranController extends Controller
     public function editMahasiswa($nim)
     {
         $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
-        
+
         if (!$mahasiswa) {
             return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
         }
@@ -287,7 +287,7 @@ class PendaftaranController extends Controller
     {
         // Get the mahasiswa first
         $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
-        
+
         if (!$mahasiswa) {
             return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan.');
         }
@@ -346,7 +346,7 @@ class PendaftaranController extends Controller
                 }
                 $pendaftaran->file_ktp = $request->file('file_ktp')->store('pendaftaran/ktp', 'public');
             }
-            
+
             if ($request->hasFile('file_ktm')) {
                 // Delete old file if exists
                 if ($pendaftaran->file_ktm && Storage::disk('public')->exists($pendaftaran->file_ktm)) {
@@ -354,7 +354,7 @@ class PendaftaranController extends Controller
                 }
                 $pendaftaran->file_ktm = $request->file('file_ktm')->store('pendaftaran/ktm', 'public');
             }
-            
+
             if ($request->hasFile('file_foto')) {
                 // Delete old file if exists
                 if ($pendaftaran->file_foto && Storage::disk('public')->exists($pendaftaran->file_foto)) {
@@ -362,7 +362,7 @@ class PendaftaranController extends Controller
                 }
                 $pendaftaran->file_foto = $request->file('file_foto')->store('pendaftaran/foto', 'public');
             }
-            
+
             // Only process bukti pembayaran for second registrations
             if ($isSecondRegistration && $request->hasFile('file_bukti_pembayaran')) {
                 // Delete old file if exists
@@ -388,7 +388,7 @@ class PendaftaranController extends Controller
         $registrations = PendaftaranModel::where('nim', $nim)
             ->orderBy('created_at', 'desc')
             ->get();
-        
+
         return $registrations;
     }
 
@@ -398,7 +398,7 @@ class PendaftaranController extends Controller
     public function showMahasiswa($nim)
     {
         $mahasiswa = MahasiswaModel::with('pendaftaran')->where('nim', $nim)->first();
-        
+
         if (!$mahasiswa) {
             return redirect()->route('mahasiswa.index')->with('error', 'Data mahasiswa tidak ditemukan.');
         }
@@ -415,7 +415,7 @@ class PendaftaranController extends Controller
     public function previewFile($nim, $type)
     {
         $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
-        
+
         if (!$pendaftaran) {
             abort(404, 'Pendaftaran tidak ditemukan');
         }
@@ -451,7 +451,7 @@ class PendaftaranController extends Controller
     public function show($id)
     {
         $pendaftaran = PendaftaranModel::with('mahasiswa')->find($id);
-        
+
         if (!$pendaftaran) {
             return response()->json([
                 'status' => 'error',

@@ -18,6 +18,7 @@ class MahasiswaModel extends Model
     // Kolom yang dapat diisi
     protected $fillable = [
         'nim',
+        'user_id',
         'nama',
         'jurusan',
         'alamat_asal',
@@ -36,7 +37,7 @@ class MahasiswaModel extends Model
 
     public function user()
     {
-        return $this->belongsTo(UserModel::class, 'nim', 'username'); // Relasi berdasarkan nim
+        return $this->belongsTo(UserModel::class, 'user_id', 'id_user'); // Relasi berdasarkan user_id
     }
 
     // Relasi ke surat pernyataan

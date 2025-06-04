@@ -32,15 +32,22 @@
                             <div class="card-body">
                                 {{-- Tombol Download Template --}}
                                 <div class="mb-4">
-                                    <a href="{{ asset('template/surat-pernyataan-template.pdf') }}" download class="btn btn-outline-primary">
-                                        <i class="fas fa-download"></i> Download Template Surat Pernyataan
-                                    </a>
+                                    @if($activeTemplate)
+                                        <a href="{{ asset('storage/templates/' . $activeTemplate->file_template) }}"
+                                        download class="btn btn-outline-primary">
+                                            <i class="fas fa-download"></i> Download Template Surat Pernyataan
+                                        </a>
+                                    @else
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle"></i> Template surat belum tersedia.
+                                        </div>
+                                    @endif
                                 </div>
 
                                 {{-- Jika sudah ada dokumen --}}
                                 @if ($surat)
                                     <div class="alert alert-info">
-                                        <strong>Status Dokumen:</strong> 
+                                        <strong>Status Dokumen:</strong>
                                         @if($surat->status == 'pending')
                                             <span class="badge bg-warning">Menunggu Validasi</span>
                                         @elseif($surat->status == 'valid')

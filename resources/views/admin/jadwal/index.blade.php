@@ -71,7 +71,7 @@
                             @foreach ($jadwal as $item)
                                 <tr class="jadwal-row fade-in" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
                                     <td class="ps-4">
-                                        <p class="text-xs font-weight-bold mb-0">{{ $item->jadwal_id }}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                     </td>
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">

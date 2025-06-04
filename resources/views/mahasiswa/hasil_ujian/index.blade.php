@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
-                    <h6>{{ $page->title }}</h6>
+                    <h6>Hasil Ujian TOEIC</h6>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     @if($hasil_ujian->isEmpty())
@@ -20,11 +20,10 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Ujian</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Skor</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Listening</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reading</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">No</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tanggal</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Informasi</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">File</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
@@ -42,18 +41,28 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $item->skor_total ?? 'N/A' }}</p>
+                                            <p class="text-xs mb-0">Hasil Ujian TOEIC</p>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $item->skor_listening ?? 'N/A' }}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $item->skor_reading ?? 'N/A' }}</p>
+                                            @if($item->file_nilai)
+                                                @php
+                                                    $extension = pathinfo($item->file_nilai, PATHINFO_EXTENSION);
+                                                @endphp
+                                                <span class="badge bg-primary text-white">
+                                                    <i class="fas fa-file me-1"></i>{{ strtoupper($extension) }}
+                                                </span>
+                                            @else
+                                                <span class="badge bg-secondary">Tidak ada file</span>
+                                            @endif
                                         </td>
                                         <td class="align-middle">
-                                            <a href="{{ route('mahasiswa.hasil_ujian.show', $item->id_hasil) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Detail hasil">
-                                                Detail
-                                            </a>
+                                            @if($item->file_nilai)
+                                                <a href="{{ asset('storage/' . $item->file_nilai) }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview File">
+                                                    <i class="fas fa-eye"></i> Preview
+                                                </a>
+                                            @else
+                                                <span class="text-muted">Tidak tersedia</span>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach

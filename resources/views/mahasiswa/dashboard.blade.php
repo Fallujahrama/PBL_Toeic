@@ -134,7 +134,7 @@
                         <div class="status-timeline">
                             @if($pendaftaran)
                                 <div class="status-item">
-                                    <div class="status-marker 
+                                    <div class="status-marker
                                         @if($pendaftaran->status_verifikasi == 'approved') bg-success
                                         @elseif($pendaftaran->status_verifikasi == 'rejected') bg-danger
                                         @else bg-warning @endif">
@@ -179,7 +179,7 @@
 
                             @if($suratPernyataan)
                                 <div class="status-item">
-                                    <div class="status-marker 
+                                    <div class="status-marker
                                         @if($suratPernyataan->status == 'valid') bg-success
                                         @elseif($suratPernyataan->status == 'rejected') bg-danger
                                         @else bg-warning @endif">

@@ -197,7 +197,7 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="400">
-                <a href="{{ url('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
+                <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
                 <button type="submit" class="btn btn-warning">

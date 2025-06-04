@@ -19,7 +19,7 @@
                     @else
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ $value }}</li>
                     @endif
-                @endforeach
+                @endforeach  
             </ol>
             <h6 class="font-weight-bolder mb-0">{{ $breadcrumb->title ?? 'Dashboard' }}</h6>
         </div>

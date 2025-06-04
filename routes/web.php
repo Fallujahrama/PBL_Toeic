@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/editPhoto', [UserController::class, 'editPhoto'])->name('user.editPhoto');
 
     // Admin routes (AdmUpa and AdmITC)
-    Route::middleware(['authorize:AdmUpa,AdmITC'])->group(function () {
+    Route::middleware(['authorize:AdmUpa,AdmITC,SprAdmin'])->group(function () {
         Route::get('/admin/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
@@ -76,6 +76,20 @@ Route::middleware('auth')->group(function () {
             // Template routes
             Route::post('/surat-pernyataan/upload-template', [SuratPernyataanController::class, 'uploadTemplate'])->name('surat-pernyataan.upload-template');
             Route::patch('/surat-pernyataan/template/{id}/toggle-status', [SuratPernyataanController::class, 'toggleStatus'])->name('surat-pernyataan.toggle-status');
+        });
+    });
+
+    // SuperAdmin only routes
+    Route::middleware(['authorize:SprAdmin'])->group(function () {
+        Route::prefix('admin')->name('admin.')->group(function () {
+            // User Management routes
+            Route::get('/users', [UserController::class, 'adminIndex'])->name('users.index');
+            Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+            Route::post('/users', [UserController::class, 'store'])->name('users.store');
+            Route::get('/users/{id}/show', [UserController::class, 'show'])->name('users.show');
+            Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+            Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
         });
     });
 

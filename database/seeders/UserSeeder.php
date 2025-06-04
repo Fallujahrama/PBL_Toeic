@@ -26,6 +26,11 @@ class UserSeeder extends Seeder
                 'level_id' => 2,
             ],
             [
+                'username' => 'superadmin',
+                'password' => Hash::make('12345'),
+                'level_id' => 3,
+            ],
+            [
                 'username' => '2341760001',
                 'password' => Hash::make('12345'),
                 'level_id' => 3,

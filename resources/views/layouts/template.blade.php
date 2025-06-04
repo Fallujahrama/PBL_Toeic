@@ -9,6 +9,10 @@
     <title>@yield('title', 'TOEIC Center Dashboard')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/Tregon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('img/Tregon.png') }}">
+
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -38,6 +42,18 @@
         }
     </style>
 
+    <style>
+        .navbar-wrapper {
+            padding-top: 1rem;
+        }
+        
+        @media (max-width: 991.98px) {
+            .navbar-wrapper {
+                padding-top: 0;
+            }
+        }
+    </style>
+
     @stack('css')
 </head>
 
@@ -47,7 +63,9 @@
 
     <main class="main-content position-relative border-radius-lg">
         <!-- Navbar -->
-        @include('layouts.navbar')
+        <div class="navbar-wrapper pt-3">
+            @include('layouts.navbar')
+        </div>
 
         <div class="container-fluid py-4">
             @yield('content')

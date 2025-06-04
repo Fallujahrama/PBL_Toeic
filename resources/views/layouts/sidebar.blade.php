@@ -1,22 +1,16 @@
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4" id="sidenav-main">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 sidebar-outlined" id="sidenav-main">
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" id="iconSidenav"></i>
-    @php
-        $dashboardRoute = Auth::check() ?
-            (Auth::user()->level->level_kode === 'AdmUpa' ? route('admin.dashboard') :
-             (Auth::user()->level->level_kode === 'AdmITC' ? route('admin.mahasiswa.index') :
-              route('mahasiswa.dashboard'))) :
-            route('landing');
-    @endphp
-    <a class="navbar-brand m-0" href="{{ $dashboardRoute }}">
-        <div class="d-flex flex-column align-items-center justify-content-center py-3">
-            <div class="text-center">
-                <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="sidebar-logo mb-2">
-                <span class="font-weight-bold text-sm">TOEIC Center</span>
-            </div>
+    <a class="navbar-brand m-0" href="{{ url('/') }}">
+      <div class="d-flex flex-column align-items-center justify-content-center py-3">
+
+        <div class="text-center">
+        <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="sidebar-logo mb-2">
+          <span class="font-weight-bold text-sm">TOEIC Center</span>
         </div>
+      </div>
     </a>
-</div>
+  </div>
 
   <hr class="horizontal dark mt-0">
 
@@ -24,17 +18,18 @@
     <ul class="navbar-nav">
       @php
         $userRole = Auth::user()->level->level_kode ?? null;
-        $isAdmin = in_array($userRole, ['AdmUpa', 'AdmITC']);
+        $isAdmin = in_array($userRole, ['AdmUpa', 'AdmITC', 'SprAdmin']);
         $isAdminUpa = $userRole === 'AdmUpa';
         $isAdminITC = $userRole === 'AdmITC';
         $isStudent = $userRole === 'Mhs';
+        $isSuperAdmin = $userRole === 'SprAdmin';
         $currentUrl = url()->current();
       @endphp
 
       <!-- Dashboard -->
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}"
-           href="{{ $isAdminUpa ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
+        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}" 
+           href="{{ ($isAdminUpa || $isSuperAdmin) ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
           </div>
@@ -45,7 +40,7 @@
       <!-- Data Mahasiswa - Only for AdminITC -->
       @if($isAdminITC)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}"
+        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}" 
            href="{{ route('admin.mahasiswa.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-users text-success text-sm opacity-10"></i>
@@ -55,10 +50,23 @@
       </li>
       @endif
 
+      <!-- User Management - Only for SuperAdmin -->
+      @if($isSuperAdmin)
+      <li class="nav-item">
+        <a class="nav-link {{ strpos($currentUrl, 'admin/users') !== false ? 'active' : '' }}" 
+           href="{{ route('admin.users.index') }}">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="fas fa-user-cog text-warning text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text ms-1">Manajemen User</span>
+        </a>
+      </li>
+      @endif
+
       <!-- Student Pendaftaran - Only for Students -->
       @if($isStudent)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}"
+        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}" 
            href="{{ route('pendaftaran.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-clipboard-list text-warning text-sm opacity-10"></i>
@@ -69,10 +77,10 @@
       @endif
 
       <!-- Jadwal -->
-      @if($isAdminUpa || $isStudent)
+      @if($isAdminUpa || $isSuperAdmin || $isStudent)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'jadwal') !== false ? 'active' : '' }}"
-           href="{{ $isAdmin ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
+           href="{{ ($isAdminUpa || $isSuperAdmin) ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-calendar-alt text-success text-sm opacity-10"></i>
           </div>
@@ -82,10 +90,10 @@
       @endif
 
       <!-- Hasil Ujian -->
-      @if($isAdminUpa || $isStudent)
+      @if($isAdminUpa || $isSuperAdmin || $isStudent)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'hasil-ujian') !== false || strpos($currentUrl, 'hasil_ujian') !== false ? 'active' : '' }}"
-           href="{{ $isAdmin ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
+           href="{{ ($isAdminUpa || $isSuperAdmin) ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-chart-bar text-info text-sm opacity-10"></i>
           </div>
@@ -94,11 +102,11 @@
       </li>
       @endif
 
-      <!-- Surat Pernyataan - Only for AdmUpa and Students -->
-      @if($isAdminUpa || $isStudent)
+      <!-- Surat Pernyataan - Only for AdmUpa, SuperAdmin and Students -->
+      @if($isAdminUpa || $isSuperAdmin || $isStudent)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}"
-           href="{{ $isAdminUpa ? route('admin.surat-pernyataan.index') : route('mahasiswa.surat-pernyataan.index') }}">
+        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}" 
+           href="{{ ($isAdminUpa || $isSuperAdmin) ? route('admin.surat-pernyataan.index') : route('mahasiswa.surat-pernyataan.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-file-signature text-danger text-sm opacity-10"></i>
           </div>
@@ -107,8 +115,8 @@
       </li>
       @endif
 
-      <!-- Verifikasi - Only for AdmUpa -->
-      @if($isAdminUpa)
+      <!-- Verifikasi - Only for AdmUpa and SuperAdmin -->
+      @if($isAdminUpa || $isSuperAdmin)
       <li class="nav-item">
         <a class="nav-link {{ request()->is('*verifikasi*') ? 'active' : '' }}" href="{{ route('verifikasi.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -169,6 +177,12 @@
 </aside>
 
 <style>
+.sidebar-outlined {
+  border: 1px solid #e9ecef !important;
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1), 0 8px 50px 0 rgba(0, 0, 0, 0.07) !important;
+  background: #ffffff !important;
+}
+
 .verification-badge {
     background: linear-gradient(135deg, #ff6b6b, #ee5a24);
     color: white;
@@ -193,5 +207,15 @@
   border-radius: 50%;
   border: 3px solid #fff;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Additional outline styling for better separation */
+.sidenav-header {
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.sidenav-footer {
+  border-top: 1px solid #f0f2f5;
+  padding-top: 1rem !important;
 }
 </style>

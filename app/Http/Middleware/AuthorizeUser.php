@@ -42,7 +42,7 @@ class AuthorizeUser
         }
 
         // If user doesn't have any of the required roles, redirect based on their role
-        if (in_array($user->level->level_kode, ['AdmUpa', 'AdmITC'])) {
+        if (in_array($user->level->level_kode, ['AdmUpa', 'AdmITC', 'SprAdmin'])) {
             return redirect('/admin/dashboard');
         } else if ($user->level->level_kode === 'Mhs') {
             return redirect('/mahasiswa/pendaftaran');

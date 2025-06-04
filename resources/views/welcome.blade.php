@@ -12,20 +12,14 @@
                             <a class="opacity-5 text-dark" href="#">{{ $value }}</a>
                         </li>
                     @else
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ $value }}</li>
-                    @endif
+                        @endif
                 @endforeach
             </ol>
         </nav>
-        <h6 class="font-weight-bolder mb-0">{{ $breadcrumb->title }}</h6>
     </div>
 
     <!-- Logo Section -->
-    <div class="text-center mb-4" data-aos="fade-down">
-        <img src="{{ asset('img/Tregon.png') }}" alt="TOEIC Center Logo" class="img-fluid mb-3" style="max-height: 100px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
-        <h2 class="text-primary mb-0">TOEIC Registration Center</h2>
-        <p class="text-muted">Politeknik Negeri Malang</p>
-    </div>
+
 
     <!-- Welcome Header -->
     <div class="welcome-header card-gradient-primary text-white" data-aos="fade-up">

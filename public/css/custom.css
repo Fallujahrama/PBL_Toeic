@@ -703,6 +703,8 @@ body {
 /* Welcome Page Specific Styles */
 
 .welcome-header {
+    top: -20%;
+    height: 100%;
     position: relative;
     padding: 2rem;
     border-radius: 1rem;
@@ -2358,7 +2360,6 @@ body {
 .nav-item.dropdown {
     position: relative !important;
 }
-
 
 
 /* Sidebar Toggle Functionality */

@@ -13,7 +13,7 @@ class LoginController extends Controller
         if (Auth::check()) {
             // Check user level directly and redirect accordingly
             $user = Auth::user();
-            if ($user->level && $user->level->level_kode == 'AdmUpa') {
+            if ($user->level && ($user->level->level_kode == 'AdmUpa' || $user->level->level_kode == 'SprAdmin')) {
                 return redirect('/admin/dashboard');
             } elseif ($user->level && $user->level->level_kode == 'AdmITC') {
                 return redirect('/admin/mahasiswa'); // Ubah ke path data mahasiswa
@@ -43,7 +43,7 @@ class LoginController extends Controller
                     if ($user->level) {
                         $levelKode = $user->level->level_kode;
 
-                        if ($levelKode == 'AdmUpa') {
+                        if ($levelKode == 'AdmUpa' || $levelKode == 'SprAdmin') {
                             $redirectUrl = '/admin/dashboard';
                         } elseif ($levelKode == 'AdmITC') {
                             $redirectUrl = '/welcome'; // Ubah ke path data mahasiswa

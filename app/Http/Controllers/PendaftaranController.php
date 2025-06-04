@@ -184,9 +184,26 @@ class PendaftaranController extends Controller
 
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $nim;
-        $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('pendaftaran/ktp', 'public') : null;
-        $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('pendaftaran/ktm', 'public') : null;
-        $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pendaftaran/foto', 'public') : null;
+        if ($request->hasFile('ktp')) {
+            $file = $request->file('ktp');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_ktp = $file->storeAs('pendaftaran/ktp', $filename, 'public');
+        }
+
+        if ($request->hasFile('scan_ktm')) {
+            $file = $request->file('scan_ktm');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_ktm = $file->storeAs('pendaftaran/ktm', $filename, 'public');
+        }
+
+        if ($request->hasFile('pas_foto')) {
+            $file = $request->file('pas_foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_foto = $file->storeAs('pendaftaran/foto', $filename, 'public');
+        }
+        // $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('pendaftaran/ktp', 'public') : null;
+        // $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('pendaftaran/ktm', 'public') : null;
+        // $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pendaftaran/foto', 'public') : null;
         $pendaftaran->file_bukti_pembayaran = null; // Tambahkan nilai default
 
         // Tambahkan ini untuk file_bukti_pembayaran
@@ -438,11 +455,23 @@ class PendaftaranController extends Controller
                 abort(404, 'Jenis file tidak valid');
         }
 
-        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
-            abort(404, 'File tidak ditemukan');
+        if (!$filePath) {
+        abort(404, 'File tidak ditemukan');
         }
 
-        return response()->file(storage_path('app/public/' . $filePath));
+        // Path lengkap ke file
+        $fullPath = storage_path('app/public/' . $filePath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di sistem');
+        }
+
+        // Get MIME type
+        $mime = mime_content_type($fullPath);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mime
+        ]);
     }
 
     /**

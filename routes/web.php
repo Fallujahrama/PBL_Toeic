@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('jadwal', JadwalController::class);
         Route::get('jadwal/preview/{id}', [JadwalController::class, 'previewFile'])->name('jadwal.preview');
         Route::get('jadwal/{id}/data', [JadwalController::class, 'getJadwal'])->name('jadwal.data');
+        Route::post('jadwal/validate-file', [JadwalController::class, 'validateFile'])->name('jadwal.validateFile');
 
         // Hasil Ujian routes
         Route::resource('hasil_ujian', HasilUjianController::class);

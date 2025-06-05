@@ -40,6 +40,12 @@
             </div>
         @endif
 
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Perhatian!</strong> Anda hanya dapat mengedit data pendaftaran satu kali. Pastikan data yang Anda masukkan sudah benar.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         @php
             // Check if this is a second registration (more than one registration exists)
             $nim = auth()->user()->username;
@@ -47,7 +53,7 @@
             $isSecondRegistration = $registrationCount > 1;
         @endphp
 
-        <form action="{{ route('mahasiswa.data.update', $mahasiswa->nim) }}" method="POST" enctype="multipart/form-data">
+        <form id="editForm" action="{{ route('mahasiswa.data.update', $mahasiswa->nim) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -347,11 +353,44 @@
                 <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
-                <button type="submit" class="btn btn-primary">
+                <button type="button" id="submitBtn" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i>Update Registration
                 </button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="confirmationModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Konfirmasi Penyimpanan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-question-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h5 class="mb-3">Apakah Anda sudah yakin?</h5>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Perhatian!</strong> Anda hanya dapat mengedit data pendaftaran satu kali. Setelah disimpan, Anda tidak dapat mengubah data ini lagi.
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Batal
+                </button>
+                <button type="button" id="confirmSubmit" class="btn btn-primary">
+                    <i class="fas fa-check me-2"></i>Ya, Saya Yakin
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -445,41 +484,39 @@ $(document).ready(function() {
         const input = container.find('input[type="file"]');
         input.click();
     });
-});
-
-// WhatsApp number formatting
-$('#wa').on('input', function() {
-    let value = $(this).val();
-    // Remove any non-digit characters
-    value = value.replace(/\D/g, '');
-    // Remove leading 62 if user types it
-    if (value.startsWith('62')) {
-        value = value.substring(2);
-    }
-    // Remove leading 0 if user types it
-    if (value.startsWith('0')) {
-        value = value.substring(1);
-    }
-    // Limit to reasonable length (max 13 digits after +62)
-    if (value.length > 13) {
-        value = value.substring(0, 13);
-    }
-    $(this).val(value);
-});
-
-// Format display on blur
-$('#wa').on('blur', function() {
-    let value = $(this).val();
-    if (value && !value.startsWith('8')) {
-        // If doesn't start with 8, add it
-        if (value.length > 0) {
-            $(this).val('8' + value);
+    
+    // WhatsApp number formatting
+    $('#wa').on('input', function() {
+        let value = $(this).val();
+        // Remove any non-digit characters
+        value = value.replace(/\D/g, '');
+        // Remove leading 62 if user types it
+        if (value.startsWith('62')) {
+            value = value.substring(2);
         }
-    }
-});
+        // Remove leading 0 if user types it
+        if (value.startsWith('0')) {
+            value = value.substring(1);
+        }
+        // Limit to reasonable length (max 13 digits after +62)
+        if (value.length > 13) {
+            value = value.substring(0, 13);
+        }
+        $(this).val(value);
+    });
 
-// Clean existing value on page load
-$(document).ready(function() {
+    // Format display on blur
+    $('#wa').on('blur', function() {
+        let value = $(this).val();
+        if (value && !value.startsWith('8')) {
+            // If doesn't start with 8, add it
+            if (value.length > 0) {
+                $(this).val('8' + value);
+            }
+        }
+    });
+
+    // Clean existing value on page load
     let currentValue = $('#wa').val();
     if (currentValue) {
         // Remove +62 prefix if exists
@@ -488,6 +525,38 @@ $(document).ready(function() {
         currentValue = currentValue.replace(/^0/, '');
         $('#wa').val(currentValue);
     }
+    
+    // Show confirmation modal when submit button is clicked
+    $('#submitBtn').on('click', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Check form validity first
+        const form = document.getElementById('editForm');
+        if (form.checkValidity()) {
+            $('#confirmationModal').modal('show');
+        } else {
+            // Trigger HTML5 validation
+            form.reportValidity();
+        }
+    });
+    
+    // Submit form when confirmed
+    $('#confirmSubmit').on('click', function() {
+        $('#confirmationModal').modal('hide');
+        
+        // Add loading state
+        $(this).html('<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...');
+        $(this).prop('disabled', true);
+        
+        // Submit the form
+        document.getElementById('editForm').submit();
+    });
+    
+    // Reset button state when modal is hidden
+    $('#confirmationModal').on('hidden.bs.modal', function () {
+        $('#confirmSubmit').html('<i class="fas fa-check me-2"></i>Ya, Saya Yakin');
+        $('#confirmSubmit').prop('disabled', false);
+    });
 });
 </script>
 @endpush

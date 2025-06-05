@@ -92,16 +92,24 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($registration->created_at != $registration->updated_at)
+                                        @if($registration->keterangan === 'EDITED')
+                                            <span class="badge bg-danger">Edited (Locked)</span>
+                                        @elseif($registration->created_at != $registration->updated_at)
                                             <span class="badge bg-info">Updated</span>
                                         @else
                                             <span class="badge bg-success">Submitted</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('mahasiswa.data.edit', $registration->nim) }}" class="btn btn-sm btn-outline-warning" title="Edit Data">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                        @if($registration->keterangan === 'EDITED')
+                                            <button class="btn btn-sm btn-secondary" disabled title="Sudah diedit, tidak dapat diubah lagi">
+                                                <i class="fas fa-lock"></i>
+                                            </button>
+                                        @else
+                                            <a href="{{ route('mahasiswa.data.edit', $registration->nim) }}" class="btn btn-sm btn-outline-warning" title="Edit Data">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

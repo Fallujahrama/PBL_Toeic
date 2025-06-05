@@ -396,12 +396,12 @@ body {
 /* Quick Actions - Improved Layout */
 
 .quick-action-card {
-    background: white;
+    background: rgb(78, 202, 224);
     border-radius: 15px;
     padding: 1.5rem;
     text-align: center;
     transition: all 0.3s ease;
-    border: 1px solid var(--light-border);
+    border: 10px solid var(--light-border);
     cursor: pointer;
     text-decoration: none;
     color: inherit;

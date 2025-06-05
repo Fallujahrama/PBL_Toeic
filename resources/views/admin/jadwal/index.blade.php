@@ -86,34 +86,17 @@
                                     </td>
                                     <td class="ps-4">
                                         @if ($item->file_info)
-                                            <div class="d-flex">
-                                                @php
-                                                    $extension = pathinfo($item->file_info, PATHINFO_EXTENSION);
-                                                @endphp
-
-                                                @if(strtolower($extension) === 'pdf')
-                                                    <span class="badge bg-danger">
-                                                        <i class="fas fa-file-pdf me-1"></i>PDF
-                                                    </span>
-                                                @elseif(in_array(strtolower($extension), ['doc', 'docx']))
-                                                    <span class="badge bg-primary">
-                                                        <i class="fas fa-file-word me-1"></i>Word
-                                                    </span>
-                                                @else
-                                                    <span class="badge bg-secondary">
-                                                        <i class="fas fa-file me-1"></i>{{ strtoupper($extension) }}
-                                                    </span>
-                                                @endif
-                                            </div>
+                                            <a href="{{ asset('storage/' . $item->file_info) }}" target="_blank" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat File">
+                                                <i class="fas fa-file-alt"></i>
+                                            </a>
                                         @else
-                                            <span class="badge bg-secondary">Tidak ada file</span>
+                                            <span class="btn btn-link text-secondary px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Tidak ada file">
+                                                <i class="fas fa-file-alt opacity-5"></i>
+                                            </span>
                                         @endif
                                     </td>
                                     <td class="align-middle text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('jadwal.preview', $item->jadwal_id) }}?t={{ time() }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview File">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
                                             <a href="{{ route('jadwal.edit', $item->jadwal_id) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
@@ -200,3 +183,4 @@
     });
 </script>
 @endpush
+    

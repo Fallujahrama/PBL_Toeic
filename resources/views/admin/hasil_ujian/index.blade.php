@@ -77,6 +77,9 @@
                                         </a>
                                     </td>
                                     <td class="align-middle text-center">
+                                        <a href="{{ route('hasil_ujian.edit', $item->id_hasil) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                         <form action="{{ route('hasil_ujian.destroy', $item->id_hasil) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('hasil_ujian.update', $hasilUjian->id_hasil) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('hasil_ujian.update', $hasil_ujian->id_hasil) }}" method="POST" enctype="multipart/form-data" id="hasil-ujian-form">
                     @csrf
                     @method('PUT')
 
@@ -40,7 +40,7 @@
                                 <label for="tanggal" class="form-control-label">Tanggal</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', $hasilUjian->tanggal) }}" required>
+                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', $hasil_ujian->tanggal) }}" required>
                                 </div>
                                 @error('tanggal')
                                     <small class="text-danger">{{ $message }}</small>
@@ -52,11 +52,12 @@
                             <div class="form-group">
                                 <label for="jadwal_id" class="form-control-label">Jadwal</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     <select name="jadwal_id" id="jadwal_id" class="form-control @error('jadwal_id') is-invalid @enderror" required>
-                                        @foreach($jadwals as $jadwal)
-                                            <option value="{{ $jadwal->jadwal_id }}" {{ $hasilUjian->jadwal_id == $jadwal->jadwal_id ? 'selected' : '' }}>
-                                                {{ $jadwal->informasi }}
+                                        <option value="">Pilih Jadwal</option>
+                                        @foreach($jadwal as $item)
+                                            <option value="{{ $item->jadwal_id }}" {{ old('jadwal_id', $hasil_ujian->jadwal_id) == $item->jadwal_id ? 'selected' : '' }}>
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }} - {{ $item->informasi }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -71,24 +72,37 @@
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
-                                <label for="file_nilai" class="form-control-label">File Nilai</label>
+                                <label for="file_nilai" class="form-control-label">File Hasil Ujian</label>
                                 <div class="document-upload-container">
-                                    <div class="document-preview {{ $hasilUjian->file_nilai ? 'has-preview' : '' }}" id="file-preview">
-                                        <i class="fas fa-file-pdf"></i>
-                                        <span>{{ $hasilUjian->file_nilai ? 'PDF File' : 'PDF' }}</span>
+                                    <div class="document-preview {{ $hasil_ujian->file_nilai ? 'has-preview' : '' }}" id="file-preview">
+                                        @if($hasil_ujian->file_nilai)
+                                            @if(pathinfo($hasil_ujian->file_nilai, PATHINFO_EXTENSION) == 'pdf')
+                                                <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+                                                <span>PDF File</span>
+                                            @elseif(in_array(pathinfo($hasil_ujian->file_nilai, PATHINFO_EXTENSION), ['xls', 'xlsx']))
+                                                <i class="fas fa-file-excel" style="font-size: 3rem; color: #10b981;"></i>
+                                                <span>Excel File</span>
+                                            @else
+                                                <i class="fas fa-file" style="font-size: 3rem;"></i>
+                                                <span>File</span>
+                                            @endif
+                                        @else
+                                            <i class="fas fa-file-pdf"></i>
+                                            <span>PDF, XLS, XLSX</span>
+                                        @endif
                                     </div>
                                     <div class="document-upload-button">
-                                        <input type="file" name="file_nilai" id="file_nilai" class="document-upload-input @error('file_nilai') is-invalid @enderror" accept=".pdf">
+                                        <input type="file" name="file_nilai" id="file_nilai" class="document-upload-input @error('file_nilai') is-invalid @enderror" accept=".pdf,.xls,.xlsx">
                                         <label for="file_nilai" class="btn btn-outline-primary w-100">
-                                            <i class="fas fa-upload me-2"></i>{{ $hasilUjian->file_nilai ? 'Ganti File' : 'Upload File' }}
+                                            <i class="fas fa-upload me-2"></i>{{ $hasil_ujian->file_nilai ? 'Ganti File' : 'Upload File' }}
                                         </label>
                                     </div>
                                 </div>
-                                <small class="text-muted">Format: PDF. Maks: 2MB</small>
-                                @if($hasilUjian->file_nilai)
+                                <small class="text-muted">Format: PDF, XLS, XLSX. Maks: 5MB</small>
+                                @if($hasil_ujian->file_nilai)
                                     <div class="mt-2">
                                         <span class="text-info">File saat ini: </span>
-                                        <a href="{{ asset('storage/' . $hasilUjian->file_nilai) }}" class="text-info" target="_blank">
+                                        <a href="{{ asset('storage/' . $hasil_ujian->file_nilai) }}" class="text-info" target="_blank">
                                             <i class="fas fa-eye me-1"></i>Lihat File
                                         </a>
                                     </div>
@@ -147,6 +161,12 @@
         margin-bottom: 10px;
     }
 
+    .document-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
     .document-upload-button {
         flex: 1;
         display: flex;
@@ -167,8 +187,14 @@
         $('#file_nilai').change(function() {
             const file = this.files[0];
             if (file) {
+                let icon = '<i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>';
+
+                if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                    icon = '<i class="fas fa-file-excel" style="font-size: 3rem; color: #10b981;"></i>';
+                }
+
                 $('#file-preview').html(`
-                    <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
+                    ${icon}
                     <span>${file.name}</span>
                 `);
                 $('#file-preview').addClass('has-preview');

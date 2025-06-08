@@ -71,14 +71,16 @@ class HasilUjianController extends Controller
         $hasil_ujian = HasilUjianModel::findOrFail($id);
         $activeMenu = 'hasil_ujian';
 
-        return view('admin.hasil-ujian.show', compact('hasil_ujian', 'activeMenu'));
+        return view('admin.hasil_ujian.show', compact('hasil_ujian', 'activeMenu'));
     }
 
     public function edit($id)
     {
-        $hasilUjian = HasilUjianModel::findOrFail($id);
-        $jadwals = JadwalModel::all();
-        return view('admin.hasil_ujian.edit', compact('hasilUjian', 'jadwals'));
+        $hasil_ujian = HasilUjianModel::findOrFail($id);
+        $activeMenu = 'hasil_ujian';
+        $jadwal = JadwalModel::orderBy('tanggal', 'desc')->get(); // Add this line to get jadwal data
+
+        return view('admin.hasil_ujian.edit', compact('hasil_ujian', 'activeMenu', 'jadwal')); // Add 'jadwal' to compact
     }
 
     public function update(Request $request, $id)

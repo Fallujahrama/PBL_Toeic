@@ -11,7 +11,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <div class="welcome-content">
-                            <h1 class="display-6 fw-bold mb-2">Selamat Datang di Sistem Pendaftaran TOEIC, {{ Auth::user()->name }}!</h1>
+                            <h1 class="text-white display-6 fw-bold mb-2">Selamat Datang di Sistem Pendaftaran TOEIC, {{ Auth::user()->name }}!</h1>
                             <p class="lead mb-1 opacity-9">Kelola sistem TOEIC dengan mudah dan efisien</p>
                             <small class="opacity-8 d-flex align-items-center">
                                 <i class="fas fa-calendar-alt me-2"></i>
@@ -483,7 +483,7 @@
         padding: 1.5rem;
         border-radius: 1rem;
         background: white;
-        border: 1px solid var(--light-border);
+        border: 7px solid var(--light-border);
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;

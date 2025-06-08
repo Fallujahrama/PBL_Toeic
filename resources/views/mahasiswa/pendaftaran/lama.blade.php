@@ -97,21 +97,6 @@
                     </div>
                 </div>
 
-                <div class="col-md-6" data-aos="fade-right" data-aos-delay="250">
-                    <div class="form-group">
-                        <label for="wa" class="form-control-label">Update No. WhatsApp (Optional)</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fab fa-whatsapp"></i></span>
-                            <span class="input-group-text bg-light">+62</span>
-                            <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa') }}" placeholder="8123456789">
-                        </div>
-                        <small class="text-muted">Kosongkan jika tidak ingin mengubah. Contoh: 8123456789</small>
-                        @error('wa')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-
                 <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
                     <div class="form-group">
                         <label for="file_bukti_pembayaran" class="form-control-label">Bukti Pembayaran (Required)</label>
@@ -302,37 +287,6 @@
                 }
                 reader.readAsDataURL(file);
                 $(this).next('label').html('<i class="fas fa-check me-2"></i>File selected');
-            }
-        });
-
-        // WhatsApp number formatting
-        $('#wa').on('input', function() {
-            let value = $(this).val();
-            // Remove any non-digit characters
-            value = value.replace(/\D/g, '');
-            // Remove leading 62 if user types it
-            if (value.startsWith('62')) {
-                value = value.substring(2);
-            }
-            // Remove leading 0 if user types it
-            if (value.startsWith('0')) {
-                value = value.substring(1);
-            }
-            // Limit to reasonable length (max 13 digits after +62)
-            if (value.length > 13) {
-                value = value.substring(0, 13);
-            }
-            $(this).val(value);
-        });
-
-        // Format display on blur
-        $('#wa').on('blur', function() {
-            let value = $(this).val();
-            if (value && !value.startsWith('8')) {
-                // If doesn't start with 8, add it
-                if (value.length > 0) {
-                    $(this).val('8' + value);
-                }
             }
         });
     });

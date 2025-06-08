@@ -369,8 +369,10 @@ class PendaftaranController extends Controller
         $user->nama = $request->nama;
         $user->save();
 
-        // Update registration files if uploaded
+        // Get the latest registration for this student
         $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
+
+        // Update registration files if uploaded
         if ($pendaftaran) {
             if ($request->hasFile('file_ktp')) {
                 // Delete old file if exists
@@ -405,6 +407,8 @@ class PendaftaranController extends Controller
                 $pendaftaran->file_bukti_pembayaran = $request->file('file_bukti_pembayaran')->store('pendaftaran/bukti_pembayaran', 'public');
             }
 
+            // Mark as edited
+            $pendaftaran->keterangan = 'EDITED';
             $pendaftaran->save();
         }
 
@@ -524,6 +528,7 @@ class PendaftaranController extends Controller
                 'file_ktm' => $pendaftaran->file_ktm,
                 'file_foto' => $pendaftaran->file_foto,
                 'file_bukti_pembayaran' => $pendaftaran->file_bukti_pembayaran,
+                'is_edited' => $pendaftaran->keterangan === 'EDITED',
                 'mahasiswa' => $pendaftaran->mahasiswa ? [
                     'nama' => $pendaftaran->mahasiswa->nama,
                     'program_studi' => $pendaftaran->mahasiswa->program_studi,
@@ -532,5 +537,42 @@ class PendaftaranController extends Controller
                 ] : null
             ]
         ]);
+    }
+
+    /**
+     * Show registration details
+     */
+    public function showRegistration($id)
+    {
+        $pendaftaran = PendaftaranModel::with('mahasiswa')->find($id);
+
+        if (!$pendaftaran) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Data pendaftaran tidak ditemukan.');
+        }
+
+        // Check if the registration belongs to the logged-in user
+        $nim = auth()->user()->username;
+        if ($pendaftaran->nim !== $nim) {
+            return redirect()->route('pendaftaran.index')->with('error', 'Anda tidak memiliki akses ke data ini.');
+        }
+
+        // Check if registration has been edited
+        if ($pendaftaran->keterangan === 'EDITED') {
+            return redirect()->route('pendaftaran.index')
+                ->with('error', 'Pendaftaran ini sudah diedit sebelumnya dan tidak dapat diakses lagi.');
+        }
+
+        $breadcrumb = (object) [
+            'title' => 'Detail Pendaftaran',
+            'list' => ['Home', 'Pendaftaran', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail Pendaftaran'
+        ];
+
+        $activeMenu = 'pendaftaran';
+
+        return view('mahasiswa.pendaftaran.show', compact('breadcrumb', 'page', 'activeMenu', 'pendaftaran'));
     }
 }

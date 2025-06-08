@@ -39,7 +39,7 @@
                                 <label for="tanggal" class="form-control-label">Tanggal</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required>
+                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required min="{{ date('Y-m-d') }}">
                                 </div>
                                 @error('tanggal')
                                     <small class="text-danger">{{ $message }}</small>

@@ -109,9 +109,9 @@
                                         @if($registration->keterangan === 'EDITED')
                                             <span class="badge bg-danger">Edited (Locked)</span>
                                         @elseif($registration->created_at != $registration->updated_at)
-                                            <span class="badge bg-info">Updated</span>
+                                            <span class="badge bg-success">Sudah Terkirim (Updated)</span>
                                         @else
-                                            <span class="badge bg-success">Submitted</span>
+                                            <span class="badge bg-success">Sudah Terkirim</span>
                                         @endif
                                     </td>
                                     <td>

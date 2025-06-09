@@ -49,7 +49,7 @@ class LoginController extends Controller
                         if ($levelKode == 'AdmUpa' || $levelKode == 'SprAdmin') {
                             $redirectUrl = '/admin/dashboard';
                         } elseif ($levelKode == 'AdmITC') {
-                            $redirectUrl = '/welcome'; // Ubah ke path data mahasiswa
+                            $redirectUrl = '/admin/mahasiswa'; // Direct to Data Mahasiswa page
                         } elseif (in_array($levelKode, ['Mhs', 'Alum', 'Dsn', 'Cvts'])) {
                             $redirectUrl = '/mahasiswa/dashboard';
                         }

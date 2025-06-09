@@ -33,6 +33,7 @@ class MahasiswaController extends Controller
 
         // Mengambil data mahasiswa dengan filter kampus jika ada
         $data = MahasiswaModel::select('nim', 'nama', 'nik', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
+            ->whereHas('pendaftaran') // Only show students who have registered
             ->when($kampusFilter, function ($query, $kampusFilter) {
                 return $query->where('kampus', $kampusFilter);
             })
@@ -154,9 +155,11 @@ class MahasiswaController extends Controller
         $kampusFilter = $request->input('kampus');
         
         // Query data with filters
-        $mahasiswa = MahasiswaModel::when($kampusFilter, function ($query, $kampusFilter) {
-            return $query->where('kampus', $kampusFilter);
-        })->orderBy('created_at', 'desc')->get();
+        $mahasiswa = MahasiswaModel::whereHas('pendaftaran')
+            ->when($kampusFilter, function ($query, $kampusFilter) {
+                return $query->where('kampus', $kampusFilter);
+            })
+            ->orderBy('created_at', 'desc')->get();
         
         // Set PDF options
         $pdf = PDF::loadView('data_mahasiswa.export_pdf', [
@@ -185,6 +188,6 @@ class MahasiswaController extends Controller
         $filename = 'data-mahasiswa-' . now()->format('Y-m-d') . '.xlsx';
         
         // Return the Excel download with filters
-        return Excel::download(new MahasiswaExport($kampusFilter), $filename);
+        return Excel::download(new MahasiswaExport($kampusFilter, true), $filename);
     }
 }

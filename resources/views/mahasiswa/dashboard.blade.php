@@ -164,8 +164,8 @@
                                                         <i class="fas fa-times me-1"></i>Ditolak
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-warning">
-                                                        <i class="fas fa-clock me-1"></i>Menunggu Verifikasi
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-clock me-1"></i>Sudah Terkirim
                                                     </span>
                                                 @endif
                                             </div>

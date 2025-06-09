@@ -27,13 +27,13 @@ use App\Http\Controllers\SuratPernyataanController;
 // Authentication routes
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'postlogin'])->name('postlogin');
-// Add to routes/web.php
 Route::get('register', [App\Http\Controllers\LoginController::class, 'register'])->name('register');
 Route::post('register', [App\Http\Controllers\LoginController::class, 'postRegister']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Welcome page
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/welcome', [WelcomeController::class, 'index'])->name('welcome.page');
 
 // Landing page route
 Route::get('/landing', function () {
@@ -112,7 +112,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['authorize:AdmITC'])->group(function () {
         // Data Mahasiswa Management routes - only for AdmITC
         Route::prefix('admin')->name('admin.')->group(function () {
-            Route::get('/mahasiswa', [PendaftaranController::class, 'dataMahasiswa'])->name('mahasiswa.index');
             Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
             Route::get('/mahasiswa/{nim}/show', [MahasiswaController::class, 'show'])->name('mahasiswa.show');
             Route::get('/mahasiswa/{nim}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
@@ -131,6 +130,10 @@ Route::middleware('auth')->group(function () {
         Route::prefix('mahasiswa/pendaftaran')->name('pendaftaran.')->group(function () {
             Route::get('/baru', [PendaftaranController::class, 'createBaru'])->name('baru');
             Route::post('/baru', [PendaftaranController::class, 'storeBaru'])->name('storeBaru');
+            
+            // Draft routes for new registration
+            Route::post('/save-draft', [PendaftaranController::class, 'saveDraft'])->name('saveDraft');
+            Route::get('/load-draft', [PendaftaranController::class, 'loadDraft'])->name('loadDraft');
         });
 
         // Surat Pernyataan routes - ONLY for active students
@@ -141,7 +144,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // Routes for ALL non-admin users (Mhs, Almn, Dsn, Cvts)
+    // Routes for ALL non-admin users (Mhs, Alum, Dsn, Cvts)
     Route::middleware(['authorize:Mhs,Alum,Dsn,Cvts'])->group(function () {
         // Dashboard
         Route::get('/mahasiswa/dashboard', function () {
@@ -181,5 +184,18 @@ Route::middleware('auth')->group(function () {
         // Profile routes
         Route::get('/mahasiswa/profile/edit', [UserController::class, 'editMahasiswa'])->name('mahasiswa.profile.edit');
         Route::post('/mahasiswa/profile/update', [UserController::class, 'updateMahasiswa'])->name('mahasiswa.profile.update');
+    });
+
+    // Additional Pendaftaran routes for debugging (can be removed after testing)
+    Route::middleware(['authorize:Mhs'])->group(function () {
+        Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index.alt');
+        Route::get('/pendaftaran/baru', [PendaftaranController::class, 'createBaru'])->name('pendaftaran.baru.alt');
+        Route::post('/pendaftaran/baru', [PendaftaranController::class, 'storeBaru'])->name('pendaftaran.storeBaru.alt');
+        Route::get('/pendaftaran/lama', [PendaftaranController::class, 'createLama'])->name('pendaftaran.lama.alt');
+        Route::post('/pendaftaran/lama', [PendaftaranController::class, 'storeLama'])->name('pendaftaran.lama.store.alt');
+        
+        // Additional draft routes for debugging
+        Route::post('/pendaftaran/save-draft', [PendaftaranController::class, 'saveDraft'])->name('pendaftaran.saveDraft.alt');
+        Route::get('/pendaftaran/load-draft', [PendaftaranController::class, 'loadDraft'])->name('pendaftaran.loadDraft.alt');
     });
 });

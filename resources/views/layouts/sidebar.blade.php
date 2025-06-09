@@ -32,7 +32,7 @@
 
       <!-- Dashboard -->
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}"
+        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false || ($isAdminITC && strpos($currentUrl, 'welcome') !== false) ? 'active' : '' }}"
            href="{{ ($isAdminUpa || $isSuperAdmin) ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
@@ -67,7 +67,7 @@
       </li>
       @endif
 
-      <!-- Pendaftaran - For all normal users -->
+      <!-- Pendaftaran - For all normal users (exclude AdminITC) -->
       @if($isNormalUser)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}"
@@ -80,7 +80,7 @@
       </li>
       @endif
 
-      <!-- Jadwal -->
+      <!-- Jadwal - Exclude AdminITC -->
       @if($isAdminUpa || $isSuperAdmin || $isNormalUser)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'jadwal') !== false ? 'active' : '' }}"
@@ -93,7 +93,7 @@
       </li>
       @endif
 
-      <!-- Hasil Ujian -->
+      <!-- Hasil Ujian - Exclude AdminITC -->
       @if($isAdminUpa || $isSuperAdmin || $isNormalUser)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'hasil-ujian') !== false || strpos($currentUrl, 'hasil_ujian') !== false ? 'active' : '' }}"
@@ -106,7 +106,7 @@
       </li>
       @endif
 
-      <!-- Surat Pernyataan - Only for AdmUpa, SuperAdmin and Students (NOT for Alumni, Dosen, Civitas) -->
+      <!-- Surat Pernyataan - Only for AdmUpa, SuperAdmin and Students (NOT for AdminITC, Alumni, Dosen, Civitas) -->
       @if($isAdminUpa || $isSuperAdmin || $isStudent)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}"
@@ -119,32 +119,7 @@
       </li>
       @endif
 
-      <!-- Verifikasi - Only for AdmUpa and SuperAdmin -->
-      @if($isAdminUpa || $isSuperAdmin)
-      <li class="nav-item">
-        <a class="nav-link {{ request()->is('*verifikasi*') ? 'active' : '' }}" href="{{ route('verifikasi.index') }}">
-          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-check-circle text-success text-sm opacity-10"></i>
-          </div>
-          <span class="nav-link-text ms-1">Verifikasi</span>
-
-          @php
-            try {
-              $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
-                ->orWhereNull('status_verifikasi')
-                ->count();
-            } catch (Exception $e) {
-              $pendingCount = 0;
-            }
-          @endphp
-
-          @if($pendingCount > 0)
-          <span class="verification-badge">{{ $pendingCount }}</span>
-          @endif
-        </a>
-      </li>
-      @endif
-
+     
       <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Akun</h6>
       </li>

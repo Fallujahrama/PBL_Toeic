@@ -18,6 +18,11 @@
         </nav>
     </div>
 
+    <!-- Debug Info (remove after testing) -->
+    @if(Auth::check())
+        <!-- User Level Debug: {{ Auth::user()->level_id }} - {{ Auth::user()->level->level_kode ?? 'No level' }} -->
+    @endif
+
     <!-- Logo Section -->
 
 
@@ -49,7 +54,14 @@
         </div>
     </div>
 
-    @if(!Auth::check() || Auth::user()->level_id == 3)
+    @php
+    $userLevel = Auth::check() ? Auth::user()->level_id : null;
+    $levelCode = Auth::check() && Auth::user()->level ? Auth::user()->level->level_kode : null;
+    @endphp
+
+    <!-- Debug: User Level ID: {{ $userLevel }}, Level Code: {{ $levelCode }} -->
+
+    @if(!Auth::check() || $userLevel == 4 || $userLevel == 5 || $userLevel == 6 || $userLevel == 7)
     <!-- Registration Process - Only shown to students or guests -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">
@@ -110,7 +122,7 @@
             </div>
         </div>
     </div>
-    @elseif(Auth::check() && Auth::user()->level->level_kode == 'AdmITC')
+    @elseif($userLevel == 3)
     <!-- AdminITC Dashboard - Only shown to AdminITC users -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">
@@ -256,7 +268,7 @@
             </div>
         </div>
     </div>
-    @elseif(Auth::check() && Auth::user()->level->level_kode == 'AdmUpa')
+    @elseif($userLevel == 2)
     <!-- Admin Dashboard Summary - Only shown to AdmUpa -->
     <div class="row mt-4">
         <div class="col-12 mb-4" data-aos="fade-up">

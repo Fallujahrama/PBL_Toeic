@@ -76,7 +76,7 @@ use App\Models\NotifikasiModel;
           </li>
           <!-- Menu Footer-->
           <li class="user-footer">
-            <a href="{{ url('/profile') }}" class="btn btn-secondary btn-flat">Profile</a>
+            <a href="{{ url('/profile') }}" class="btn btn-secondary btn-flat">Profil</a>
             <a href="#" class="btn btn-warning btn-flat float-right"
               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
               Logout

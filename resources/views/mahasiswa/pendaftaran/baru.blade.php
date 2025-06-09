@@ -40,8 +40,20 @@
             </div>
         @endif
 
-        <form action="{{ route('pendaftaran.storeBaru') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('pendaftaran.storeBaru') }}" method="POST" enctype="multipart/form-data" id="registrationForm">
             @csrf
+    
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Validation Errors:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
             <div class="row">
                 <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
@@ -266,8 +278,13 @@
                 <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
                     <i class="fas fa-arrow-left me-2"></i>Back
                 </a>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>Submit Registration
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">
+                        <i class="fas fa-save me-2"></i>Submit Registration
+                    </span>
+                    <span class="btn-loading d-none">
+                        <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                    </span>
                 </button>
             </div>
         </form>
@@ -279,6 +296,64 @@
 @push('js')
 <script>
 $(document).ready(function() {
+    // Form submission handling
+    $('#registrationForm').on('submit', function(e) {
+        console.log('Form submission started');
+        
+        // Show loading state
+        const submitBtn = $('#submitBtn');
+        const btnText = submitBtn.find('.btn-text');
+        const btnLoading = submitBtn.find('.btn-loading');
+        
+        submitBtn.prop('disabled', true);
+        btnText.addClass('d-none');
+        btnLoading.removeClass('d-none');
+        
+        // Basic validation
+        let isValid = true;
+        const requiredFields = ['nama', 'nik', 'wa', 'alamat_asal', 'alamat_sekarang', 'prodi', 'jurusan', 'kampus'];
+        
+        requiredFields.forEach(function(field) {
+            const input = $(`[name="${field}"]`);
+            if (!input.val().trim()) {
+                isValid = false;
+                input.addClass('is-invalid');
+                console.log(`Field ${field} is empty`);
+            } else {
+                input.removeClass('is-invalid');
+            }
+        });
+        
+        // File validation
+        const requiredFiles = ['ktp', 'scan_ktm', 'pas_foto'];
+        requiredFiles.forEach(function(field) {
+            const input = $(`[name="${field}"]`);
+            if (!input[0].files.length) {
+                isValid = false;
+                input.addClass('is-invalid');
+                console.log(`File ${field} is not selected`);
+            } else {
+                input.removeClass('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            
+            // Reset button state
+            submitBtn.prop('disabled', false);
+            btnText.removeClass('d-none');
+            btnLoading.addClass('d-none');
+            
+            // Show error message
+            showAlert('Please fill all required fields and upload all required documents.', 'danger');
+            console.log('Form validation failed');
+            return false;
+        }
+        
+        console.log('Form validation passed, submitting...');
+    });
+    
     // Preview for KTP
     $('#ktp').change(function() {
         const file = this.files[0];
@@ -373,5 +448,23 @@ $(document).ready(function() {
         }
     });
 });
+
+// Helper function to show alerts
+function showAlert(message, type = 'danger') {
+    const alertHtml = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    
+    // Insert alert at the top of the card body
+    $('.card-body').prepend(alertHtml);
+    
+    // Auto remove after 5 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 5000);
+}
 </script>
 @endpush

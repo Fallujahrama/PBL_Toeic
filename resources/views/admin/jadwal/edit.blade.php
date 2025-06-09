@@ -12,10 +12,10 @@
             <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="{{ route('jadwal.index') }}">Jadwal</a>
             </li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Ubah</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">Edit Jadwal</h6>
+    <h6 class="font-weight-bolder mb-0">Ubah Jadwal</h6>
 </div>
 
 <div class="row">
@@ -26,7 +26,7 @@
                     <div class="icon icon-shape icon-sm bg-gradient-warning text-white rounded-circle shadow me-2">
                         <i class="fas fa-edit"></i>
                     </div>
-                    <h5 class="mb-0">Form Edit Jadwal</h5>
+                    <h5 class="mb-0">Formulir Ubah Jadwal</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -40,7 +40,7 @@
                                 <label for="tanggal" class="form-control-label">Tanggal</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', $jadwal->tanggal) }}" required>
+                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', $jadwal->tanggal) }}" required min="{{ date('Y-m-d') }}" required>
                                 </div>
                                 @error('tanggal')
                                     <small class="text-danger">{{ $message }}</small>
@@ -65,19 +65,19 @@
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
-                                <label for="file_info" class="form-control-label">File (Opsional)</label>
+                                <label for="file_info" class="form-control-label">Berkas (Opsional)</label>
                                 <div class="document-upload-container">
                                     <div class="document-preview {{ $jadwal->file_info ? 'has-preview' : '' }}" id="file-preview">
                                         @if($jadwal->file_info)
                                             @if(pathinfo($jadwal->file_info, PATHINFO_EXTENSION) == 'pdf')
                                                 <i class="fas fa-file-pdf" style="font-size: 3rem; color: #ef4444;"></i>
-                                                <span>PDF File</span>
+                                                <span>PDF</span>
                                             @elseif(in_array(pathinfo($jadwal->file_info, PATHINFO_EXTENSION), ['doc', 'docx']))
                                                 <i class="fas fa-file-word" style="font-size: 3rem; color: #3b82f6;"></i>
-                                                <span>Word File</span>
+                                                <span>Word</span>
                                             @else
                                                 <i class="fas fa-file" style="font-size: 3rem;"></i>
-                                                <span>File</span>
+                                                <span>Berkas</span>
                                             @endif
                                         @else
                                             <i class="fas fa-file-pdf"></i>
@@ -87,14 +87,14 @@
                                     <div class="document-upload-button">
                                         <input type="file" name="file_info" id="file_info" class="document-upload-input @error('file_info') is-invalid @enderror" accept=".pdf,.doc,.docx">
                                         <label for="file_info" class="btn btn-outline-primary w-100">
-                                            <i class="fas fa-upload me-2"></i>{{ $jadwal->file_info ? 'Ganti File' : 'Upload File' }}
+                                            <i class="fas fa-upload me-2"></i>{{ $jadwal->file_info ? 'Ganti Berkas' : 'Upload Berkas' }}
                                         </label>
                                     </div>
                                 </div>
                                 <small class="text-muted">Format: PDF, DOC, DOCX. Maks: 2MB</small>
                                 @if($jadwal->file_info)
                                     <div class="mt-2">
-                                        <span class="text-info">File saat ini: </span>
+                                        <span class="text-info">Berkas saat ini: </span>
                                         <a href="{{ route('jadwal.preview', $jadwal->jadwal_id) }}?t={{ time() }}" class="text-info" target="_blank">
                                             <i class="fas fa-eye me-1"></i>Lihat Detail
                                         </a>
@@ -112,7 +112,7 @@
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
                         <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-save me-2"></i>Update
+                            <i class="fas fa-save me-2"></i>Perbarui
                         </button>
                     </div>
                 </form>

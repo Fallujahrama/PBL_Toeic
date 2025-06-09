@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dasbor</a>
             </li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Hasil Ujian</li>
         </ol>
@@ -27,7 +27,7 @@
                         <h5 class="mb-0">Daftar Hasil Ujian TOEIC</h5>
                     </div>
                     <a href="{{ route('hasil_ujian.create') }}" class="btn btn-sm btn-primary" data-aos="fade-left">
-                        <i class="fas fa-plus me-2"></i>Upload Hasil Ujian
+                        <i class="fas fa-plus me-2"></i>Unggah Hasil Ujian
                     </a>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">No</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Tanggal</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Jadwal</th>
-                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">File</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Berkas</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7 text-center">Aksi</th>
                             </tr>
                         </thead>

@@ -36,7 +36,7 @@
                                         @if($surat->status == 'pending')
                                             <span class="badge bg-warning">Menunggu Validasi</span>
                                         @elseif($surat->status == 'valid')
-                                            <span class="badge bg-success">Valid</span>
+                                            <span class="badge bg-success">Disetujui</span>
                                         @elseif($surat->status == 'rejected')
                                             <span class="badge bg-danger">Ditolak</span>
                                         @endif
@@ -52,7 +52,7 @@
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ url('/mahasiswa/surat-pernyataan/preview/'.$surat->id_surat_pernyataan) }}"
                                                        target="_blank" class="btn btn-info">
-                                                        <i class="fas fa-eye me-1"></i> Preview Dokumen
+                                                        <i class="fas fa-eye me-1"></i> Pratinjau Dokumen
                                                     </a>
                                                 </div>
                                             </div>

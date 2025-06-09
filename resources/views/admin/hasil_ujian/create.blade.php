@@ -7,15 +7,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dasbor</a>
             </li>
             <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="{{ route('hasil_ujian.index') }}">Hasil Ujian</a>
             </li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Upload</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Unggah</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">Upload Hasil Ujian</h6>
+    <h6 class="font-weight-bolder mb-0">Unggah Hasil Ujian</h6>
 </div>
 
 <div class="row">
@@ -26,7 +26,7 @@
                     <div class="icon icon-shape icon-sm bg-gradient-success text-white rounded-circle shadow me-2">
                         <i class="fas fa-upload"></i>
                     </div>
-                    <h5 class="mb-0">Form Upload Hasil Ujian</h5>
+                    <h5 class="mb-0">Formulir Upload Hasil Ujian</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -69,7 +69,7 @@
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
-                                <label for="file_nilai" class="form-control-label">File Hasil Ujian</label>
+                                <label for="file_nilai" class="form-control-label">Berkas Hasil Ujian</label>
                                 <div class="document-upload-container">
                                     <div class="document-preview" id="file-preview">
                                         <i class="fas fa-file-pdf"></i>
@@ -78,7 +78,7 @@
                                     <div class="document-upload-button">
                                         <input type="file" name="file_nilai" id="file_nilai" class="document-upload-input @error('file_nilai') is-invalid @enderror" accept=".pdf,.doc,.docx,.xlsx" required>
                                         <label for="file_nilai" class="btn btn-outline-success w-100">
-                                            <i class="fas fa-upload me-2"></i>Upload File
+                                            <i class="fas fa-upload me-2"></i>Upload Berkas
                                         </label>
                                     </div>
                                 </div>

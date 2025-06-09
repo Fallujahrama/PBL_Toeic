@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dasbor</a>
             </li>
             <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="{{ route('jadwal.index') }}">Jadwal</a>
@@ -26,7 +26,7 @@
                     <div class="icon icon-shape icon-sm bg-gradient-primary text-white rounded-circle shadow me-2">
                         <i class="fas fa-calendar-plus"></i>
                     </div>
-                    <h5 class="mb-0">Form Tambah Jadwal</h5>
+                    <h5 class="mb-0">Formulir Tambah Jadwal</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -64,7 +64,7 @@
                     <div class="row mt-4">
                         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
                             <div class="form-group">
-                                <label for="file_info" class="form-control-label">File <span class="text-danger">*</span></label>
+                                <label for="file_info" class="form-control-label">Berkas <span class="text-danger">*</span></label>
                                 <div class="document-upload-container">
                                     <div class="document-preview" id="file-preview">
                                         <i class="fas fa-file-pdf"></i>
@@ -75,7 +75,7 @@
                                             class="document-upload-input @error('file_info') is-invalid @enderror"
                                             accept=".pdf,.doc,.docx" required tabindex="0">
                                         <label for="file_info" class="btn btn-outline-primary w-100" role="button">
-                                            <i class="fas fa-upload me-2"></i>Upload File
+                                            <i class="fas fa-upload me-2"></i>Unggah Berkas
                                         </label>
                                     </div>
                                 </div>

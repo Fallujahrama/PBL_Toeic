@@ -12,7 +12,7 @@
                         </div>
                         <h6 class="mb-0">{{ $page->title }}</h6>
                         <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm ms-auto">
-                            <i class="fas fa-plus me-1"></i> Tambah User
+                            <i class="fas fa-plus me-1"></i> Tambah Pengguna
                         </a>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                             <i class="fas fa-check me-2"></i>{{ session('success') }}
                         </div>
                     @endif
-                    
+
                     @if(session('error'))
                         <div class="alert alert-danger mx-4">
                             <i class="fas fa-exclamation-triangle me-2"></i>{{ session('error') }}
@@ -34,8 +34,8 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Username</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pengguna</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Pengguna</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Level</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-calendar-day text-info"></i> Dibuat
@@ -99,10 +99,10 @@
                                             <a href="{{ route('admin.users.show', $user->id_user) }}" class="btn btn-link text-info text-gradient px-2 mb-0" title="Lihat Detail">
                                                 <i class="fas fa-eye text-info me-1"></i>
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user->id_user) }}" class="btn btn-link text-warning text-gradient px-2 mb-0" title="Edit">
+                                            <a href="{{ route('admin.users.edit', $user->id_user) }}" class="btn btn-link text-warning text-gradient px-2 mb-0" title="Ubah">
                                                 <i class="fas fa-edit text-warning me-1"></i>
                                             </a>
-                                            <button type="button" class="btn btn-link text-danger text-gradient px-2 mb-0" 
+                                            <button type="button" class="btn btn-link text-danger text-gradient px-2 mb-0"
                                                     onclick="confirmDelete({{ $user->id_user }}, '{{ $user->nama ?? $user->username }}')" title="Hapus">
                                                 <i class="fas fa-trash text-danger"></i>
                                             </button>
@@ -114,8 +114,8 @@
                                     <td colspan="6" class="text-center py-4">
                                         <div class="d-flex flex-column align-items-center">
                                             <i class="fas fa-users text-muted mb-2" style="font-size: 3rem;"></i>
-                                            <h6 class="text-muted">Belum ada data user</h6>
-                                            <p class="text-sm text-muted">Klik tombol "Tambah User" untuk menambah user baru</p>
+                                            <h6 class="text-muted">Belum ada data pengguna</h6>
+                                            <p class="text-sm text-muted">Klik tombol "Tambah Pengguna" untuk menambah pengguna baru</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -123,7 +123,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     @if($users->hasPages())
                     <div class="d-flex justify-content-center mt-4">
                         {{ $users->links() }}
@@ -144,7 +144,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus user <strong id="userName"></strong>?</p>
+                <p>Apakah Anda yakin ingin menghapus pengguna <strong id="userName"></strong>?</p>
                 <p class="text-danger text-sm">
                     <i class="fas fa-exclamation-triangle me-1"></i>
                     Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait.
@@ -170,7 +170,7 @@
 function confirmDelete(userId, userName) {
     document.getElementById('userName').textContent = userName;
     document.getElementById('deleteForm').action = '/admin/users/' + userId;
-    
+
     var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
     deleteModal.show();
 }

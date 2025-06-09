@@ -5,15 +5,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ route('mahasiswa.dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ route('mahasiswa.dashboard') }}">Dasbor</a>
             </li>
             <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="{{ route('pendaftaran.index') }}">Pendaftaran</a>
             </li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit Data</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Ubah Data</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">Edit Data Mahasiswa</h6>
+    <h6 class="font-weight-bolder mb-0">Ubah Data Mahasiswa</h6>
 </div>
 
 <div class="card animate-card" data-aos="fade-up">
@@ -22,7 +22,7 @@
             <div class="icon icon-shape icon-sm bg-gradient-warning text-white rounded-circle shadow me-2">
                 <i class="fas fa-user-edit"></i>
             </div>
-            <h5 class="mb-0">Edit Registration Form</h5>
+            <h5 class="mb-0">Formulir Ubah Pendaftaran</h5>
         </div>
     </div>
     <div class="card-body">
@@ -42,7 +42,7 @@
 
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <i class="fas fa-exclamation-triangle me-2"></i>
-            <strong>Perhatian!</strong> Anda hanya dapat mengedit data pendaftaran satu kali. Pastikan data yang Anda masukkan sudah benar.
+            <strong>Perhatian!</strong> Anda hanya dapat mengubah data pendaftaran satu kali. Pastikan data yang Anda masukkan sudah benar.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
@@ -198,7 +198,7 @@
 
             <div class="row mt-4">
                 <div class="col-12">
-                    <h6 class="text-primary mb-3"><i class="fas fa-file-upload me-2"></i>Update Documents (Optional)</h6>
+                    <h6 class="text-primary mb-3"><i class="fas fa-file-upload me-2"></i>Perbarui Dokumen (Opsional)</h6>
                 </div>
             </div>
 
@@ -210,7 +210,7 @@
                         <div class="document-upload-container">
                             <div class="document-preview" id="ktp-preview">
                                 @if(isset($pendaftaran) && $pendaftaran->file_ktp)
-                                    <img src="{{ asset('storage/'.$pendaftaran->file_ktp) }}" alt="KTP Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <img src="{{ asset('storage/'.$pendaftaran->file_ktp) }}" alt="Pratinjau KTP" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div style="display: none; flex-direction: column; align-items: center; justify-content: center;">
                                         <i class="fas fa-file-pdf" style="font-size: 2rem; color: #ef4444;"></i>
                                         <span>{{ basename($pendaftaran->file_ktp) }}</span>
@@ -223,14 +223,14 @@
                             <div class="document-upload-button mt-2">
                                 <input type="file" name="file_ktp" id="file_ktp" class="document-upload-input @error('file_ktp') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf">
                                 <label for="file_ktp" class="btn btn-outline-info w-100">
-                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_ktp ? 'Change KTP' : 'Upload KTP' }}
+                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_ktp ? 'Ganti KTP' : 'Unggah KTP' }}
                                 </label>
                             </div>
                             @if(isset($pendaftaran) && $pendaftaran->file_ktp)
-                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Current: {{ basename($pendaftaran->file_ktp) }}</small>
+                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Saat ini: {{ basename($pendaftaran->file_ktp) }}</small>
                             @endif
                         </div>
-                        <small class="text-muted">Format: JPG, PNG, PDF. Max: 10MB</small>
+                        <small class="text-muted">Format: JPG, PNG, PDF. Maks: 10MB</small>
                         @error('file_ktp')
                         <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
@@ -244,7 +244,7 @@
                         <div class="document-upload-container">
                             <div class="document-preview" id="ktm-preview">
                                 @if(isset($pendaftaran) && $pendaftaran->file_ktm)
-                                    <img src="{{ asset('storage/'.$pendaftaran->file_ktm) }}" alt="KTM Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <img src="{{ asset('storage/'.$pendaftaran->file_ktm) }}" alt="Pratinjau KTM" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div style="display: none; flex-direction: column; align-items: center; justify-content: center;">
                                         <i class="fas fa-file-pdf" style="font-size: 2rem; color: #ef4444;"></i>
                                         <span>{{ basename($pendaftaran->file_ktm) }}</span>
@@ -257,14 +257,14 @@
                             <div class="document-upload-button mt-2">
                                 <input type="file" name="file_ktm" id="file_ktm" class="document-upload-input @error('file_ktm') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf">
                                 <label for="file_ktm" class="btn btn-outline-info w-100">
-                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_ktm ? 'Change KTM' : 'Upload KTM' }}
+                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_ktm ? 'Ganti KTM' : 'Unggah KTM' }}
                                 </label>
                             </div>
                             @if(isset($pendaftaran) && $pendaftaran->file_ktm)
-                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Current: {{ basename($pendaftaran->file_ktm) }}</small>
+                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Saat ini: {{ basename($pendaftaran->file_ktm) }}</small>
                             @endif
                         </div>
-                        <small class="text-muted">Format: JPG, PNG, PDF. Max: 10MB</small>
+                        <small class="text-muted">Format: JPG, PNG, PDF. Maks: 10MB</small>
                         @error('file_ktm')
                         <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
@@ -278,7 +278,7 @@
                         <div class="document-upload-container">
                             <div class="document-preview photo-preview" id="foto-preview">
                                 @if(isset($pendaftaran) && $pendaftaran->file_foto)
-                                    <img src="{{ asset('storage/'.$pendaftaran->file_foto) }}" alt="Foto Preview" class="rounded-circle">
+                                    <img src="{{ asset('storage/'.$pendaftaran->file_foto) }}" alt="Pratinjau Foto" class="rounded-circle">
                                 @else
                                     <i class="fas fa-user"></i>
                                     <span>Foto</span>
@@ -287,14 +287,14 @@
                             <div class="document-upload-button mt-2">
                                 <input type="file" name="file_foto" id="file_foto" class="document-upload-input @error('file_foto') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg">
                                 <label for="file_foto" class="btn btn-outline-info w-100">
-                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_foto ? 'Change Foto' : 'Upload Foto' }}
+                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_foto ? 'Ganti Foto' : 'Unggah Foto' }}
                                 </label>
                             </div>
                             @if(isset($pendaftaran) && $pendaftaran->file_foto)
-                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Current: {{ basename($pendaftaran->file_foto) }}</small>
+                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Saat ini: {{ basename($pendaftaran->file_foto) }}</small>
                             @endif
                         </div>
-                        <small class="text-muted">Format: JPG, PNG. Max: 2MB</small>
+                        <small class="text-muted">Format: JPG, PNG. Maks: 2MB</small>
                         @error('file_foto')
                         <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
@@ -309,7 +309,7 @@
                         <div class="document-upload-container">
                             <div class="document-preview" id="bukti-preview">
                                 @if(isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran)
-                                    <img src="{{ asset('storage/'.$pendaftaran->file_bukti_pembayaran) }}" alt="Bukti Pembayaran Preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <img src="{{ asset('storage/'.$pendaftaran->file_bukti_pembayaran) }}" alt="Pratinjau Bukti Pembayaran" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div style="display: none; flex-direction: column; align-items: center; justify-content: center;">
                                         <i class="fas fa-file-pdf" style="font-size: 2rem; color: #ef4444;"></i>
                                         <span>{{ basename($pendaftaran->file_bukti_pembayaran) }}</span>
@@ -322,14 +322,14 @@
                             <div class="document-upload-button mt-2">
                                 <input type="file" name="file_bukti_pembayaran" id="file_bukti_pembayaran" class="document-upload-input @error('file_bukti_pembayaran') is-invalid @enderror" accept="image/jpeg,image/png,image/jpg,application/pdf">
                                 <label for="file_bukti_pembayaran" class="btn btn-outline-warning w-100">
-                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran ? 'Change Bukti' : 'Upload Bukti' }}
+                                    <i class="fas fa-upload me-2"></i>{{ isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran ? 'Ganti Bukti' : 'Unggah Bukti' }}
                                 </label>
                             </div>
                             @if(isset($pendaftaran) && $pendaftaran->file_bukti_pembayaran)
-                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Current: {{ basename($pendaftaran->file_bukti_pembayaran) }}</small>
+                                <small class="text-success d-block mt-1"><i class="fas fa-check"></i> Saat ini: {{ basename($pendaftaran->file_bukti_pembayaran) }}</small>
                             @endif
                         </div>
-                        <small class="text-muted">Format: JPG, PNG, PDF. Max: 10MB</small>
+                        <small class="text-muted">Format: JPG, PNG, PDF. Maks: 10MB</small>
                         @error('file_bukti_pembayaran')
                         <small class="text-danger d-block">{{ $message }}</small>
                         @enderror
@@ -343,7 +343,7 @@
                 <div class="col-12">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Pendaftaran Kedua:</strong> Anda sedang mengedit pendaftaran kedua. Bukti pembayaran diperlukan untuk pendaftaran ini.
+                        <strong>Pendaftaran Kedua:</strong> Anda sedang mengubah pendaftaran kedua. Bukti pembayaran diperlukan untuk pendaftaran ini.
                     </div>
                 </div>
             </div>
@@ -351,17 +351,17 @@
 
             <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="800">
                 <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
-                    <i class="fas fa-arrow-left me-2"></i>Back
+                    <i class="fas fa-arrow-left me-2"></i>Kembali
                 </a>
                 <button type="button" id="submitBtn" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>Update Registration
+                    <i class="fas fa-save me-2"></i>Perbarui Pendaftaran
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Confirmation Modal -->
+<!-- Modal Konfirmasi -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -379,7 +379,7 @@
                 <h5 class="mb-3">Apakah Anda sudah yakin?</h5>
                 <div class="alert alert-warning">
                     <i class="fas fa-info-circle me-2"></i>
-                    <strong>Perhatian!</strong> Anda hanya dapat mengedit data pendaftaran satu kali. Setelah disimpan, Anda tidak dapat mengubah data ini lagi.
+                    <strong>Perhatian!</strong> Anda hanya dapat mengubah data pendaftaran satu kali. Setelah disimpan, Anda tidak dapat mengubah data ini lagi.
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
@@ -411,12 +411,12 @@ $(document).ready(function() {
                         <span>${file.name}</span>
                     `);
                 } else {
-                    $('#ktp-preview').html(`<img src="${e.target.result}" alt="KTP Preview">`);
+                    $('#ktp-preview').html(`<img src="${e.target.result}" alt="Pratinjau KTP">`);
                 }
                 $('#ktp-preview').addClass('has-preview');
             }
             reader.readAsDataURL(file);
-            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
+            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Dipilih');
         }
     });
 
@@ -432,12 +432,12 @@ $(document).ready(function() {
                         <span>${file.name}</span>
                     `);
                 } else {
-                    $('#ktm-preview').html(`<img src="${e.target.result}" alt="KTM Preview">`);
+                    $('#ktm-preview').html(`<img src="${e.target.result}" alt="Pratinjau KTM">`);
                 }
                 $('#ktm-preview').addClass('has-preview');
             }
             reader.readAsDataURL(file);
-            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
+            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Dipilih');
         }
     });
 
@@ -447,11 +447,11 @@ $(document).ready(function() {
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                $('#foto-preview').html(`<img src="${e.target.result}" alt="Foto Preview" class="rounded-circle">`);
+                $('#foto-preview').html(`<img src="${e.target.result}" alt="Pratinjau Foto" class="rounded-circle">`);
                 $('#foto-preview').addClass('has-preview');
             }
             reader.readAsDataURL(file);
-            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
+            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Dipilih');
         }
     });
 
@@ -468,12 +468,12 @@ $(document).ready(function() {
                         <span>${file.name}</span>
                     `);
                 } else {
-                    $('#bukti-preview').html(`<img src="${e.target.result}" alt="Bukti Pembayaran Preview">`);
+                    $('#bukti-preview').html(`<img src="${e.target.result}" alt="Pratinjau Bukti Pembayaran">`);
                 }
                 $('#bukti-preview').addClass('has-preview');
             }
             reader.readAsDataURL(file);
-            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Selected');
+            $(this).next('label').html('<i class="fas fa-check me-2"></i>File Dipilih');
         }
     });
     @endif
@@ -484,7 +484,7 @@ $(document).ready(function() {
         const input = container.find('input[type="file"]');
         input.click();
     });
-    
+
     // WhatsApp number formatting
     $('#wa').on('input', function() {
         let value = $(this).val();
@@ -525,11 +525,11 @@ $(document).ready(function() {
         currentValue = currentValue.replace(/^0/, '');
         $('#wa').val(currentValue);
     }
-    
+
     // Show confirmation modal when submit button is clicked
     $('#submitBtn').on('click', function(e) {
         e.preventDefault(); // Prevent default form submission
-        
+
         // Check form validity first
         const form = document.getElementById('editForm');
         if (form.checkValidity()) {
@@ -539,19 +539,19 @@ $(document).ready(function() {
             form.reportValidity();
         }
     });
-    
+
     // Submit form when confirmed
     $('#confirmSubmit').on('click', function() {
         $('#confirmationModal').modal('hide');
-        
+
         // Add loading state
         $(this).html('<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...');
         $(this).prop('disabled', true);
-        
+
         // Submit the form
         document.getElementById('editForm').submit();
     });
-    
+
     // Reset button state when modal is hidden
     $('#confirmationModal').on('hidden.bs.modal', function () {
         $('#confirmSubmit').html('<i class="fas fa-check me-2"></i>Ya, Saya Yakin');

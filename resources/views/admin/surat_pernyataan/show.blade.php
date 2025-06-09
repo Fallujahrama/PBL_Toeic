@@ -64,10 +64,10 @@
                                             <td>{{ $surat->created_at->format('d/m/Y H:i') }}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>File:</strong></td>
+                                            <td><strong>Berkas:</strong></td>
                                             <td>
                                                 <a href="{{ Storage::url('surat/' . $surat->file_surat_pernyataan) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-file-pdf"></i> Lihat PDF
+                                                    <i class="fas fa-file-pdf"></i> Lihat Dokumen
                                                 </a>
                                             </td>
                                         </tr>
@@ -82,7 +82,7 @@
                                                 <i class="fas fa-check"></i> Validasi
                                             </button>
                                         </form>
-                                        
+
                                         <form action="{{ route('admin.surat-pernyataan.reject', $surat->id_surat_pernyataan) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PATCH')
@@ -101,12 +101,12 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h6>Preview Dokumen</h6>
+                                    <h6>Pratinjau Dokumen</h6>
                                 </div>
                                 <div class="card-body">
-                                    <iframe src="{{ Storage::url('surat/' . $surat->file_surat_pernyataan) }}" 
+                                    <iframe src="{{ Storage::url('surat/' . $surat->file_surat_pernyataan) }}"
                                             width="100%" height="600px" style="border: none;">
-                                        <p>Browser Anda tidak mendukung preview PDF. 
+                                        <p>Browser Anda tidak mendukung preview PDF.
                                            <a href="{{ Storage::url('surat/' . $surat->file_surat_pernyataan) }}" target="_blank">Klik di sini untuk membuka file</a>
                                         </p>
                                     </iframe>

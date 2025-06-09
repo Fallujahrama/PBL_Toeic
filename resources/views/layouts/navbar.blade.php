@@ -19,12 +19,12 @@
                     @else
                         <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ $value }}</li>
                     @endif
-                @endforeach  
+                @endforeach
             </ol>
             <h6 class="font-weight-bolder mb-0">{{ $breadcrumb->title ?? 'Dashboard' }}</h6>
         </div>
       @else
-        <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+        <h6 class="font-weight-bolder mb-0">Dasbor</h6>
       @endif
     </nav>
 
@@ -111,12 +111,12 @@
           <li><hr class="dropdown-divider"></li>
           <li>
             <a class="dropdown-item" href="{{ url('/profile') }}">
-              <i class="fas fa-user me-2"></i> Profile
+              <i class="fas fa-user me-2"></i> Profil
             </a>
           </li>
           <li>
             <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <i class="fas fa-sign-out-alt me-2"></i> Logout
+              <i class="fas fa-sign-out-alt me-2"></i> Keluar
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
               @csrf

@@ -39,18 +39,18 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">Username</label>
+                                        <label class="form-control-label">Nama Pengguna</label>
                                         <p class="form-control-static">{{ $user->username }}</p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">Level User</label>
+                                        <label class="form-control-label">Level Pengguna</label>
                                         <p class="form-control-static">
-                                            <span class="badge badge-lg 
+                                            <span class="badge badge-lg
                                                 @if($user->level->level_kode == 'SprAdmin') bg-gradient-danger
                                                 @elseif($user->level->level_kode == 'AdmUpa') bg-gradient-warning
                                                 @elseif($user->level->level_kode == 'AdmITC') bg-gradient-info
@@ -70,11 +70,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">Terakhir Diupdate</label>
+                                        <label class="form-control-label">Terakhir Diperbarui</label>
                                         <p class="form-control-static">
                                             {{ $user->updated_at ? $user->updated_at->format('d F Y, H:i') : 'Tidak tersedia' }}
                                         </p>

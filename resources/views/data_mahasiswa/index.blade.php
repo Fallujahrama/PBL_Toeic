@@ -512,8 +512,12 @@ $(document).ready(function() {
     });
 });
 
-// Export data function
+// Export data function - Updated to include kampus filter
 function exportData() {
+    // Get current kampus filter value
+    var kampusFilter = $('#kampus').val();
+    var kampusParam = kampusFilter ? '?kampus=' + encodeURIComponent(kampusFilter) : '';
+    
     Swal.fire({
         title: 'Export Data',
         text: 'Pilih format export yang diinginkan',
@@ -525,10 +529,10 @@ function exportData() {
     }).then((result) => {
         if (result.isConfirmed) {
             // Export to Excel
-            window.location.href = '/admin/mahasiswa/export/excel';
+            window.location.href = '/admin/mahasiswa/export/excel' + kampusParam;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             // Export to PDF
-            window.location.href = '/admin/mahasiswa/export/pdf';
+            window.location.href = '/admin/mahasiswa/export/pdf' + kampusParam;
         }
     });
 }

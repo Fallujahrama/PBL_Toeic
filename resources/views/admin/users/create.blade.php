@@ -33,17 +33,17 @@
 
                     <form action="{{ route('admin.users.store') }}" method="POST" id="createUserForm">
                         @csrf
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nama" class="form-control-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                    <input class="form-control @error('nama') is-invalid @enderror" 
-                                           type="text" 
-                                           name="nama" 
-                                           id="nama" 
-                                           value="{{ old('nama') }}" 
-                                           required 
+                                    <input class="form-control @error('nama') is-invalid @enderror"
+                                           type="text"
+                                           name="nama"
+                                           id="nama"
+                                           value="{{ old('nama') }}"
+                                           required
                                            placeholder="Masukkan nama lengkap">
                                     @error('nama')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -52,13 +52,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="username" class="form-control-label">Username/NIM <span class="text-danger">*</span></label>
-                                    <input class="form-control @error('username') is-invalid @enderror" 
-                                           type="text" 
-                                           name="username" 
-                                           id="username" 
-                                           value="{{ old('username') }}" 
-                                           required 
+                                    <label for="username" class="form-control-label">Nama Pengguna/NIM <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('username') is-invalid @enderror"
+                                           type="text"
+                                           name="username"
+                                           id="username"
+                                           value="{{ old('username') }}"
+                                           required
                                            placeholder="Masukkan NIM atau Username">
                                     @error('username')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -66,16 +66,16 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password" class="form-control-label">Password <span class="text-danger">*</span></label>
-                                    <input class="form-control @error('password') is-invalid @enderror" 
-                                           type="password" 
-                                           name="password" 
-                                           id="password" 
-                                           required 
+                                    <label for="password" class="form-control-label">Kata Sandi <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('password') is-invalid @enderror"
+                                           type="password"
+                                           name="password"
+                                           id="password"
+                                           required
                                            placeholder="Masukkan password">
                                     @error('password')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -84,10 +84,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="level_id" class="form-control-label">Level User <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('level_id') is-invalid @enderror" 
-                                            name="level_id" 
-                                            id="level_id" 
+                                    <label for="level_id" class="form-control-label">Level Pengguna <span class="text-danger">*</span></label>
+                                    <select class="form-control @error('level_id') is-invalid @enderror"
+                                            name="level_id"
+                                            id="level_id"
                                             required>
                                         <option value="">Pilih Level</option>
                                         @foreach($levels as $level)
@@ -125,10 +125,10 @@ $(document).ready(function() {
         console.log('Nama:', $('#nama').val());
         console.log('Username:', $('#username').val());
         console.log('Level ID:', $('#level_id').val());
-        
+
         // Show loading state
         $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i> Menyimpan...');
-        
+
         // Let the form submit normally
         return true;
     });

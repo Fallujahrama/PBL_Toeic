@@ -10,7 +10,7 @@
                     @if(count($suratPernyataan) > 0)
                     <a href="{{ route('admin.surat-pernyataan.download-all') }}"
                         class="btn btn-sm btn-success">
-                            <i class="fas fa-download me-2"></i>Download Semua Surat
+                            <i class="fas fa-download me-2"></i>Unduh Semua Surat
                     </a>
                     @endif
                 </div>
@@ -29,7 +29,7 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">NIM</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Mahasiswa</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">File</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Berkas</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Upload</th>
                                     <th class="text-secondary opacity-7">Aksi</th>
@@ -65,7 +65,7 @@
                                             <div class="d-flex flex-column justify-content-center">
                                                 @if($surat->file_surat_pernyataan)
                                                     <a href="{{ Storage::url('surat/' . $surat->file_surat_pernyataan) }}" target="_blank" class="text-sm font-weight-bold mb-0">
-                                                        <i class="fas fa-file-pdf text-danger"></i> Lihat PDF
+                                                        <i class="fas fa-file-pdf text-danger"></i> Lihat
                                                     </a>
                                                 @else
                                                     <span class="badge badge-sm bg-secondary">Belum Dibuat</span>
@@ -77,7 +77,7 @@
                                         @if($surat->status == 'pending')
                                             <span class="badge badge-sm bg-gradient-warning">Menunggu</span>
                                         @elseif($surat->status == 'valid')
-                                            <span class="badge badge-sm bg-gradient-success">Valid</span>
+                                            <span class="badge badge-sm bg-gradient-success">Disetujui</span>
                                         @elseif($surat->status == 'rejected')
                                             <span class="badge badge-sm bg-gradient-danger">Ditolak</span>
                                         @endif

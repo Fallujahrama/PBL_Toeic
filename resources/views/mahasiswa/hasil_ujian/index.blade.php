@@ -23,7 +23,7 @@
                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">No</th>
                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tanggal</th>
                                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Informasi</th>
-                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">File</th>
+                                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Berkas</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
@@ -52,13 +52,13 @@
                                                     <i class="fas fa-file me-1"></i>{{ strtoupper($extension) }}
                                                 </span>
                                             @else
-                                                <span class="badge bg-secondary">Tidak ada file</span>
+                                                <span class="badge bg-secondary">Tidak ada berkas</span>
                                             @endif
                                         </td>
                                         <td class="align-middle">
                                             @if($item->file_nilai)
-                                                <a href="{{ asset('storage/' . $item->file_nilai) }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview File">
-                                                    <i class="fas fa-eye"></i> Preview
+                                                <a href="{{ asset('storage/' . $item->file_nilai) }}" class="btn btn-link text-info px-2 mb-0" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="Pratinjau Berkas">
+                                                    <i class="fas fa-eye"></i> Pratinjau
                                                 </a>
                                             @else
                                                 <span class="text-muted">Tidak tersedia</span>

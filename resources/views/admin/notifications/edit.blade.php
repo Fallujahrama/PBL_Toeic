@@ -7,15 +7,15 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dasbor</a>
             </li>
             <li class="breadcrumb-item text-sm">
                 <a class="opacity-5 text-dark" href="{{ route('notifications.index') }}">Notifikasi</a>
             </li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Ubah</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">Edit Notifikasi</h6>
+    <h6 class="font-weight-bolder mb-0">Ubah Notifikasi</h6>
 </div>
 
 <div class="row">
@@ -26,7 +26,7 @@
                     <div class="icon icon-shape icon-sm bg-gradient-warning text-white rounded-circle shadow me-2">
                         <i class="fas fa-edit"></i>
                     </div>
-                    <h5 class="mb-0">Edit Notifikasi</h5>
+                    <h5 class="mb-0">Ubah Notifikasi</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -39,7 +39,7 @@
                                 <label for="tanggal" class="form-control-label">Tanggal</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                    <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $notification->tanggal }}" required>
+                                    <input type="date" name="tanggal" id="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal', $notification->tanggal) }}" required min="{{ date('Y-m-d') }}" required>
                                 </div>
                                 @error('tanggal')
                                     <small class="text-danger">{{ $message }}</small>
@@ -64,7 +64,7 @@
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
                         <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-save me-2"></i>Update
+                            <i class="fas fa-save me-2"></i>Perbarui
                         </button>
                     </div>
                 </form>
@@ -80,21 +80,21 @@
         // Form validation
         $('#notification-form').on('submit', function(e) {
             let isValid = true;
-            
+
             if ($('#tanggal').val() === '') {
                 isValid = false;
                 $('#tanggal').addClass('is-invalid');
             } else {
                 $('#tanggal').removeClass('is-invalid');
             }
-            
+
             if ($('#pesan').val().trim() === '') {
                 isValid = false;
                 $('#pesan').addClass('is-invalid');
             } else {
                 $('#pesan').removeClass('is-invalid');
             }
-            
+
             return isValid;
         });
     });

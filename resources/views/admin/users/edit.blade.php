@@ -27,39 +27,39 @@
                     <form action="{{ route('admin.users.update', $user->id_user) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="nama" class="form-control-label">Nama Lengkap</label>
-                                    <input class="form-control" type="text" name="nama" id="nama" 
+                                    <input class="form-control" type="text" name="nama" id="nama"
                                            value="{{ old('nama', $user->nama) }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="username" class="form-control-label">Username</label>
-                                    <input class="form-control" type="text" name="username" id="username" 
+                                    <label for="username" class="form-control-label">Nama Pengguna</label>
+                                    <input class="form-control" type="text" name="username" id="username"
                                            value="{{ old('username', $user->username) }}" required>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password" class="form-control-label">Password</label>
+                                    <label for="password" class="form-control-label">Kata Sandi</label>
                                     <input class="form-control" type="password" name="password" id="password">
-                                    <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                                    <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah kata sandi</small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="level_id" class="form-control-label">Level User</label>
+                                    <label for="level_id" class="form-control-label">Level Pengguna</label>
                                     <select class="form-control" name="level_id" id="level_id" required>
                                         <option value="">Pilih Level</option>
                                         @foreach($levels as $level)
-                                            <option value="{{ $level->level_id }}" 
+                                            <option value="{{ $level->level_id }}"
                                                     {{ old('level_id', $user->level_id) == $level->level_id ? 'selected' : '' }}>
                                                 {{ $level->level_nama }}
                                             </option>
@@ -71,7 +71,7 @@
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i> Update
+                                <i class="fas fa-save me-1"></i> Perbarui
                             </button>
                         </div>
                     </form>

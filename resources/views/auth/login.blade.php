@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Login - TOEIC Registration System</title>
+  <title>Masuk - Sistem Pendaftaran TOEIC</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Fonts -->
@@ -38,7 +38,7 @@
                     </a>
                   </div>
                   <h4 class="font-weight-bolder text-center">TOEIC Registration</h4>
-                  <p class="mb-0 text-center">Enter your credentials to access your account</p>
+                  <p class="mb-0 text-center">Masukkan kredensial Anda untuk mengakses akun</p>
                 </div>
                 <div class="card-body">
                   @if ($errors->any())
@@ -50,23 +50,23 @@
                     @csrf
                     <div class="form-floating mb-3">
                       <input type="text" name="username" class="form-control" id="username" placeholder=" " required>
-                      <label for="username">Username</label>
+                      <label for="username">Nama Pengguna</label>
                       <span class="text-danger error-text" id="error-username"></span>
                     </div>
                     <div class="form-floating mb-3">
                       <input type="password" name="password" class="form-control" id="password" placeholder=" " required>
-                      <label for="password">Password</label>
+                      <label for="password">Kata Sandi</label>
                       <span class="text-danger error-text" id="error-password"></span>
                     </div>
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0 pulse">Sign in</button>
+                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0 pulse">Masuk</button>
                       <div class="mt-3">
                         <a href="{{ route('register') }}" class="btn btn-lg btn-outline-secondary btn-lg w-100 pulse">
-                          <i class="fas fa-user-plus me-2"></i>Create New Account
+                          <i class="fas fa-user-plus me-2"></i>Buat Akun Baru
                         </a>
                       </div>
                         <a href="{{ route('landing') }}" class="btn btn-link text-secondary mt-2 slide-up">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Landing Page
+                            <i class="fas fa-arrow-left me-2"></i>Kembali ke Halaman Utama
                         </a>
                     </div>
                   </form>
@@ -77,25 +77,25 @@
               <div class="login-side-image h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" data-aos="fade-left">
                 <div class="login-side-content">
                   <h2 class="mt-5 text-white font-weight-bolder position-relative">Test of English for International Communication</h2>
-                  <p class="text-white position-relative">Enhance your career prospects with internationally recognized English language certification. Register for your TOEIC exam today.</p>
+                  <p class="text-white position-relative">Tingkatkan prospek karier Anda dengan sertifikasi bahasa Inggris yang diakui secara internasional. Daftar untuk ujian TOEIC Anda hari ini.</p>
                   <div class="mt-4">
                     <div class="d-flex justify-content-center mb-4">
                       <div class="px-3 py-2 bg-white bg-opacity-10 rounded-pill me-2">
-                        <i class="fas fa-headphones me-1 "></i> Listening
+                        <i class="fas fa-headphones me-1 "></i> Mendengarkan
                       </div>
                       <div class="px-3 py-2 bg-white bg-opacity-10 rounded-pill me-2">
-                        <i class="fas fa-book-open me-1"></i> Reading
+                        <i class="fas fa-book-open me-1"></i> Membaca
                       </div>
                       <div class="px-3 py-2 bg-white bg-opacity-10 rounded-pill">
-                        <i class="fas fa-comments me-1"></i> Speaking
+                        <i class="fas fa-comments me-1"></i> Berbicara
                       </div>
                     </div>
                     <div class="d-flex justify-content-center">
                       <div class="px-3 py-2 bg-white bg-opacity-10 rounded-pill me-2">
-                        <i class="fas fa-pen me-1"></i> Writing
+                        <i class="fas fa-pen me-1"></i> Menulis
                       </div>
                       <div class="px-3 py-2 bg-white bg-opacity-10 rounded-pill">
-                        <i class="fas fa-certificate me-1"></i> Certification
+                        <i class="fas fa-certificate me-1"></i> Sertifikasi
                       </div>
                     </div>
                   </div>
@@ -156,14 +156,14 @@
         },
         messages: {
           username: {
-            required: "Please enter your username",
-            minlength: "Username must be at least 4 characters",
-            maxlength: "Username cannot exceed 20 characters"
+            required: "Harap masukkan nama pengguna Anda",
+            minlength: "Nama pengguna minimal 4 karakter",
+            maxlength: "Nama pengguna maksimal 20 karakter"
           },
           password: {
-            required: "Please enter your password",
-            minlength: "Password must be at least 5 characters",
-            maxlength: "Password cannot exceed 20 characters"
+            required: "Harap masukkan kata sandi Anda",
+            minlength: "Kata sandi minimal 5 karakter",
+            maxlength: "Kata sandi maksimal 20 karakter"
           }
         },
         submitHandler: function(form) {
@@ -172,14 +172,14 @@
             type: form.method,
             data: $(form).serialize(),
             beforeSend: function() {
-              $('button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i> Signing in...');
+              $('button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i> Sedang masuk...');
               $('button[type="submit"]').prop('disabled', true);
             },
             success: function(response) {
               if (response.status) {
                 Swal.fire({
                   icon: 'success',
-                  title: 'Login Successful',
+                  title: 'Login Berhasil',
                   text: response.message,
                   background: '#ffffff',
                   color: '#1f2937',
@@ -196,26 +196,26 @@
                 }
                 Swal.fire({
                   icon: 'error',
-                  title: 'Login Failed',
+                  title: 'Login Gagal',
                   text: response.message,
                   background: '#ffffff',
                   color: '#1f2937',
                   confirmButtonColor: '#3b82f6'
                 });
-                $('button[type="submit"]').html('Sign in');
+                $('button[type="submit"]').html('Masuk');
                 $('button[type="submit"]').prop('disabled', false);
               }
             },
             error: function() {
               Swal.fire({
                 icon: 'error',
-                title: 'Server Error',
-                text: 'There was an error connecting to the server.',
+                title: 'Kesalahan Server',
+                text: 'Terjadi kesalahan saat menghubungi server.',
                 background: '#1f2937',
                 color: '#e2e8f0',
                 confirmButtonColor: '#3b82f6'
               });
-              $('button[type="submit"]').html('Sign in');
+              $('button[type="submit"]').html('Masuk');
               $('button[type="submit"]').prop('disabled', false);
             }
           });

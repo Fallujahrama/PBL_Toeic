@@ -5,7 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/') }}">Home</a>
+                <a class="opacity-5 text-dark" href="{{ url('/') }}">Beranda</a>
             </li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pendaftaran</li>
         </ol>
@@ -27,8 +27,8 @@
         <div class="col-12">
             <div class="card shadow-sm animate-card" data-aos="fade-up">
                 <div class="card-header text-center">
-                    <h2 class="fw-bold">TOEIC Test Registration</h2>
-                    <p>Please select the registration type</p>
+                    <h2 class="fw-bold">Pendaftaran Tes TOEIC</h2>
+                    <p>Silakan pilih jenis pendaftaran</p>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -49,9 +49,9 @@
                                 <h4>Pendaftaran Gratis</h4>
                                 <p>Form pendaftaran TOEIC gratis untuk mahasiswa aktif</p>
                                 @if ($hasRegistered)
-                                    <small class="text-danger">You have already registered.</small>
+                                    <small class="text-danger">Anda sudah terdaftar.</small>
                                 @elseif ($isNewUserType)
-                                    <small class="text-danger">Only available for active students.</small>
+                                    <small class="text-danger">Hanya tersedia untuk mahasiswa aktif.</small>
                                 @endif
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                                 <i class="fas fa-user-edit fa-3x mb-3 text-warning"></i>
                                 <h4>Pendaftaran Mandiri</h4>
                                 <p>Form pendaftaran TOEIC berbayar</p>
-                                <small class="text-muted"><i class="fas fa-external-link-alt me-1"></i>Redirects to ITC website</small>
+                                <small class="text-muted"><i class="fas fa-external-link-alt me-1"></i>Mengarah ke situs ITC</small>
                             </div>
                         </div>
                     </div>
@@ -73,13 +73,13 @@
         </div>
     </div>
 
-    <!-- Tabel History Pendaftaran -->
+    <!-- Tabel Riwayat Pendaftaran -->
     @if($registrations->count() > 0)
     <div class="row justify-content-center mt-4">
         <div class="col-md-12" data-aos="fade-up" data-aos-delay="500">
             <div class="card shadow-sm animate-card" style="background-color: var(--dark-card); border: 1px solid var(--dark-border);">
                 <div class="card-header">
-                    <h5><i class="fas fa-history me-2 text-info"></i>Registration History</h5>
+                    <h5><i class="fas fa-history me-2 text-info"></i>Riwayat Pendaftaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -87,10 +87,10 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Registration Date</th>
-                                    <th>Registration Type</th>
+                                    <th>Tanggal Pendaftaran</th>
+                                    <th>Jenis Pendaftaran</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,20 +107,20 @@
                                     </td>
                                     <td>
                                         @if($registration->keterangan === 'EDITED')
-                                            <span class="badge bg-danger">Edited (Locked)</span>
+                                            <span class="badge bg-danger">Diubah (Terkunci)</span>
                                         @elseif($registration->created_at != $registration->updated_at)
-                                            <span class="badge bg-info">Updated</span>
+                                            <span class="badge bg-success">Sudah Terkirim (Diperbarui)</span>
                                         @else
-                                            <span class="badge bg-success">Submitted</span>
+                                            <span class="badge bg-success">Sudah Terkirim</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if($registration->keterangan === 'EDITED')
-                                            <button class="btn btn-sm btn-secondary" disabled title="Sudah diedit, tidak dapat diubah lagi">
+                                            <button class="btn btn-sm btn-secondary" disabled title="Sudah diubah, tidak dapat diubah lagi">
                                                 <i class="fas fa-lock"></i>
                                             </button>
                                         @else
-                                            <a href="{{ route('mahasiswa.data.edit', $registration->nim) }}" class="btn btn-sm btn-outline-warning" title="Edit Data">
+                                            <a href="{{ route('mahasiswa.data.edit', $registration->nim) }}" class="btn btn-sm btn-outline-warning" title="Ubah Data">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         @endif
@@ -153,19 +153,19 @@
     </div>
 </div>
 
-<!-- Modal for Registration Details -->
+<!-- Modal untuk Detail Pendaftaran -->
 <div class="modal fade" id="registrationDetailModal" tabindex="-1" aria-labelledby="registrationDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registrationDetailModalLabel">Registration Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="registrationDetailModalLabel">Detail Pendaftaran</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body" id="registrationDetailContent">
                 <!-- Content will be loaded here -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -211,9 +211,9 @@ function viewRegistration(id) {
     const content = `
         <div class="text-center">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">Memuat...</span>
             </div>
-            <p class="mt-2">Loading registration details...</p>
+            <p class="mt-2">Memuat detail pendaftaran...</p>
         </div>
     `;
     document.getElementById('registrationDetailContent').innerHTML = content;
@@ -233,25 +233,25 @@ function viewRegistration(id) {
                 const content = `
                     <div class="row">
                         <div class="col-md-6">
-                            <h6 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Student Information</h6>
+                            <h6 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Informasi Mahasiswa</h6>
                             <p><strong>NIM:</strong> ${registration.nim}</p>
                             ${mahasiswa ? `
-                                <p><strong>Name:</strong> ${mahasiswa.nama}</p>
-                                <p><strong>Study Program:</strong> ${mahasiswa.program_studi}</p>
-                                <p><strong>Department:</strong> ${mahasiswa.jurusan}</p>
-                                <p><strong>Campus:</strong> ${mahasiswa.kampus}</p>
+                                <p><strong>Nama:</strong> ${mahasiswa.nama}</p>
+                                <p><strong>Program Studi:</strong> ${mahasiswa.program_studi}</p>
+                                <p><strong>Jurusan:</strong> ${mahasiswa.jurusan}</p>
+                                <p><strong>Kampus:</strong> ${mahasiswa.kampus}</p>
                             ` : ''}
                         </div>
                         <div class="col-md-6">
-                            <h6 class="text-info mb-3"><i class="fas fa-calendar me-2"></i>Registration Details</h6>
-                            <p><strong>Registration Date:</strong> ${new Date(registration.created_at).toLocaleDateString('id-ID', {
+                            <h6 class="text-info mb-3"><i class="fas fa-calendar me-2"></i>Detail Pendaftaran</h6>
+                            <p><strong>Tanggal Pendaftaran:</strong> ${new Date(registration.created_at).toLocaleDateString('id-ID', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
                                 hour: '2-digit',
                                 minute: '2-digit'
                             })}</p>
-                            <p><strong>Last Updated:</strong> ${new Date(registration.updated_at).toLocaleDateString('id-ID', {
+                            <p><strong>Terakhir Diperbarui:</strong> ${new Date(registration.updated_at).toLocaleDateString('id-ID', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
@@ -263,14 +263,14 @@ function viewRegistration(id) {
                     <hr>
                     <div class="row">
                         <div class="col-12">
-                            <h6 class="text-success mb-3"><i class="fas fa-file-alt me-2"></i>Uploaded Files</h6>
+                            <h6 class="text-success mb-3"><i class="fas fa-file-alt me-2"></i>Berkas Diunggah</h6>
                             <div class="row">
                                 <div class="col-md-3 mb-2">
                                     <div class="text-center p-2 border rounded">
                                         <i class="fas fa-id-card fa-2x ${registration.file_ktp ? 'text-success' : 'text-muted'} mb-2"></i>
                                         <p class="mb-1"><strong>KTP</strong></p>
                                         <span class="badge ${registration.file_ktp ? 'bg-success' : 'bg-secondary'}">
-                                            ${registration.file_ktp ? 'Uploaded' : 'Not uploaded'}
+                                            ${registration.file_ktp ? 'Terunggah' : 'Belum diunggah'}
                                         </span>
                                     </div>
                                 </div>
@@ -279,25 +279,25 @@ function viewRegistration(id) {
                                         <i class="fas fa-id-badge fa-2x ${registration.file_ktm ? 'text-success' : 'text-muted'} mb-2"></i>
                                         <p class="mb-1"><strong>KTM</strong></p>
                                         <span class="badge ${registration.file_ktm ? 'bg-success' : 'bg-secondary'}">
-                                            ${registration.file_ktm ? 'Uploaded' : 'Not uploaded'}
+                                            ${registration.file_ktm ? 'Terunggah' : 'Belum diunggah'}
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <div class="text-center p-2 border rounded">
                                         <i class="fas fa-user-circle fa-2x ${registration.file_foto ? 'text-success' : 'text-muted'} mb-2"></i>
-                                        <p class="mb-1"><strong>Photo</strong></p>
+                                        <p class="mb-1"><strong>Foto</strong></p>
                                         <span class="badge ${registration.file_foto ? 'bg-success' : 'bg-secondary'}">
-                                            ${registration.file_foto ? 'Uploaded' : 'Not uploaded'}
+                                            ${registration.file_foto ? 'Terunggah' : 'Belum diunggah'}
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <div class="text-center p-2 border rounded">
                                         <i class="fas fa-receipt fa-2x ${registration.file_bukti_pembayaran ? 'text-success' : 'text-muted'} mb-2"></i>
-                                        <p class="mb-1"><strong>Payment Proof</strong></p>
+                                        <p class="mb-1"><strong>Bukti Pembayaran</strong></p>
                                         <span class="badge ${registration.file_bukti_pembayaran ? 'bg-success' : 'bg-secondary'}">
-                                            ${registration.file_bukti_pembayaran ? 'Uploaded' : 'Not uploaded'}
+                                            ${registration.file_bukti_pembayaran ? 'Terunggah' : 'Belum diunggah'}
                                         </span>
                                     </div>
                                 </div>
@@ -315,8 +315,8 @@ function viewRegistration(id) {
             const errorContent = `
                 <div class="text-center text-danger">
                     <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
-                    <h5>Error Loading Details</h5>
-                    <p>${error.message || 'Failed to load registration details. Please try again.'}</p>
+                    <h5>Error Memuat Detail</h5>
+                    <p>${error.message || 'Gagal memuat detail pendaftaran. Silakan coba lagi.'}</p>
                 </div>
             `;
             document.getElementById('registrationDetailContent').innerHTML = errorContent;

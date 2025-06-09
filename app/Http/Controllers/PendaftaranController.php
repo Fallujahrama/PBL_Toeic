@@ -137,9 +137,16 @@ class PendaftaranController extends Controller
 
     public function storeBaru(Request $request)
     {
+    try {
+        // Debug: Log incoming request
+        \Log::info('Registration form submitted', [
+            'user_id' => auth()->id(),
+            'username' => auth()->user()->username,
+            'request_data' => $request->except(['ktp', 'scan_ktm', 'pas_foto'])
+        ]);
+
         // Validasi input mahasiswa baru
-        $request->validate([
-            // 'nim' => 'required|integer|unique:mahasiswa,nim',  // Validasi NIM di tabel mahasiswa
+        $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
             'nik' => 'required|string|max:20',
             'wa' => 'required|string|max:15',
@@ -151,84 +158,130 @@ class PendaftaranController extends Controller
             'ktp' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'scan_ktm' => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'pas_foto' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'nama.required' => 'Nama lengkap wajib diisi',
+            'nik.required' => 'NIK wajib diisi',
+            'wa.required' => 'Nomor WhatsApp wajib diisi',
+            'alamat_asal.required' => 'Alamat asal wajib diisi',
+            'alamat_sekarang.required' => 'Alamat sekarang wajib diisi',
+            'prodi.required' => 'Program studi wajib diisi',
+            'jurusan.required' => 'Jurusan wajib dipilih',
+            'kampus.required' => 'Kampus wajib dipilih',
+            'ktp.required' => 'File KTP wajib diupload',
+            'ktp.mimes' => 'File KTP harus berformat JPG, JPEG, PNG, atau PDF',
+            'ktp.max' => 'Ukuran file KTP maksimal 10MB',
+            'scan_ktm.required' => 'File KTM wajib diupload',
+            'scan_ktm.mimes' => 'File KTM harus berformat JPG, JPEG, PNG, atau PDF',
+            'scan_ktm.max' => 'Ukuran file KTM maksimal 10MB',
+            'pas_foto.required' => 'Pas foto wajib diupload',
+            'pas_foto.mimes' => 'Pas foto harus berformat JPG, JPEG, atau PNG',
+            'pas_foto.max' => 'Ukuran pas foto maksimal 2MB',
         ]);
 
-         // Ambil NIM dari user yang sedang login
+        \Log::info('Validation passed');
+
+        // Ambil NIM dari user yang sedang login
         $nim = auth()->user()->username;
+
+        // Cek apakah mahasiswa sudah pernah mendaftar
+        $hasRegistered = PendaftaranModel::where('nim', $nim)->exists();
+        if ($hasRegistered) {
+            \Log::warning('User already registered', ['nim' => $nim]);
+            return redirect()->route('pendaftaran.index')
+                ->with('error', 'Anda sudah pernah mendaftar. Silakan gunakan pendaftaran kedua.');
+        }
 
         // Cari data mahasiswa berdasarkan NIM
         $mahasiswa = MahasiswaModel::where('nim', $nim)->first();
 
         if (!$mahasiswa) {
-            return redirect()->route('pendaftaran.index')->with('error', 'Data mahasiswa tidak ditemukan. Silakan hubungi admin.');
+            \Log::error('Student data not found', ['nim' => $nim]);
+            return redirect()->route('pendaftaran.index')
+                ->with('error', 'Data mahasiswa tidak ditemukan. Silakan hubungi admin.');
         }
 
-        // Menyimpan data mahasiswa tanpa kolom ktp, scan_ktm, pas_foto
-        // $mahasiswa = new MahasiswaModel();
-        // $mahasiswa->nim = auth()->user()->username; // Ambil NIM dari username user yang sedang login
-        $mahasiswa->nama = $request->nama;
-        $mahasiswa->nik = $request->nik;
-        $mahasiswa->no_whatsapp = $request->wa;
-        $mahasiswa->alamat_asal = $request->alamat_asal;
-        $mahasiswa->alamat_saat_ini = $request->alamat_sekarang;
-        $mahasiswa->program_studi = $request->prodi;
-        $mahasiswa->jurusan = $request->jurusan;
-        $mahasiswa->kampus = $request->kampus;
-        // $mahasiswa->user_id = auth()->id(); // This will use the currently logged-in user's ID
-        $mahasiswa->save();
+        \Log::info('Student found, updating data', ['nim' => $nim]);
+
+        // Update data mahasiswa
+        $mahasiswa->update([
+            'nama' => $validatedData['nama'],
+            'nik' => $validatedData['nik'],
+            'no_whatsapp' => $validatedData['wa'],
+            'alamat_asal' => $validatedData['alamat_asal'],
+            'alamat_saat_ini' => $validatedData['alamat_sekarang'],
+            'program_studi' => $validatedData['prodi'],
+            'jurusan' => $validatedData['jurusan'],
+            'kampus' => $validatedData['kampus'],
+        ]);
 
         // Perbarui nama di tabel m_user
-        $user = auth()->user(); // Ambil data user yang sedang login
-        $user->nama = $request->nama; // Perbarui kolom nama
+        $user = auth()->user();
+        $user->nama = $validatedData['nama'];
         $user->save();
 
-        // Get registration count for this student
-        $registrationCount = PendaftaranModel::where('nim', $nim)->count();
-        $isFirstRegistration = $registrationCount === 0;
+        \Log::info('Student and user data updated');
 
-        // Menyimpan data pendaftaran untuk mahasiswa baru
+        // Menyimpan data pendaftaran
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $nim;
 
-        // Handle file uploads
-        if ($request->hasFile('ktp')) {
-            $file = $request->file('ktp');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $pendaftaran->file_ktp = $file->storeAs('pendaftaran/ktp', $filename, 'public');
-        }
-
-        if ($request->hasFile('scan_ktm')) {
-            $file = $request->file('scan_ktm');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $pendaftaran->file_ktm = $file->storeAs('pendaftaran/ktm', $filename, 'public');
-        }
-
-        if ($request->hasFile('pas_foto')) {
-            $file = $request->file('pas_foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $pendaftaran->file_foto = $file->storeAs('pendaftaran/foto', $filename, 'public');
-        }
-
-        // Set file_bukti_pembayaran explicitly to null for first registration
-        if ($isFirstRegistration) {
-            $pendaftaran->file_bukti_pembayaran = null;
-            // Add this line to make the column nullable for first registration
-            DB::statement('ALTER TABLE pendaftaran MODIFY file_bukti_pembayaran VARCHAR(255) NULL');
-        } else {
-            if ($request->hasFile('bukti_pembayaran')) {
-                $file = $request->file('bukti_pembayaran');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $pendaftaran->file_bukti_pembayaran = $file->storeAs('pendaftaran/bukti_pembayaran', $filename, 'public');
-            }
-        }
-
+        // Handle file uploads dengan error handling
         try {
-            $pendaftaran->save();
-            return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
+            if ($request->hasFile('ktp')) {
+                $file = $request->file('ktp');
+                $filename = time() . '_ktp_' . $file->getClientOriginalName();
+                $pendaftaran->file_ktp = $file->storeAs('pendaftaran/ktp', $filename, 'public');
+                \Log::info('KTP file uploaded', ['filename' => $filename]);
+            }
+
+            if ($request->hasFile('scan_ktm')) {
+                $file = $request->file('scan_ktm');
+                $filename = time() . '_ktm_' . $file->getClientOriginalName();
+                $pendaftaran->file_ktm = $file->storeAs('pendaftaran/ktm', $filename, 'public');
+                \Log::info('KTM file uploaded', ['filename' => $filename]);
+            }
+
+            if ($request->hasFile('pas_foto')) {
+                $file = $request->file('pas_foto');
+                $filename = time() . '_foto_' . $file->getClientOriginalName();
+                $pendaftaran->file_foto = $file->storeAs('pendaftaran/foto', $filename, 'public');
+                \Log::info('Photo file uploaded', ['filename' => $filename]);
+            }
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan pendaftaran. Silakan coba lagi.');
+            \Log::error('File upload error', ['error' => $e->getMessage()]);
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal mengupload file. Silakan coba lagi.');
         }
+
+        // Set file_bukti_pembayaran to null for first registration
+        $pendaftaran->file_bukti_pembayaran = null;
+
+        // Save pendaftaran
+        $pendaftaran->save();
+
+        \Log::info('Registration saved successfully', ['pendaftaran_id' => $pendaftaran->id]);
+
+        return redirect()->route('pendaftaran.index')
+            ->with('success', 'Pendaftaran TOEIC berhasil! Silakan tunggu konfirmasi dari admin.');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        \Log::error('Validation error', ['errors' => $e->errors()]);
+        return redirect()->back()
+            ->withErrors($e->errors())
+            ->withInput()
+            ->with('error', 'Terdapat kesalahan dalam pengisian form. Silakan periksa kembali.');
+    } catch (\Exception $e) {
+        \Log::error('Registration error', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return redirect()->back()
+            ->withInput()
+            ->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');
     }
+}
 
     /**
      * Store data pendaftaran mahasiswa lama

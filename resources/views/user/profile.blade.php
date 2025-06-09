@@ -7,12 +7,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm">
-                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dashboard</a>
+                <a class="opacity-5 text-dark" href="{{ url('/dashboard') }}">Dasbor</a>
             </li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Profile</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Profil</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">User Profile</h6>
+    <h6 class="font-weight-bolder mb-0">Profil Pengguna</h6>
 </div>
 
 <div class="row">
@@ -22,7 +22,7 @@
                 <div class="icon icon-shape icon-sm bg-gradient-primary text-white rounded-circle shadow me-2">
                     <i class="fas fa-user"></i>
                 </div>
-                <h5 class="mb-0">Profile Pengguna</h5>
+                <h5 class="mb-0">Profil Pengguna</h5>
             </div>
 
             <div class="card-body">
@@ -56,7 +56,7 @@
                                 @enderror
 
                                 <button type="submit" class="btn btn-primary w-100 mt-3">
-                                    <i class="fas fa-save me-2"></i>Update Foto
+                                    <i class="fas fa-save me-2"></i>Perbarui Foto
                                 </button>
                             </form>
                         </div>
@@ -71,7 +71,7 @@
                             <div class="card-body">
                                 <div class="profile-info-item mb-3">
                                     <div class="profile-info-label">
-                                        <i class="fas fa-user-circle me-2"></i>Username
+                                        <i class="fas fa-user-circle me-2"></i>Nama Pengguna
                                     </div>
                                     <div class="profile-info-value">
                                         {{ $user->username }}
@@ -82,7 +82,7 @@
                                 {{-- Mahasiswa --}}
                                 <div class="profile-info-item mb-3">
                                     <div class="profile-info-label">
-                                        <i class="fas fa-id-card me-2"></i>Nama
+                                        <i class="fas fa-id-card me-2"></i>Nama Lengkap
                                     </div>
                                     <div class="profile-info-value">
                                         {{ $user->nama ?? 'Nama Belum Diisi' }}
@@ -98,7 +98,7 @@
                                 </div>
 
                                 <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                    <i class="fas fa-edit me-1"></i>Ubah Profil
                                 </a>
                                 @elseif(auth()->user()->level->level_kode === 'Alum' || auth()->user()->level->level_kode === 'Dsn' || auth()->user()->level->level_kode === 'Cvts')
                                 {{-- Alumni/Dosen/Civitas --}}
@@ -112,7 +112,7 @@
                                 </div>
 
                                 <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                    <i class="fas fa-edit me-1"></i>Ubah Profil
                                 </a>
                                 @else
                                 {{-- Admin --}}
@@ -134,7 +134,7 @@
                                 </div>
 
                                 <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                    <i class="fas fa-edit me-1"></i>Ubah Profil
                                 </a>
                                 @endif
 

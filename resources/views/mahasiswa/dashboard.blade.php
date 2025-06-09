@@ -11,7 +11,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <div class="welcome-content">
-                            <h1 class="text-white display-6 fw-bold mb-2">Selamat Datang, {{ Auth::user()->name }}!</h1>
+                            <h1 class="text-white display-6 fw-bold mb-2">Selamat Datang, {{ Auth::user()->nama }}!</h1>
                             <p class="lead mb-1 opacity-9">Kelola pendaftaran TOEIC Anda dengan mudah</p>
                             <small class="opacity-8 d-flex align-items-center">
                                 <i class="fas fa-calendar-alt me-2"></i>
@@ -164,8 +164,8 @@
                                                         <i class="fas fa-times me-1"></i>Ditolak
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-warning">
-                                                        <i class="fas fa-clock me-1"></i>Menunggu Verifikasi
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-clock me-1"></i>Sudah Terkirim
                                                     </span>
                                                 @endif
                                             </div>
@@ -208,7 +208,7 @@
                                             <div>
                                                 @if($suratPernyataan->status == 'valid')
                                                     <span class="badge bg-success">
-                                                        <i class="fas fa-check me-1"></i>Valid
+                                                        <i class="fas fa-check me-1"></i>Disetujui
                                                     </span>
                                                 @elseif($suratPernyataan->status == 'rejected')
                                                     <span class="badge bg-danger">

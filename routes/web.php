@@ -112,7 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['authorize:AdmITC'])->group(function () {
         // Data Mahasiswa Management routes - only for AdmITC
         Route::prefix('admin')->name('admin.')->group(function () {
-            // Fixed: Use MahasiswaController for the main route
+            Route::get('/mahasiswa', [PendaftaranController::class, 'dataMahasiswa'])->name('mahasiswa.index');
             Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
             Route::get('/mahasiswa/{nim}/show', [MahasiswaController::class, 'show'])->name('mahasiswa.show');
             Route::get('/mahasiswa/{nim}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');

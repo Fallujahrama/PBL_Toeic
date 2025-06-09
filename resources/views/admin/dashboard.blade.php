@@ -121,23 +121,6 @@
                 <div class="card-body pt-3">
                     <div class="row g-3">
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ route('verifikasi.index') }}" class="quick-action-card text-decoration-none">
-                                <div class="quick-action-content">
-                                    <div class="quick-action-icon bg-gradient-primary">
-                                        <i class="fas fa-check-circle"></i>
-                                    </div>
-                                    <div class="quick-action-info">
-                                        <h6 class="quick-action-title">Verifikasi Pendaftaran</h6>
-                                        <p class="quick-action-desc">Verifikasi pendaftaran mahasiswa baru</p>
-                                    </div>
-                                </div>
-                                <div class="quick-action-arrow">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6">
                             <a href="{{ route('jadwal.index') }}" class="quick-action-card text-decoration-none">
                                 <div class="quick-action-content">
                                     <div class="quick-action-icon bg-gradient-success">
@@ -187,6 +170,22 @@
                                 </div>
                             </a>
                         </div>
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ route('admin.mahasiswa.index') }}" class="quick-action-card text-decoration-none">
+                                <div class="quick-action-content">
+                                    <div class="quick-action-icon bg-gradient-primary">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="quick-action-info">
+                                        <h6 class="quick-action-title">Kelola Mahasiswa</h6>
+                                        <p class="quick-action-desc">Lihat dan kelola data mahasiswa</p>
+                                    </div>
+                                </div>
+                                <div class="quick-action-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,10 +202,10 @@
                             <div class="icon-shape icon-sm bg-gradient-warning text-white rounded-circle me-3">
                                 <i class="fas fa-hourglass-half"></i>
                             </div>
-                            <h6 class="mb-0 fw-bold">Menunggu Verifikasi</h6>
+                            <h6 class="mb-0 fw-bold">Surat Pernyataan Menunggu</h6>
                         </div>
                         @php
-                            $pendingCount = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')->orWhereNull('status_verifikasi')->count();
+                            $pendingCount = App\Models\SuratPernyataanModel::where('status', 'pending')->count();
                         @endphp
                         @if($pendingCount > 0)
                             <span class="badge bg-warning">{{ $pendingCount }}</span>
@@ -215,39 +214,38 @@
                 </div>
                 <div class="card-body pt-3">
                     @php
-                        $pendingVerifications = App\Models\PendaftaranModel::where('status_verifikasi', 'pending')
-                            ->orWhereNull('status_verifikasi')
-                            ->with('mahasiswa')
+                        $pendingSurat = App\Models\SuratPernyataanModel::where('status', 'pending')
+                            ->with('pendaftaran.mahasiswa')
                             ->take(6)
                             ->get();
                     @endphp
 
-                    @if($pendingVerifications->isEmpty())
+                    @if($pendingSurat->isEmpty())
                         <div class="text-center py-5">
                             <div class="icon-shape icon-xl bg-success-light text-success rounded-circle mx-auto mb-3">
                                 <i class="fas fa-check-circle fa-2x"></i>
                             </div>
-                            <h5 class="text-success">Semua Terverifikasi!</h5>
-                            <p class="text-muted mb-0">Tidak ada pendaftaran yang menunggu verifikasi</p>
+                            <h5 class="text-success">Semua Surat Selesai!</h5>
+                            <p class="text-muted mb-0">Tidak ada surat pernyataan yang menunggu</p>
                         </div>
                     @else
                         <div class="row g-3">
-                            @foreach($pendingVerifications as $pendaftaran)
+                            @foreach($pendingSurat as $surat)
                                 <div class="col-md-6">
                                     <div class="pending-item">
                                         <div class="d-flex align-items-center">
                                             <div class="pending-avatar">
                                                 <div class="avatar bg-gradient-primary text-white">
-                                                    {{ substr($pendaftaran->mahasiswa->nama ?? 'N', 0, 1) }}
+                                                    {{ substr($surat->pendaftaran->mahasiswa->nama ?? 'N', 0, 1) }}
                                                 </div>
                                             </div>
                                             <div class="pending-info flex-grow-1">
-                                                <h6 class="mb-1">{{ $pendaftaran->mahasiswa->nama ?? 'N/A' }}</h6>
-                                                <p class="text-muted small mb-1">{{ $pendaftaran->nim }}</p>
-                                                <small class="text-muted">{{ \Carbon\Carbon::parse($pendaftaran->created_at)->diffForHumans() }}</small>
+                                                <h6 class="mb-1">{{ $surat->pendaftaran->mahasiswa->nama ?? 'N/A' }}</h6>
+                                                <p class="text-muted small mb-1">{{ $surat->pendaftaran->nim }}</p>
+                                                <small class="text-muted">{{ \Carbon\Carbon::parse($surat->created_at)->diffForHumans() }}</small>
                                             </div>
                                             <div class="pending-action">
-                                                <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('admin.surat-pernyataan.show', $surat->id_surat_pernyataan) }}" class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </div>
@@ -258,8 +256,8 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <a href="{{ route('verifikasi.index') }}" class="btn btn-primary">
-                                <i class="fas fa-list me-2"></i>Lihat Semua Verifikasi
+                            <a href="{{ route('admin.surat-pernyataan.index') }}" class="btn btn-primary">
+                                <i class="fas fa-list me-2"></i>Lihat Semua Surat
                             </a>
                         </div>
                     @endif
@@ -288,13 +286,6 @@
                                     'label' => 'Pendaftaran hari ini',
                                     'icon' => 'fas fa-user-plus',
                                     'color' => 'primary'
-                                ],
-                                (object)[
-                                    'type' => 'verifikasi',
-                                    'count' => App\Models\PendaftaranModel::where('status_verifikasi', 'approved')->whereDate('updated_at', today())->count(),
-                                    'label' => 'Verifikasi hari ini',
-                                    'icon' => 'fas fa-check',
-                                    'color' => 'success'
                                 ],
                                 (object)[
                                     'type' => 'surat',

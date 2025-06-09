@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
         // Routes untuk Template Surat - Admin
         Route::prefix('admin')->name('admin.')->group(function () {
             // Surat Pernyataan routes
+            Route::get('/surat-pernyataan/generate/{id}', [SuratPernyataanController::class, 'generatePDF'])->name('surat-pernyataan.generate');
             Route::get('/surat-pernyataan/download-all', [SuratPernyataanController::class, 'downloadAll'])->name('surat-pernyataan.download-all');
             Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'adminIndex'])->name('surat-pernyataan.index');
             Route::get('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'adminShow'])->name('surat-pernyataan.show');
@@ -123,6 +124,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'index'])->name('surat-pernyataan.index');
             Route::post('/surat-pernyataan', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
             Route::delete('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'destroy'])->name('surat-pernyataan.destroy');
+            Route::post('/surat-pernyataan/ajukan', [SuratPernyataanController::class, 'ajukan'])->name('surat-pernyataan.ajukan');
+            Route::get('/surat-pernyataan/preview/{id}', [SuratPernyataanController::class, 'previewSurat'])->name('surat-pernyataan.preview')->middleware('auth');
         });
     });
 

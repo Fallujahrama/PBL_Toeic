@@ -22,13 +22,17 @@
         $isAdminUpa = $userRole === 'AdmUpa';
         $isAdminITC = $userRole === 'AdmITC';
         $isStudent = $userRole === 'Mhs';
+        $isAlumni = $userRole === 'Alum';
+        $isDosen = $userRole === 'Dsn';
+        $isCivitas = $userRole === 'Cvts';
+        $isNormalUser = in_array($userRole, ['Mhs', 'Alum', 'Dsn', 'Cvts']);
         $isSuperAdmin = $userRole === 'SprAdmin';
         $currentUrl = url()->current();
       @endphp
 
       <!-- Dashboard -->
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'dashboard') !== false ? 'active' : '' }}"
            href="{{ ($isAdminUpa || $isSuperAdmin) ? route('admin.dashboard') : ($isAdminITC ? route('welcome') : route('mahasiswa.dashboard')) }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-tachometer-alt text-primary text-sm opacity-10"></i>
@@ -40,7 +44,7 @@
       <!-- Data Mahasiswa - Only for AdminITC -->
       @if($isAdminITC)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'admin/mahasiswa') !== false ? 'active' : '' }}"
            href="{{ route('admin.mahasiswa.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-users text-success text-sm opacity-10"></i>
@@ -53,7 +57,7 @@
       <!-- User Management - Only for SuperAdmin -->
       @if($isSuperAdmin)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'admin/users') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'admin/users') !== false ? 'active' : '' }}"
            href="{{ route('admin.users.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-user-cog text-warning text-sm opacity-10"></i>
@@ -63,10 +67,10 @@
       </li>
       @endif
 
-      <!-- Student Pendaftaran - Only for Students -->
-      @if($isStudent)
+      <!-- Pendaftaran - For all normal users -->
+      @if($isNormalUser)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'pendaftaran') !== false ? 'active' : '' }}"
            href="{{ route('pendaftaran.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-clipboard-list text-warning text-sm opacity-10"></i>
@@ -77,7 +81,7 @@
       @endif
 
       <!-- Jadwal -->
-      @if($isAdminUpa || $isSuperAdmin || $isStudent)
+      @if($isAdminUpa || $isSuperAdmin || $isNormalUser)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'jadwal') !== false ? 'active' : '' }}"
            href="{{ ($isAdminUpa || $isSuperAdmin) ? route('jadwal.index') : route('mahasiswa.jadwal') }}">
@@ -90,7 +94,7 @@
       @endif
 
       <!-- Hasil Ujian -->
-      @if($isAdminUpa || $isSuperAdmin || $isStudent)
+      @if($isAdminUpa || $isSuperAdmin || $isNormalUser)
       <li class="nav-item">
         <a class="nav-link {{ strpos($currentUrl, 'hasil-ujian') !== false || strpos($currentUrl, 'hasil_ujian') !== false ? 'active' : '' }}"
            href="{{ ($isAdminUpa || $isSuperAdmin) ? route('hasil_ujian.index') : route('mahasiswa.hasil_ujian') }}">
@@ -102,10 +106,10 @@
       </li>
       @endif
 
-      <!-- Surat Pernyataan - Only for AdmUpa, SuperAdmin and Students -->
+      <!-- Surat Pernyataan - Only for AdmUpa, SuperAdmin and Students (NOT for Alumni, Dosen, Civitas) -->
       @if($isAdminUpa || $isSuperAdmin || $isStudent)
       <li class="nav-item">
-        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}" 
+        <a class="nav-link {{ strpos($currentUrl, 'surat-pernyataan') !== false ? 'active' : '' }}"
            href="{{ ($isAdminUpa || $isSuperAdmin) ? route('admin.surat-pernyataan.index') : route('mahasiswa.surat-pernyataan.index') }}">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-file-signature text-danger text-sm opacity-10"></i>

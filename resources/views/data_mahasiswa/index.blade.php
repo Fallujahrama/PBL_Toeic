@@ -209,15 +209,15 @@
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-book me-1"></i>Jurusan
-                                        {{-- <select class="filter-select ms-2" data-column="2">
+                                        <select class="filter-select ms-2" data-column="2">
                                             <option value="">Semua</option>
-                                        </select> --}}
+                                        </select>
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-graduation-cap me-1"></i>Program Studi
-                                        {{-- <select class="filter-select ms-2" data-column="3">
+                                        <select class="filter-select ms-2" data-column="3">
                                             <option value="">Semua</option>
-                                        </select> --}}
+                                        </select>
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         <i class="fas fa-university me-1"></i>Kampus
@@ -244,7 +244,7 @@
                                             <div class="d-flex flex-column">
                                                 <h6 class="mb-0 text-sm font-weight-bold">{{ $mhs->nama }}</h6>
                                                 <p class="text-xs text-secondary mb-0">
-                                                    <i class="fas fa-id-badge me-1"></i>NIK: {{ $mhs->nik !== null ? $mhs->nik : 'N/A' }}
+                                                    <i class="fas fa-id-badge me-1"></i>NIK: {{ $mhs->nik ?? 'N/A' }}
                                                 </p>
                                             </div>
                                         </td>
@@ -467,28 +467,15 @@ $(document).ready(function() {
                 "previous": "Sebelumnya"
             }
         },
-        "initComplete": function () {
-            // Initialize filters for Jurusan and Program Studi
-            this.api().columns([2, 3]).every(function () {
-                var column = this;
-                var select = $('select[data-column="' + column.index() + '"]');
-
-                // Clear existing options
-                select.empty().append('<option value="">Semua</option>');
-
-                // Add new options
-                column.data().unique().sort().each(function (d) {
-                    if (d && d !== 'null' && d !== 'NULL') {
-                        select.append('<option value="' + d + '">' + d + '</option>');
-                    }
-                });
-
-                // Handle filter changes
-                select.on('change', function () {
-                    var val = $(this).val();
-                    column.search(val ? val : '', true, false).draw();
-                });
+        "dom": '<"row"<"col-sm-6"l><"col-sm-6"f>>rtip',
+        "drawCallback": function() {
+            // Animate rows
+            $('.mahasiswa-row').each(function(index) {
+                $(this).css('animation-delay', (index * 0.1) + 's');
             });
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
         }
     });
 
@@ -500,6 +487,28 @@ $(document).ready(function() {
     // Page length change
     $('#pageLength').on('change', function() {
         table.page.len(this.value).draw();
+    });
+
+    // Populate filter dropdowns
+    table.columns([2,3]).every(function() {
+        var column = this;
+        var colIndex = column.index();
+        var select = $('select.filter-select[data-column="'+colIndex+'"]');
+
+        column.data().unique().sort().each(function(d) {
+            if (d) {
+                select.append('<option value="'+d+'">'+d+'</option>');
+            }
+        });
+    });
+
+    // Filter dropdown change events
+    $('select.filter-select').on('change', function() {
+        var colIndex = $(this).data('column');
+        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        table.column(colIndex)
+             .search(val ? '^'+val+'$' : '', true, false)
+             .draw();
     });
 });
 

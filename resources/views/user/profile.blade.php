@@ -85,7 +85,7 @@
                                         <i class="fas fa-id-card me-2"></i>Nama
                                     </div>
                                     <div class="profile-info-value">
-                                        {{ $user->mahasiswa->nama ?? 'Nama Belum Diisi' }}
+                                        {{ $user->nama ?? 'Nama Belum Diisi' }}
                                     </div>
                                 </div>
                                 <div class="profile-info-item mb-3">
@@ -94,6 +94,20 @@
                                     </div>
                                     <div class="profile-info-value">
                                         {{ $user->mahasiswa->no_whatsapp ?? '-' }}
+                                    </div>
+                                </div>
+
+                                <a href="{{ route('mahasiswa.profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit Profil
+                                </a>
+                                @elseif(auth()->user()->level->level_kode === 'Alum' || auth()->user()->level->level_kode === 'Dsn' || auth()->user()->level->level_kode === 'Cvts')
+                                {{-- Alumni/Dosen/Civitas --}}
+                                <div class="profile-info-item mb-3">
+                                    <div class="profile-info-label">
+                                        <i class="fas fa-id-card me-2"></i>Nama
+                                    </div>
+                                    <div class="profile-info-value">
+                                        {{ $user->nama ?? 'Nama Belum Diisi' }}
                                     </div>
                                 </div>
 

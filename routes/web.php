@@ -16,6 +16,9 @@ use App\Http\Controllers\SuratPernyataanController;
 // Authentication routes
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'postlogin'])->name('postlogin');
+// Add to routes/web.php
+Route::get('register', [App\Http\Controllers\LoginController::class, 'register'])->name('register');
+Route::post('register', [App\Http\Controllers\LoginController::class, 'postRegister']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Welcome page
@@ -98,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['authorize:AdmITC'])->group(function () {
         // Data Mahasiswa Management routes - only for AdmITC
         Route::prefix('admin')->name('admin.')->group(function () {
+            Route::get('/mahasiswa', [PendaftaranController::class, 'dataMahasiswa'])->name('mahasiswa.index');
             Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
             Route::get('/mahasiswa/{nim}/show', [MahasiswaController::class, 'show'])->name('mahasiswa.show');
             Route::get('/mahasiswa/{nim}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
@@ -106,42 +110,55 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // Student routes (Mhs)
+    // Routes ONLY for active students (Mhs) - Restricted features
     Route::middleware(['authorize:Mhs'])->group(function () {
+        // New registration route - ONLY for active students
+        Route::prefix('mahasiswa/pendaftaran')->name('pendaftaran.')->group(function () {
+            Route::get('/baru', [PendaftaranController::class, 'createBaru'])->name('baru');
+            Route::post('/baru', [PendaftaranController::class, 'storeBaru'])->name('storeBaru');
+        });
+
+        // Surat Pernyataan routes - ONLY for active students
+        Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'index'])->name('surat-pernyataan.index');
+            Route::post('/surat-pernyataan', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
+            Route::delete('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'destroy'])->name('surat-pernyataan.destroy');
+        });
+    });
+
+    // Routes for ALL non-admin users (Mhs, Almn, Dsn, Cvts)
+    Route::middleware(['authorize:Mhs,Alum,Dsn,Cvts'])->group(function () {
+        // Dashboard
         Route::get('/mahasiswa/dashboard', function () {
             return view('mahasiswa.dashboard');
         })->name('mahasiswa.dashboard');
 
-        // Pendaftaran routes
+        // Pendaftaran routes (except 'baru' which is restricted to active students)
         Route::prefix('mahasiswa/pendaftaran')->name('pendaftaran.')->group(function () {
             Route::get('/', [PendaftaranController::class, 'index'])->name('index');
-            Route::get('/baru', [PendaftaranController::class, 'createBaru'])->name('baru');
-            Route::post('/baru', [PendaftaranController::class, 'storeBaru'])->name('storeBaru');
             Route::get('/lama', [PendaftaranController::class, 'createLama'])->name('lama');
             Route::post('/lama', [PendaftaranController::class, 'storeLama'])->name('lama.store');
             Route::get('/lama/get-mahasiswa/{nim}', [PendaftaranController::class, 'getMahasiswa'])->name('getMahasiswa');
             Route::get('/{id}/show', [PendaftaranController::class, 'showRegistration'])->name('show');
-
-            // File preview route - TAMBAHAN ROUTE INI
             Route::get('/{nim}/preview/{type}', [PendaftaranController::class, 'previewFile'])->name('preview');
         });
 
-        // Student data management routes - untuk mahasiswa edit data sendiri
+        // Student data management routes
         Route::prefix('mahasiswa/data')->name('mahasiswa.data.')->group(function () {
             Route::get('/{nim}/edit', [PendaftaranController::class, 'editMahasiswa'])->name('edit');
             Route::put('/{nim}', [PendaftaranController::class, 'updateMahasiswa'])->name('update');
             Route::get('/{nim}/show', [PendaftaranController::class, 'showMahasiswa'])->name('show');
         });
 
-        // Jadwal routes for students
+        // Jadwal routes for non-admin users
         Route::get('/mahasiswa/jadwal', [JadwalController::class, 'mahasiswaIndex'])->name('mahasiswa.jadwal');
         Route::get('/mahasiswa/jadwal/preview/{id}', [JadwalController::class, 'previewFile'])->name('mahasiswa.jadwal.preview');
 
-        // Hasil Ujian routes for students
+        // Hasil Ujian routes for non-admin users
         Route::get('/mahasiswa/hasil-ujian', [HasilUjianController::class, 'mahasiswaIndex'])->name('mahasiswa.hasil_ujian');
         Route::get('/mahasiswa/hasil-ujian/{id}', [HasilUjianController::class, 'mahasiswaShow'])->name('mahasiswa.hasil_ujian.show');
 
-        // Notifications routes for students
+        // Notifications routes for non-admin users
         Route::get('/mahasiswa/notifikasi', [NotifikasiController::class, 'mahasiswaIndex'])->name('mahasiswa.notifikasi.index');
         Route::get('/mahasiswa/notifikasi/{id}', [NotifikasiController::class, 'mahasiswaShow'])->name('mahasiswa.notifikasi.show');
         Route::post('/mahasiswa/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead'])->name('mahasiswa.notifikasi.read');
@@ -149,12 +166,5 @@ Route::middleware('auth')->group(function () {
         // Profile routes
         Route::get('/mahasiswa/profile/edit', [UserController::class, 'editMahasiswa'])->name('mahasiswa.profile.edit');
         Route::post('/mahasiswa/profile/update', [UserController::class, 'updateMahasiswa'])->name('mahasiswa.profile.update');
-
-        // Routes untuk Surat Pernyataan - Mahasiswa
-        Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'index'])->name('surat-pernyataan.index');
-            Route::post('/surat-pernyataan', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
-            Route::delete('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'destroy'])->name('surat-pernyataan.destroy');
-        });
     });
 });

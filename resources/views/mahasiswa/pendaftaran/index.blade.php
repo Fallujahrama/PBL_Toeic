@@ -10,7 +10,7 @@
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Pendaftaran</li>
         </ol>
     </nav>
-    <h6 class="font-weight-bolder mb-0">{{ $page->title ?? 'Pendaftaran Mahasiswa' }}</h6>
+    <h6 class="font-weight-bolder mb-0">{{ $page->title ?? 'Pendaftaran TOEIC' }}</h6>
 </div>
 @if (session('success'))
     <div class="alert alert-success">
@@ -32,25 +32,39 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Mahasiswa Baru -->
+                        @php
+                            $userRole = Auth::user()->level->level_kode ?? null;
+                            $isStudent = $userRole === 'Mhs';
+                            $isNewUserType = in_array($userRole, ['Alum', 'Dsn', 'Cvts']);
+                            // For non-students, we'll always show the Pendaftaran Gratis option as disabled
+                            $disableFirstReg = $hasRegistered || $isNewUserType;
+                        @endphp
+
+                        <!-- Pendaftaran Gratis (previously First Registration) -->
                         <div class="col-md-6 mb-3" data-aos="fade-right" data-aos-delay="100">
                             <div class="card p-4 text-center h-100 shadow-sm animate-card"
-                                 style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer; {{ $hasRegistered ? 'pointer-events: none; opacity: 0.5;' : '' }}"
-                                 onclick="{{ $hasRegistered ? '' : "window.location='" . route('pendaftaran.baru') . "'" }}">
+                                 style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: {{ $disableFirstReg ? 'not-allowed' : 'pointer' }}; {{ $disableFirstReg ? 'opacity: 0.5;' : '' }}"
+                                 onclick="{{ $disableFirstReg ? '' : "window.location='" . route('pendaftaran.baru') . "'" }}">
                                 <i class="fas fa-user-plus fa-3x mb-3 text-primary"></i>
-                                <h4>First Registration</h4>
-                                <p>First Registration Form</p>
+                                <h4>Pendaftaran Gratis</h4>
+                                <p>Form pendaftaran TOEIC gratis untuk mahasiswa aktif</p>
                                 @if ($hasRegistered)
                                     <small class="text-danger">You have already registered.</small>
+                                @elseif ($isNewUserType)
+                                    <small class="text-danger">Only available for active students.</small>
                                 @endif
                             </div>
                         </div>
-                        <!-- Mahasiswa Lama -->
+
+                        <!-- Pendaftaran Mandiri (previously Second Registration) -->
                         <div class="col-md-6 mb-3" data-aos="fade-left" data-aos-delay="200">
-                            <div class="card p-4 text-center h-100 shadow-sm animate-card" style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;" onclick="window.location='{{ route('pendaftaran.lama') }}'">
+                            <div class="card p-4 text-center h-100 shadow-sm animate-card"
+                                 style="border: 1px solid var(--dark-border); background-color: var(--dark-card); cursor: pointer;"
+                                 onclick="window.open('https://itc-indonesia.com/biaya-tes-2/', '_blank')">
                                 <i class="fas fa-user-edit fa-3x mb-3 text-warning"></i>
-                                <h4>Second Registration</h4>
-                                <p>Second Registration Form</p>
+                                <h4>Pendaftaran Mandiri</h4>
+                                <p>Form pendaftaran TOEIC berbayar</p>
+                                <small class="text-muted"><i class="fas fa-external-link-alt me-1"></i>Redirects to ITC website</small>
                             </div>
                         </div>
                     </div>
@@ -59,7 +73,7 @@
         </div>
     </div>
 
-      <!-- Tabel History Pendaftaran -->
+    <!-- Tabel History Pendaftaran -->
     @if($registrations->count() > 0)
     <div class="row justify-content-center mt-4">
         <div class="col-md-12" data-aos="fade-up" data-aos-delay="500">
@@ -86,9 +100,9 @@
                                     <td>{{ $registration->created_at->format('d M Y H:i') }}</td>
                                     <td>
                                         @if($index == $registrations->count() - 1)
-                                            <span class="badge bg-primary">First Registration</span>
+                                            <span class="badge bg-primary">Pendaftaran Gratis</span>
                                         @else
-                                            <span class="badge bg-warning">Second Registration</span>
+                                            <span class="badge bg-warning">Pendaftaran Mandiri</span>
                                         @endif
                                     </td>
                                     <td>
@@ -126,19 +140,17 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-12" data-aos="fade-up" data-aos-delay="300">
             <div class="card p-4 shadow-sm animate-card" style="background-color: var(--dark-card); border: 1px solid var(--dark-border);">
-                <h5><i class="fas fa-info-circle me-2 text-primary"></i>First Registration</h5>
-                <p class="text-muted">This registration form for students who are taking the TOEIC exam for the first time.</p>
+                <h5><i class="fas fa-info-circle me-2 text-primary"></i>Pendaftaran Gratis</h5>
+                <p class="text-muted">Form pendaftaran TOEIC gratis untuk mahasiswa aktif.</p>
             </div>
         </div>
         <div class="col-md-12 mt-3" data-aos="fade-up" data-aos-delay="400">
             <div class="card p-4 shadow-sm animate-card" style="background-color: var(--dark-card); border: 1px solid var(--dark-border);">
-                <h5><i class="fas fa-info-circle me-2 text-warning"></i>Second Registration</h5>
-                <p class="text-muted">This registration form for students who have previously taken the TOEIC exam.</p>
+                <h5><i class="fas fa-info-circle me-2 text-warning"></i>Pendaftaran Mandiri</h5>
+                <p class="text-muted">Form pendaftaran TOEIC berbayar untuk semua pengguna (mahasiswa, alumni, dosen, dan civitas akademik).</p>
             </div>
         </div>
     </div>
-
-  
 </div>
 
 <!-- Modal for Registration Details -->

@@ -23,19 +23,31 @@ class UserController extends Controller
             return redirect('/login')->with('error', 'Silahkan login terlebih dahulu');
         }
 
+        // Get user role code
+        $userRole = $user->level->level_kode ?? null;
+
         // Jika admin, ambil nama dari tabel admin
-        if ($user->level_id == 1 || $user->level_id == 2) {
+        if (in_array($userRole, ['AdmUpa', 'AdmITC', 'SprAdmin'])) {
             $admin = $user->admin()->first(); // Relasi ke tabel admin
             $user->nama = $admin ? $admin->nama : $user->username; // Gunakan nama admin jika ada
         }
 
         // Jika mahasiswa, ambil nama dari tabel mahasiswa
-        if ($user->level_id == 3) {
+        else if ($userRole === 'Mhs') {
             $mahasiswa = $user->mahasiswa; // Relasi ke tabel mahasiswa
             if ($mahasiswa && $mahasiswa->nama) {
                 $user->nama = $mahasiswa->nama; // Gunakan nama mahasiswa jika ada
             } else {
                 $user->nama = "Nama Belum Diisi"; // Tampilkan default jika nama tidak ditemukan
+            }
+        }
+
+        // For Alumni, Dosen, and Civitas users
+        // Data comes directly from m_user table, so no special handling needed
+        // Just ensure nama is set to something if it's null
+        else if (in_array($userRole, ['Alum', 'Dsn', 'Cvts'])) {
+            if (!$user->nama) {
+                $user->nama = $user->username ?? "Nama Belum Diisi";
             }
         }
 
@@ -133,36 +145,66 @@ class UserController extends Controller
     public function editMahasiswa()
     {
         $user = auth()->user();
+        $userRole = $user->level->level_kode ?? null;
+
+        // For Alumni, Dosen, and Civitas users, ensure the nama property is available
+        if (in_array($userRole, ['Alum', 'Dsn', 'Cvts']) && !isset($user->nama)) {
+            // Set default name if not already set
+            $user->nama = $user->username ?? '';
+        }
+
         return view('user.edit_mahasiswa', compact('user'));
     }
 
     public function updateMahasiswa(Request $request)
     {
         $user = auth()->user();
-        $request->validate([
+        $userRole = $user->level->level_kode ?? null;
+
+        // Different validation rules based on user type
+        $rules = [
             'nama' => 'required|string',
-            'no_whatsapp' => 'required|numeric|digits_between:10,15', // Ubah validasi',
             'password' => 'nullable|string|min:6|confirmed',
-        ], [
-            // Pesan error kustom
+        ];
+
+        // Only require WhatsApp number for Mahasiswa users
+        if ($userRole === 'Mhs') {
+            $rules['no_whatsapp'] = 'required|numeric|digits_between:10,15';
+        }
+
+        // Custom error messages
+        $messages = [
             'no_whatsapp.numeric' => 'Nomor WhatsApp harus berupa angka',
             'no_whatsapp.digits_between' => 'Nomor WhatsApp harus antara 10-15 digit'
-        ]);
+        ];
 
-        // Update user
+        $request->validate($rules, $messages);
+
+        // Update password if provided (applies to all user types)
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
-        $user->save();
 
-        // Update mahasiswa table
-        if ($user->mahasiswa) {
+        // Different handling based on user role
+        if ($userRole === 'Mhs' && $user->mahasiswa) {
+            // For regular students, update mahasiswa table
             $user->mahasiswa->nama = $request->nama;
             $user->mahasiswa->no_whatsapp = $request->no_whatsapp;
             $user->mahasiswa->save();
         }
+        else if (in_array($userRole, ['Alum', 'Dsn', 'Cvts'])) {
+            // For Alumni, Dosen, and Civitas - directly update m_user table
+            // Add debugging info
+            \Log::info("Updating alumni/dosen/civitas user with ID: {$user->id_user}");
+            \Log::info("Current name: {$user->nama}, New name: {$request->nama}");
 
-        return redirect()->route('profile')->with('success', 'Profil mahasiswa berhasil diperbarui');
+            $user->nama = $request->nama;
+            $saved = $user->save();
+
+            \Log::info("Save result: " . ($saved ? "Success" : "Failed"));
+        }
+
+        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui');
     }
 
     // Admin User Management Methods

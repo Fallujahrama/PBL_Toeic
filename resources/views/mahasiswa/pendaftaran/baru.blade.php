@@ -40,13 +40,6 @@
             </div>
         @endif
 
-        @if(isset($draftData) && $draftData)
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <i class="fas fa-info-circle me-2"></i>Draft data found and loaded automatically.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
-
         <form action="{{ route('pendaftaran.storeBaru') }}" method="POST" enctype="multipart/form-data" id="registrationForm">
             @csrf
     
@@ -68,7 +61,7 @@
                         <label for="nama" class="form-control-label">Nama Lengkap</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama', $draftData->nama ?? '') }}" required>
+                            <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" required>
                         </div>
                         @error('nama')
                         <small class="text-danger">{{ $message }}</small>
@@ -96,7 +89,7 @@
                         <label for="nik" class="form-control-label">NIK</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
-                            <input type="text" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik', $draftData->nik ?? '') }}" required>
+                            <input type="text" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror" value="{{ old('nik') }}" required>
                         </div>
                         @error('nik')
                         <small class="text-danger">{{ $message }}</small>
@@ -110,7 +103,7 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="fab fa-whatsapp"></i></span>
                             <span class="input-group-text bg-light">+62</span>
-                            <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa', $draftData->wa ?? '') }}" placeholder="8123456789" required>
+                            <input type="text" name="wa" id="wa" class="form-control @error('wa') is-invalid @enderror" value="{{ old('wa') }}" placeholder="8123456789" required>
                         </div>
                         <small class="text-muted">Contoh: 8123456789 (tanpa +62)</small>
                         @error('wa')
@@ -126,7 +119,7 @@
                         <label for="alamat_asal" class="form-control-label">Alamat Asal</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-home"></i></span>
-                            <textarea name="alamat_asal" id="alamat_asal" class="form-control @error('alamat_asal') is-invalid @enderror" rows="3" required>{{ old('alamat_asal', $draftData->alamat_asal ?? '') }}</textarea>
+                            <textarea name="alamat_asal" id="alamat_asal" class="form-control @error('alamat_asal') is-invalid @enderror" rows="3" required>{{ old('alamat_asal') }}</textarea>
                         </div>
                         @error('alamat_asal')
                         <small class="text-danger">{{ $message }}</small>
@@ -139,7 +132,7 @@
                         <label for="alamat_sekarang" class="form-control-label">Alamat Sekarang</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                            <textarea name="alamat_sekarang" id="alamat_sekarang" class="form-control @error('alamat_sekarang') is-invalid @enderror" rows="3" required>{{ old('alamat_sekarang', $draftData->alamat_sekarang ?? '') }}</textarea>
+                            <textarea name="alamat_sekarang" id="alamat_sekarang" class="form-control @error('alamat_sekarang') is-invalid @enderror" rows="3" required>{{ old('alamat_sekarang') }}</textarea>
                         </div>
                         @error('alamat_sekarang')
                         <small class="text-danger">{{ $message }}</small>
@@ -154,7 +147,7 @@
                         <label for="prodi" class="form-control-label">Program Studi</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
-                            <input type="text" name="prodi" id="prodi" class="form-control @error('prodi') is-invalid @enderror" value="{{ old('prodi', $draftData->prodi ?? '') }}" required>
+                            <input type="text" name="prodi" id="prodi" class="form-control @error('prodi') is-invalid @enderror" value="{{ old('prodi') }}" required>
                         </div>
                         @error('prodi')
                         <small class="text-danger">{{ $message }}</small>
@@ -169,13 +162,13 @@
                             <span class="input-group-text"><i class="fas fa-book"></i></span>
                             <select name="jurusan" id="jurusan" class="form-control @error('jurusan') is-invalid @enderror" required>
                                 <option value="">-- Pilih Jurusan --</option>
-                                <option value="Akuntansi" {{ old('jurusan', $draftData->jurusan ?? '') == 'Akuntansi' ? 'selected' : '' }}>Akuntansi</option>
-                                <option value="Administrasi Niaga" {{ old('jurusan', $draftData->jurusan ?? '') == 'Administrasi Niaga' ? 'selected' : '' }}>Administrasi Niaga</option>
-                                <option value="Teknik Elektro" {{ old('jurusan', $draftData->jurusan ?? '') == 'Teknik Elektro' ? 'selected' : '' }}>Teknik Elektro</option>
-                                <option value="Teknik Mesin" {{ old('jurusan', $draftData->jurusan ?? '') == 'Teknik Mesin' ? 'selected' : '' }}>Teknik Mesin</option>
-                                <option value="Teknik Kimia" {{ old('jurusan', $draftData->jurusan ?? '') == 'Teknik Kimia' ? 'selected' : '' }}>Teknik Kimia</option>
-                                <option value="Teknik Sipil" {{ old('jurusan', $draftData->jurusan ?? '') == 'Teknik Sipil' ? 'selected' : '' }}>Teknik Sipil</option>
-                                <option value="Teknologi Informasi" {{ old('jurusan', $draftData->jurusan ?? '') == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
+                                <option value="Akuntansi" {{ old('jurusan') == 'Akuntansi' ? 'selected' : '' }}>Akuntansi</option>
+                                <option value="Administrasi Niaga" {{ old('jurusan') == 'Administrasi Niaga' ? 'selected' : '' }}>Administrasi Niaga</option>
+                                <option value="Teknik Elektro" {{ old('jurusan') == 'Teknik Elektro' ? 'selected' : '' }}>Teknik Elektro</option>
+                                <option value="Teknik Mesin" {{ old('jurusan') == 'Teknik Mesin' ? 'selected' : '' }}>Teknik Mesin</option>
+                                <option value="Teknik Kimia" {{ old('jurusan') == 'Teknik Kimia' ? 'selected' : '' }}>Teknik Kimia</option>
+                                <option value="Teknik Sipil" {{ old('jurusan') == 'Teknik Sipil' ? 'selected' : '' }}>Teknik Sipil</option>
+                                <option value="Teknologi Informasi" {{ old('jurusan') == 'Teknologi Informasi' ? 'selected' : '' }}>Teknologi Informasi</option>
                             </select>
                         </div>
                         @error('jurusan')
@@ -191,10 +184,10 @@
                             <span class="input-group-text"><i class="fas fa-university"></i></span>
                             <select name="kampus" id="kampus" class="form-control @error('kampus') is-invalid @enderror" required>
                                 <option value="">-- Pilih Kampus --</option>
-                                <option value="Utama" {{ old('kampus', $draftData->kampus ?? '') == 'Utama' ? 'selected' : '' }}>Utama</option>
-                                <option value="PSDKU Kediri" {{ old('kampus', $draftData->kampus ?? '') == 'PSDKU Kediri' ? 'selected' : '' }}>PSDKU Kediri</option>
-                                <option value="PSDKU Lumajang" {{ old('kampus', $draftData->kampus ?? '') == 'PSDKU Lumajang' ? 'selected' : '' }}>PSDKU Lumajang</option>
-                                <option value="PSDKU Pamekasan" {{ old('kampus', $draftData->kampus ?? '') == 'PSDKU Pamekasan' ? 'selected' : '' }}>PSDKU Pamekasan</option>
+                                <option value="Utama" {{ old('kampus') == 'Utama' ? 'selected' : '' }}>Utama</option>
+                                <option value="PSDKU Kediri" {{ old('kampus') == 'PSDKU Kediri' ? 'selected' : '' }}>PSDKU Kediri</option>
+                                <option value="PSDKU Lumajang" {{ old('kampus') == 'PSDKU Lumajang' ? 'selected' : '' }}>PSDKU Lumajang</option>
+                                <option value="PSDKU Pamekasan" {{ old('kampus') == 'PSDKU Pamekasan' ? 'selected' : '' }}>PSDKU Pamekasan</option>
                             </select>
                         </div>
                         @error('kampus')
@@ -281,30 +274,18 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between mt-4" data-aos="fade-up" data-aos-delay="800">
-                <div>
-                    <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i>Back
-                    </a>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-outline-primary me-2" id="saveDraftBtn">
-                        <span class="btn-text">
-                            <i class="fas fa-save me-2"></i>Save Draft
-                        </span>
-                        <span class="btn-loading d-none">
-                            <i class="fas fa-spinner fa-spin me-2"></i>Saving...
-                        </span>
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <span class="btn-text">
-                            <i class="fas fa-paper-plane me-2"></i>Submit Registration
-                        </span>
-                        <span class="btn-loading d-none">
-                            <i class="fas fa-spinner fa-spin me-2"></i>Processing...
-                        </span>
-                    </button>
-                </div>
+            <div class="d-flex justify-content-end mt-4" data-aos="fade-up" data-aos-delay="800">
+                <a href="{{ route('pendaftaran.index') }}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </a>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">
+                        <i class="fas fa-save me-2"></i>Submit Registration
+                    </span>
+                    <span class="btn-loading d-none">
+                        <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                    </span>
+                </button>
             </div>
         </form>
     </div>
@@ -315,22 +296,6 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    // Load draft data on page load
-    loadDraftData();
-    
-    // Save draft functionality
-    $('#saveDraftBtn').on('click', function(e) {
-        e.preventDefault();
-        saveDraft();
-    });
-    
-    // Auto-save every 2 minutes
-    setInterval(function() {
-        if (hasFormData()) {
-            saveDraft(true); // Silent save
-        }
-    }, 120000); // 2 minutes
-    
     // Form submission handling
     $('#registrationForm').on('submit', function(e) {
         console.log('Form submission started');
@@ -484,111 +449,21 @@ $(document).ready(function() {
     });
 });
 
-// Load draft data function - updated to be silent
-function loadDraftData() {
-    $.ajax({
-        url: '{{ route("pendaftaran.loadDraft") }}',
-        type: 'GET',
-        success: function(response) {
-            if (response.status === 'success') {
-                const data = response.data;
-                
-                // Fill form fields with draft data
-                $('[name="nama"]').val(data.nama || '');
-                $('[name="nik"]').val(data.nik || '');
-                $('[name="wa"]').val(data.wa || '');
-                $('[name="alamat_asal"]').val(data.alamat_asal || '');
-                $('[name="alamat_sekarang"]').val(data.alamat_sekarang || '');
-                $('[name="prodi"]').val(data.prodi || '');
-                $('[name="jurusan"]').val(data.jurusan || '');
-                $('[name="kampus"]').val(data.kampus || '');
-                
-                // Don't show alert for automatic loading
-                // Only show alert when user manually saves draft
-            }
-        },
-        error: function() {
-            // Silent fail - no draft exists
-        }
-    });
-}
-
-// Save draft function
-function saveDraft(silent = false) {
-    const saveDraftBtn = $('#saveDraftBtn');
-    const btnText = saveDraftBtn.find('.btn-text');
-    const btnLoading = saveDraftBtn.find('.btn-loading');
-    
-    if (!silent) {
-        saveDraftBtn.prop('disabled', true);
-        btnText.addClass('d-none');
-        btnLoading.removeClass('d-none');
-    }
-    
-    const formData = {
-        nama: $('[name="nama"]').val(),
-        nik: $('[name="nik"]').val(),
-        wa: $('[name="wa"]').val(),
-        alamat_asal: $('[name="alamat_asal"]').val(),
-        alamat_sekarang: $('[name="alamat_sekarang"]').val(),
-        prodi: $('[name="prodi"]').val(),
-        jurusan: $('[name="jurusan"]').val(),
-        kampus: $('[name="kampus"]').val(),
-        _token: $('[name="_token"]').val()
-    };
-    
-    $.ajax({
-        url: '{{ route("pendaftaran.saveDraft") }}',
-        type: 'POST',
-        data: formData,
-        success: function(response) {
-            if (!silent) {
-                if (response.status === 'success') {
-                    showAlert(response.message, 'success');
-                } else {
-                    showAlert(response.message, 'danger');
-                }
-            }
-        },
-        error: function() {
-            if (!silent) {
-                showAlert('Failed to save draft. Please try again.', 'danger');
-            }
-        },
-        complete: function() {
-            if (!silent) {
-                saveDraftBtn.prop('disabled', false);
-                btnText.removeClass('d-none');
-                btnLoading.addClass('d-none');
-            }
-        }
-    });
-}
-
-// Check if form has data
-function hasFormData() {
-    const fields = ['nama', 'nik', 'wa', 'alamat_asal', 'alamat_sekarang', 'prodi', 'jurusan', 'kampus'];
-    return fields.some(field => $(`[name="${field}"]`).val().trim() !== '');
-}
-
-// Helper function to show alerts - updated to avoid sidebar
+// Helper function to show alerts
 function showAlert(message, type = 'danger') {
-    // Remove any existing alerts first
-    $('.main-content .alert').remove();
-    
     const alertHtml = `
         <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : 'exclamation-circle'} me-2"></i>${message}
+            <i class="fas fa-exclamation-circle me-2"></i>${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     `;
     
-    // Insert alert specifically in the card body, not anywhere else
-    $('.card-body').first().prepend(alertHtml);
+    // Insert alert at the top of the card body
+    $('.card-body').prepend(alertHtml);
     
     // Auto remove after 5 seconds
     setTimeout(function() {
-        $('.card-body .alert').fadeOut();
+        $('.alert').fadeOut();
     }, 5000);
 }
 </script>

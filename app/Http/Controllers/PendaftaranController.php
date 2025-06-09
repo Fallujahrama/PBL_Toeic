@@ -63,15 +63,6 @@ class PendaftaranController extends Controller
             'list' => ['Home', 'Pendaftaran', 'Mahasiswa Baru']
         ];
 
-        // Load draft data if exists - handle missing table gracefully
-        $draftData = null;
-        try {
-            $draftData = DB::table('draft_pendaftaran')->where('nim', $nim)->first();
-        } catch (\Exception $e) {
-            // Table doesn't exist yet, continue without draft data
-            \Log::info('Draft table not found, continuing without draft data');
-        }
-
         $page = (object) [
             'title' => 'Form Pendaftaran Mahasiswa Baru'
         ];
@@ -79,7 +70,7 @@ class PendaftaranController extends Controller
         $activeMenu = 'pendaftaran';  // Menandakan menu aktif
 
         // Menampilkan form pendaftaran untuk mahasiswa baru
-        return view('mahasiswa.pendaftaran.baru', compact('breadcrumb', 'page', 'activeMenu', 'draftData'));
+        return view('mahasiswa.pendaftaran.baru', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function showPendaftaranLama(Request $request)
@@ -289,114 +280,6 @@ class PendaftaranController extends Controller
         return redirect()->back()
             ->withInput()
             ->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');
-    }
-}
-
-/**
- * Save draft registration data
- */
-public function saveDraft(Request $request)
-{
-    try {
-        // Check if table exists, create if not
-        if (!DB::getSchemaBuilder()->hasTable('draft_pendaftaran')) {
-            DB::statement("
-                CREATE TABLE draft_pendaftaran (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    nim VARCHAR(20) NOT NULL UNIQUE,
-                    nama VARCHAR(255),
-                    nik VARCHAR(20),
-                    wa VARCHAR(15),
-                    alamat_asal TEXT,
-                    alamat_sekarang TEXT,
-                    prodi VARCHAR(100),
-                    jurusan VARCHAR(100),
-                    kampus VARCHAR(100),
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    INDEX idx_nim (nim)
-                )
-            ");
-        }
-        
-        // Get NIM from logged-in user
-        $nim = auth()->user()->username;
-        
-        // Check if draft already exists
-        $existingDraft = DB::table('draft_pendaftaran')->where('nim', $nim)->first();
-        
-        // Prepare draft data
-        $draftData = [
-            'nim' => $nim,
-            'nama' => $request->input('nama'),
-            'nik' => $request->input('nik'),
-            'wa' => $request->input('wa'),
-            'alamat_asal' => $request->input('alamat_asal'),
-            'alamat_sekarang' => $request->input('alamat_sekarang'),
-            'prodi' => $request->input('prodi'),
-            'jurusan' => $request->input('jurusan'),
-            'kampus' => $request->input('kampus'),
-            'updated_at' => now()
-        ];
-        
-        if ($existingDraft) {
-            // Update existing draft
-            DB::table('draft_pendaftaran')->where('nim', $nim)->update($draftData);
-        } else {
-            // Create new draft
-            $draftData['created_at'] = now();
-            DB::table('draft_pendaftaran')->insert($draftData);
-        }
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Draft berhasil disimpan!'
-        ]);
-        
-    } catch (\Exception $e) {
-        \Log::error('Draft save error', ['error' => $e->getMessage()]);
-        
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Gagal menyimpan draft. Silakan coba lagi.'
-        ], 500);
-    }
-}
-
-/**
- * Load draft registration data
- */
-public function loadDraft()
-{
-    try {
-        // Check if table exists
-        if (!DB::getSchemaBuilder()->hasTable('draft_pendaftaran')) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Draft table not found'
-            ]);
-        }
-        
-        $nim = auth()->user()->username;
-        $draft = DB::table('draft_pendaftaran')->where('nim', $nim)->first();
-        
-        if ($draft) {
-            return response()->json([
-                'status' => 'success',
-                'data' => $draft
-            ]);
-        }
-        
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Draft tidak ditemukan'
-        ]);
-        
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Gagal memuat draft'
-        ], 500);
     }
 }
 

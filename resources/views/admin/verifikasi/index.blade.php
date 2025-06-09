@@ -47,7 +47,7 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">ID</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">No</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">NIM</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Nama</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Tanggal Daftar</th>
@@ -59,7 +59,7 @@
                             @foreach ($pendaftarans as $pendaftaran)
                                 <tr class="pendaftaran-row fade-in" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
                                     <td class="ps-4">
-                                        <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->id_pendaftaran }}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                     </td>
                                     <td class="ps-4">
                                         <p class="text-xs font-weight-bold mb-0">{{ $pendaftaran->nim }}</p>
@@ -99,9 +99,9 @@
                                             <a href="{{ route('verifikasi.show', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-info px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                            {{-- <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-link text-warning px-2 mb-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
-                                            </a>
+                                            </a> --}}
                                             <button type="button" class="btn btn-link text-danger px-2 mb-0 delete-btn"
                                                 data-id="{{ $pendaftaran->id_pendaftaran }}"
                                                 data-bs-toggle="tooltip"

@@ -53,6 +53,16 @@
                                                 {{ $template->status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}
                                             </button>
                                         </form>
+                                        <form action="{{ route('admin.surat-pernyataan.delete-template', $template->id_template) }}"
+                                            method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Hapus template ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash me-1"></i> Hapus
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @empty

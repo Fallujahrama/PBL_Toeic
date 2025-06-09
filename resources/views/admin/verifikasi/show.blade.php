@@ -297,9 +297,9 @@
                             <a href="{{ url('/verifikasi') }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>Kembali
                             </a>
-                            <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-warning">
+                            {{-- <a href="{{ route('verifikasi.edit', $pendaftaran->id_pendaftaran) }}" class="btn btn-warning">
                                 <i class="fas fa-edit me-2"></i>Edit
-                            </a>
+                            </a> --}}
                         </div>
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save me-2"></i>Simpan Verifikasi

@@ -29,11 +29,23 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'tanggal' => 'required|date',
             'informasi' => 'required|string',
-            'file_info' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file_info' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ], [
+            'file_info.required' => 'File harus ditambahkan',
+            'file_info.file' => 'Upload harus berupa file',
+            'file_info.mimes' => 'Format file harus pdf, doc, atau docx',
+            'file_info.max' => 'Ukuran file maksimal 2MB'
         ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $data = $request->only(['tanggal', 'informasi']);
 

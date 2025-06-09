@@ -41,7 +41,7 @@
             $kampusStats = $data->groupBy('kampus')->map->count();
             $jurusanStats = $data->groupBy('jurusan')->map->count();
         @endphp
-        
+
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
             <div class="card animate-card">
                 <div class="card-body p-3">
@@ -264,7 +264,7 @@
                                         </td>
                                         <td>
                                             @if($mhs->no_whatsapp)
-                                                <a href="https://wa.me/62{{ $mhs->no_whatsapp }}" target="_blank" 
+                                                <a href="https://wa.me/62{{ $mhs->no_whatsapp }}" target="_blank"
                                                    class="btn btn-success btn-sm">
                                                     <i class="fab fa-whatsapp me-1"></i>{{ $mhs->no_whatsapp }}
                                                 </a>
@@ -294,7 +294,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .card-background-overlay {
         position: absolute;
         top: 0;
@@ -311,7 +311,7 @@
         border: none;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
-    
+
     .animate-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -321,7 +321,7 @@
         border-radius: 10px;
         overflow: hidden;
     }
-    
+
     #mahasiswaTable thead th {
         background: linear-gradient(310deg, #f8f9fa 0%, #e9ecef 100%);
         border: none;
@@ -329,18 +329,18 @@
         font-size: 11px;
         letter-spacing: 0.5px;
     }
-    
+
     #mahasiswaTable tbody tr {
         border-bottom: 1px solid #f0f2f5;
         transition: all 0.3s ease;
     }
-    
+
     #mahasiswaTable tbody tr:hover {
         background-color: #f8f9fa;
         transform: scale(1.01);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    
+
     .filter-select {
         width: 80px;
         font-size: 10px;
@@ -350,14 +350,14 @@
         border-radius: 4px;
         background: white;
     }
-    
+
     .btn-group .btn {
         margin: 0 1px;
         border-radius: 6px !important;
         padding: 6px 10px;
         font-size: 12px;
     }
-    
+
     .avatar {
         display: flex;
         align-items: center;
@@ -365,18 +365,18 @@
         width: 32px;
         height: 32px;
     }
-    
+
     .badge {
         font-size: 11px;
         padding: 6px 12px;
         border-radius: 8px;
     }
-    
+
     .mahasiswa-row {
         opacity: 0;
         animation: fadeInUp 0.5s ease forwards;
     }
-    
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -387,38 +387,38 @@
             transform: translateY(0);
         }
     }
-    
+
     .form-select, .form-control {
         border-radius: 8px;
         border: 1px solid #e0e6ed;
         padding: 10px 15px;
         transition: all 0.3s ease;
     }
-    
+
     .form-select:focus, .form-control:focus {
         border-color: #4f46e5;
         box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
     }
-    
+
     .input-group-text {
         background: #f8f9fa;
         border: 1px solid #e0e6ed;
         border-right: none;
         border-radius: 8px 0 0 8px;
     }
-    
+
     .btn-outline-white {
         border: 2px solid rgba(255, 255, 255, 0.3);
         color: white;
         transition: all 0.3s ease;
     }
-    
+
     .btn-outline-white:hover {
         background: rgba(255, 255, 255, 0.2);
         border-color: white;
         color: white;
     }
-    
+
     /* New styles for better icon centering */
     .icon-circle {
         width: 50px;
@@ -430,7 +430,7 @@
         margin-left: auto;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     }
-    
+
     .icon-circle i {
         font-size: 20px;
         color: white;
@@ -473,7 +473,7 @@ $(document).ready(function() {
             $('.mahasiswa-row').each(function(index) {
                 $(this).css('animation-delay', (index * 0.1) + 's');
             });
-            
+
             // Initialize tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
         }
@@ -494,7 +494,7 @@ $(document).ready(function() {
         var column = this;
         var colIndex = column.index();
         var select = $('select.filter-select[data-column="'+colIndex+'"]');
-        
+
         column.data().unique().sort().each(function(d) {
             if (d) {
                 select.append('<option value="'+d+'">'+d+'</option>');
@@ -512,8 +512,12 @@ $(document).ready(function() {
     });
 });
 
-// Export data function
+// Export data function - Updated to include kampus filter
 function exportData() {
+    // Get current kampus filter value
+    var kampusFilter = $('#kampus').val();
+    var kampusParam = kampusFilter ? '?kampus=' + encodeURIComponent(kampusFilter) : '';
+    
     Swal.fire({
         title: 'Export Data',
         text: 'Pilih format export yang diinginkan',
@@ -525,10 +529,10 @@ function exportData() {
     }).then((result) => {
         if (result.isConfirmed) {
             // Export to Excel
-            window.location.href = '/admin/mahasiswa/export/excel';
+            window.location.href = '/admin/mahasiswa/export/excel' + kampusParam;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             // Export to PDF
-            window.location.href = '/admin/mahasiswa/export/pdf';
+            window.location.href = '/admin/mahasiswa/export/pdf' + kampusParam;
         }
     });
 }

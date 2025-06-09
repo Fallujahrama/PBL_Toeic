@@ -282,31 +282,41 @@ class VerifikasiController extends Controller
     {
         $pendaftaran = \App\Models\PendaftaranModel::where('id_pendaftaran', $id)->firstOrFail();
 
+        $filePath = null;
         switch ($jenis) {
             case 'ktp':
-                $file = $pendaftaran->file_ktp;
+                $filePath = $pendaftaran->file_ktp;
                 break;
             case 'ktm':
-                $file = $pendaftaran->file_ktm;
+                $filePath = $pendaftaran->file_ktm;
                 break;
             case 'foto':
-                $file = $pendaftaran->file_foto;
+                $filePath = $pendaftaran->file_foto;
                 break;
             case 'bukti':
-                $file = $pendaftaran->file_bukti_pembayaran ?? null;
+                $filePath = $pendaftaran->file_bukti_pembayaran ?? null;
                 break;
             default:
                 abort(404, 'File tidak ditemukan');
         }
 
-        if (!$file || !\Storage::exists($file)) {
-            abort(404, 'File tidak ditemukan');
+        if (!$filePath) {
+        abort(404, 'File tidak ditemukan');
         }
 
-        $mime = \Storage::mimeType($file);
-        $content = \Storage::get($file);
+        // Path lengkap ke file
+        $fullPath = storage_path('app/public/' . $filePath);
 
-        return response($content)->header('Content-Type', $mime);
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di sistem');
+        }
+
+        // Get MIME type
+        $mime = mime_content_type($fullPath);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mime
+        ]);
     }
 
     /**

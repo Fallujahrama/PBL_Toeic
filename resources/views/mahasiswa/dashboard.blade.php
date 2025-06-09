@@ -33,6 +33,12 @@
 
     <!-- Quick Actions -->
     <div class="row g-4 mb-4">
+        @php
+            $userRole = Auth::user()->level->level_kode ?? null;
+            $isStudent = $userRole === 'Mhs';
+            $isNewUserType = in_array($userRole, ['Almn', 'Dsn', 'Cvts']);
+        @endphp
+
         <div class="col-lg-3 col-md-6">
             <a href="{{ route('pendaftaran.index') }}" class="feature-card feature-card-primary text-decoration-none">
                 <div class="feature-card-content">
@@ -90,6 +96,7 @@
             </a>
         </div>
 
+        @if($isStudent)
         <div class="col-lg-3 col-md-6">
             <a href="{{ route('mahasiswa.surat-pernyataan.index') }}" class="feature-card feature-card-purple text-decoration-none">
                 <div class="feature-card-content">
@@ -108,6 +115,7 @@
                 <div class="feature-bg"></div>
             </a>
         </div>
+        @endif
     </div>
 
     <div class="row g-4">
@@ -177,7 +185,13 @@
                                 </div>
                             @endif
 
-                            @if($suratPernyataan)
+                            @if($pendaftaran)
+                                <div class="status-item">
+                                    <!-- Pendaftaran status content -->
+                                </div>
+                            @endif
+
+                            @if($isStudent && $suratPernyataan)
                                 <div class="status-item">
                                     <div class="status-marker
                                         @if($suratPernyataan->status == 'valid') bg-success
@@ -222,9 +236,11 @@
                                 <a href="{{ route('pendaftaran.index') }}" class="btn btn-primary">
                                     <i class="fas fa-plus me-2"></i>Daftar TOEIC
                                 </a>
+                                @if($isStudent)
                                 <a href="{{ route('mahasiswa.surat-pernyataan.index') }}" class="btn btn-outline-primary">
                                     <i class="fas fa-upload me-2"></i>Upload Surat
                                 </a>
+                                @endif
                             </div>
                         </div>
                     @endif

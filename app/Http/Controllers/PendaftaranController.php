@@ -182,18 +182,52 @@ class PendaftaranController extends Controller
         $user->nama = $request->nama; // Perbarui kolom nama
         $user->save();
 
+        // Get registration count for this student
+        $registrationCount = PendaftaranModel::where('nim', $nim)->count();
+        $isFirstRegistration = $registrationCount === 0;
+
+        // Menyimpan data pendaftaran untuk mahasiswa baru
         $pendaftaran = new PendaftaranModel();
         $pendaftaran->nim = $nim;
-        $pendaftaran->file_ktp = $request->hasFile('ktp') ? $request->file('ktp')->store('pendaftaran/ktp', 'public') : null;
-        $pendaftaran->file_ktm = $request->hasFile('scan_ktm') ? $request->file('scan_ktm')->store('pendaftaran/ktm', 'public') : null;
-        $pendaftaran->file_foto = $request->hasFile('pas_foto') ? $request->file('pas_foto')->store('pendaftaran/foto', 'public') : null;
-        $pendaftaran->file_bukti_pembayaran = null; // Tambahkan nilai default
-        // Tambahkan ini untuk file_bukti_pembayaran
-        // $pendaftaran->file_bukti_pembayaran = $request->hasFile('bukti_pembayaran') ? $request->file('bukti_pembayaran')->store('bukti_pembayaran') : null;
 
-        $pendaftaran->save();
+        // Handle file uploads
+        if ($request->hasFile('ktp')) {
+            $file = $request->file('ktp');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_ktp = $file->storeAs('pendaftaran/ktp', $filename, 'public');
+        }
 
-        return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
+        if ($request->hasFile('scan_ktm')) {
+            $file = $request->file('scan_ktm');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_ktm = $file->storeAs('pendaftaran/ktm', $filename, 'public');
+        }
+
+        if ($request->hasFile('pas_foto')) {
+            $file = $request->file('pas_foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $pendaftaran->file_foto = $file->storeAs('pendaftaran/foto', $filename, 'public');
+        }
+
+        // Set file_bukti_pembayaran explicitly to null for first registration
+        if ($isFirstRegistration) {
+            $pendaftaran->file_bukti_pembayaran = null;
+            // Add this line to make the column nullable for first registration
+            DB::statement('ALTER TABLE pendaftaran MODIFY file_bukti_pembayaran VARCHAR(255) NULL');
+        } else {
+            if ($request->hasFile('bukti_pembayaran')) {
+                $file = $request->file('bukti_pembayaran');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $pendaftaran->file_bukti_pembayaran = $file->storeAs('pendaftaran/bukti_pembayaran', $filename, 'public');
+            }
+        }
+
+        try {
+            $pendaftaran->save();
+            return redirect()->route('pendaftaran.index')->with('success', 'Successfully Register TOEIC Exam!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan pendaftaran. Silakan coba lagi.');
+        }
     }
 
     /**
@@ -264,12 +298,6 @@ class PendaftaranController extends Controller
 
         // Get latest registration for this student
         $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
-        
-        // Check if registration has already been edited
-        if ($pendaftaran && $pendaftaran->keterangan === 'EDITED') {
-            return redirect()->route('pendaftaran.index')
-                ->with('error', 'Anda sudah mengedit pendaftaran ini sebelumnya. Tidak diperbolehkan mengedit lebih dari satu kali.');
-        }
 
         $breadcrumb = (object) [
             'title' => 'Edit Data Mahasiswa',
@@ -301,15 +329,6 @@ class PendaftaranController extends Controller
         $nim = auth()->user()->username;
         $registrationCount = PendaftaranModel::where('nim', $nim)->count();
         $isSecondRegistration = $registrationCount > 1;
-
-        // Get latest registration
-        $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
-        
-        // Check if registration has already been edited
-        if ($pendaftaran && $pendaftaran->keterangan === 'EDITED') {
-            return redirect()->route('pendaftaran.index')
-                ->with('error', 'Anda sudah mengedit pendaftaran ini sebelumnya. Tidak diperbolehkan mengedit lebih dari satu kali.');
-        }
 
         // Base validation rules
         $validationRules = [
@@ -349,6 +368,9 @@ class PendaftaranController extends Controller
         $user = auth()->user();
         $user->nama = $request->nama;
         $user->save();
+
+        // Get the latest registration for this student
+        $pendaftaran = PendaftaranModel::where('nim', $nim)->latest()->first();
 
         // Update registration files if uploaded
         if ($pendaftaran) {
@@ -453,11 +475,23 @@ class PendaftaranController extends Controller
                 abort(404, 'Jenis file tidak valid');
         }
 
-        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
-            abort(404, 'File tidak ditemukan');
+        if (!$filePath) {
+        abort(404, 'File tidak ditemukan');
         }
 
-        return response()->file(storage_path('app/public/' . $filePath));
+        // Path lengkap ke file
+        $fullPath = storage_path('app/public/' . $filePath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di sistem');
+        }
+
+        // Get MIME type
+        $mime = mime_content_type($fullPath);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mime
+        ]);
     }
 
     /**

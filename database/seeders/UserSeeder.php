@@ -16,44 +16,69 @@ class UserSeeder extends Seeder
     {
         $data = [
             [
-                'username' => 'adminupa',
+                'username' => 'superadmin',
                 'password' => Hash::make('12345'),
                 'level_id' => 1,
             ],
             [
-                'username' => 'adminitc',
+                'username' => 'adminupa',
                 'password' => Hash::make('12345'),
                 'level_id' => 2,
             ],
             [
-                'username' => 'superadmin',
+                'username' => 'adminitc',
                 'password' => Hash::make('12345'),
                 'level_id' => 3,
             ],
             [
-                'username' => '2341760001',
+                'username' => '2441760001',
                 'password' => Hash::make('12345'),
-                'level_id' => 3,
+                'level_id' => 4,
             ],
             [
                 'username' => '2441760002',
                 'password' => Hash::make('12345'),
-                'level_id' => 3,
+                'level_id' => 4,
             ],
             [
                 'username' => '2441760003',
                 'password' => Hash::make('12345'),
-                'level_id' => 3,
+                'level_id' => 4,
             ],
             [
                 'username' => '2441760004',
                 'password' => Hash::make('12345'),
-                'level_id' => 3,
+                'level_id' => 4,
             ],
             [
                 'username' => '2441760005',
                 'password' => Hash::make('12345'),
-                'level_id' => 3,
+                'level_id' => 4,
+            ],
+            [
+                'username' => '2441760006',
+                'password' => Hash::make('12345'),
+                'level_id' => 4,
+            ],
+            [
+                'username' => '2441760007',
+                'password' => Hash::make('12345'),
+                'level_id' => 4,
+            ],
+            [
+                'username' => '2441760008',
+                'password' => Hash::make('12345'),
+                'level_id' => 4,
+            ],
+            [
+                'username' => '2441760009',
+                'password' => Hash::make('12345'),
+                'level_id' => 4,
+            ],
+            [
+                'username' => '2441760010',
+                'password' => Hash::make('12345'),
+                'level_id' => 4,
             ],
         ];
 

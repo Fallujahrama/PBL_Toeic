@@ -248,4 +248,18 @@ class SuratPernyataanController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunduh file');
         }
     }
+
+    public function deleteTemplate($id)
+    {
+        $template = \App\Models\TemplateSuratModel::findOrFail($id);
+
+        // Hapus file dari storage
+        if ($template->file_template && \Storage::disk('public')->exists('templates/' . $template->file_template)) {
+            \Storage::disk('public')->delete('templates/' . $template->file_template);
+        }
+
+        $template->delete();
+
+        return redirect()->route('admin.surat-pernyataan.index')->with('success', 'Template surat berhasil dihapus.');
+    }
 }

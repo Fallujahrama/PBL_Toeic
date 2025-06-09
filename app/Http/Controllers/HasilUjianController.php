@@ -74,12 +74,6 @@ class HasilUjianController extends Controller
         return view('admin.hasil_ujian.show', compact('hasil_ujian', 'activeMenu'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $hasil_ujian = HasilUjianModel::findOrFail($id);
@@ -89,36 +83,38 @@ class HasilUjianController extends Controller
         return view('admin.hasil_ujian.edit', compact('hasil_ujian', 'activeMenu', 'jadwal')); // Add 'jadwal' to compact
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
             'tanggal' => 'required|date',
             'jadwal_id' => 'required|exists:jadwal,jadwal_id',
-            'file_nilai' => 'nullable|file|mimes:pdf,doc,docx,xlsx|max:2048',
+            'file_nilai' => 'nullable|mimes:pdf|max:2048',
         ]);
 
-        $hasil_ujian = HasilUjianModel::findOrFail($id);
-        $data = $request->only(['tanggal', 'jadwal_id']);
+        $hasilUjian = HasilUjianModel::findOrFail($id);
+
+        $data = [
+            'tanggal' => $request->tanggal,
+            'jadwal_id' => $request->jadwal_id,
+        ];
 
         if ($request->hasFile('file_nilai')) {
-            // Delete old file if exists
-            if ($hasil_ujian->file_nilai && Storage::disk('public')->exists($hasil_ujian->file_nilai)) {
-                Storage::disk('public')->delete($hasil_ujian->file_nilai);
+            // Hapus file lama
+            if ($hasilUjian->file_nilai) {
+                Storage::delete('public/' . $hasilUjian->file_nilai);
             }
 
-            $data['file_nilai'] = $request->file('file_nilai')->store('hasil_ujian', 'public');
+            // Upload file baru
+            $file = $request->file('file_nilai');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('public/hasil_ujian', $filename);
+            $data['file_nilai'] = 'hasil_ujian/' . $filename;
         }
 
-        $hasil_ujian->update($data);
+        $hasilUjian->update($data);
 
-        return redirect()->route('hasil_ujian.index')->with('success', 'Hasil ujian berhasil diperbarui.');
+        return redirect()->route('hasil_ujian.index')
+            ->with('success', 'Hasil ujian berhasil diperbarui!');
     }
 
     /**

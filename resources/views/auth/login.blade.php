@@ -60,6 +60,11 @@
                     </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0 pulse">Sign in</button>
+                      <div class="mt-3">
+                        <a href="{{ route('register') }}" class="btn btn-lg btn-outline-secondary btn-lg w-100 pulse">
+                          <i class="fas fa-user-plus me-2"></i>Create New Account
+                        </a>
+                      </div>
                         <a href="{{ route('landing') }}" class="btn btn-link text-secondary mt-2 slide-up">
                             <i class="fas fa-arrow-left me-2"></i>Back to Landing Page
                         </a>

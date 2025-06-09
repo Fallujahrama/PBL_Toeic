@@ -60,7 +60,7 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">ID</th>
+                                <th class="text-uppercase text-xxs font-weight-bolder opacity-7">No</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Tanggal</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">Informasi</th>
                                 <th class="text-uppercase text-xxs font-weight-bolder opacity-7">File</th>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_admin');
             $table->unsignedBigInteger('user_id')->index();
             $table->string('nama');
-            $table->string('no_hp');
+            $table->bigInteger('no_hp');
             $table->foreign('user_id')->references('id_user')->on('m_user');
             $table->timestamps();
         });

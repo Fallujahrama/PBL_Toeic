@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->string('nim')->primary();
             $table->unsignedBigInteger('user_id')->index();
-            $table->string('nama');
+            $table->string('nama')->nullable();
             $table->string('jurusan')->nullable();
             $table->string('alamat_asal')->nullable();
             $table->string('nik')->nullable();
-            $table->string('no_whatsapp')->nullable();
+            $table->bigInteger('no_whatsapp')->nullable();
             $table->string('kampus')->nullable();
             $table->string('program_studi')->nullable();
             $table->string('alamat_saat_ini')->nullable();

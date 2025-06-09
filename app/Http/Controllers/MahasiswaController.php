@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MahasiswaModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MahasiswaExport;
 
 class MahasiswaController extends Controller
 {
@@ -29,7 +32,7 @@ class MahasiswaController extends Controller
         $kampusFilter = request('kampus');
 
         // Mengambil data mahasiswa dengan filter kampus jika ada
-        $data = MahasiswaModel::select('nim', 'nama', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
+        $data = MahasiswaModel::select('nim', 'nama', 'nik', 'jurusan', 'program_studi', 'kampus', 'no_whatsapp')
             ->when($kampusFilter, function ($query, $kampusFilter) {
                 return $query->where('kampus', $kampusFilter);
             })
@@ -140,5 +143,48 @@ class MahasiswaController extends Controller
 
         return redirect()->route('admin.mahasiswa.index')
             ->with('success', 'Data mahasiswa berhasil dihapus');
+    }
+
+    /**
+     * Export data mahasiswa to PDF
+     */
+    public function exportPDF(Request $request)
+    {
+        // Get filter parameters
+        $kampusFilter = $request->input('kampus');
+        
+        // Query data with filters
+        $mahasiswa = MahasiswaModel::when($kampusFilter, function ($query, $kampusFilter) {
+            return $query->where('kampus', $kampusFilter);
+        })->orderBy('created_at', 'desc')->get();
+        
+        // Set PDF options
+        $pdf = PDF::loadView('data_mahasiswa.export_pdf', [
+            'data' => $mahasiswa,
+            'title' => 'Data Mahasiswa',
+            'date' => now()->format('d-m-Y H:i:s'),
+            'kampusFilter' => $kampusFilter
+        ]);
+        
+        // Set paper to landscape for better readability
+        $pdf->setPaper('a4', 'landscape');
+        
+        // Download the PDF file
+        return $pdf->download('data-mahasiswa-' . now()->format('Y-m-d') . '.pdf');
+    }
+
+    /**
+     * Export data mahasiswa to Excel
+     */
+    public function exportExcel(Request $request)
+    {
+        // Get filter parameters
+        $kampusFilter = $request->input('kampus');
+        
+        // Create a filename with date
+        $filename = 'data-mahasiswa-' . now()->format('Y-m-d') . '.xlsx';
+        
+        // Return the Excel download with filters
+        return Excel::download(new MahasiswaExport($kampusFilter), $filename);
     }
 }

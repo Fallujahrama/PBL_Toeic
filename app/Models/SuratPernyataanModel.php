@@ -15,6 +15,7 @@ class SuratPernyataanModel extends Model
 
     protected $fillable = [
         'file_surat_pernyataan',
+        'file_lampiran',
         'status',
         'nim'
     ];
@@ -23,5 +24,10 @@ class SuratPernyataanModel extends Model
     public function mahasiswa()
     {
         return $this->belongsTo(MahasiswaModel::class, 'nim', 'nim');
+    }
+
+    public function pendaftaran()
+    {
+        return $this->hasOne(PendaftaranModel::class, 'nim', 'nim');
     }
 }

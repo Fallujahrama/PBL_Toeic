@@ -114,6 +114,66 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Tambahkan Card Lampiran Bukti Ujian -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6>Lampiran Bukti Ujian</h6>
+                                </div>
+                                <div class="card-body">
+                                    @if($surat->file_lampiran)
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="me-3">
+                                                <i class="fas fa-file-alt text-success fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <p class="mb-0 fw-bold">Berkas Lampiran</p>
+                                                <span class="text-muted">{{ basename($surat->file_lampiran) }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-2 mb-3">
+                                            <a href="{{ route('admin.surat-pernyataan.preview-lampiran', $surat->id_surat_pernyataan) }}" class="btn btn-info" target="_blank">
+                                                <i class="fas fa-eye me-1"></i> Pratinjau
+                                            </a>
+                                            <a href="{{ route('admin.surat-pernyataan.download-lampiran', $surat->id_surat_pernyataan) }}" class="btn btn-secondary">
+                                                <i class="fas fa-download me-1"></i> Unduh
+                                            </a>
+                                        </div>
+
+                                        <!-- Tambahkan iframe untuk preview lampiran jika formatnya PDF -->
+                                        @php
+                                            $fileExtension = pathinfo($surat->file_lampiran, PATHINFO_EXTENSION);
+                                        @endphp
+
+                                        @if(strtolower($fileExtension) === 'pdf')
+                                            <iframe src="{{ route('admin.surat-pernyataan.preview-lampiran', $surat->id_surat_pernyataan) }}"
+                                                    width="100%" height="500px" style="border: none;">
+                                                <p>Browser Anda tidak mendukung preview PDF.
+                                                <a href="{{ route('admin.surat-pernyataan.preview-lampiran', $surat->id_surat_pernyataan) }}" target="_blank">Klik di sini untuk membuka file</a>
+                                                </p>
+                                            </iframe>
+                                        @elseif(in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png']))
+                                            <div class="text-center">
+                                                <img src="{{ route('admin.surat-pernyataan.preview-lampiran', $surat->id_surat_pernyataan) }}"
+                                                     alt="Lampiran Bukti Ujian" class="img-fluid" style="max-height: 500px;">
+                                            </div>
+                                        @else
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-info-circle me-1"></i> Format file tidak dapat ditampilkan secara langsung. Silakan unduh file untuk melihat isinya.
+                                            </div>
+                                        @endif
+                                    @else
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-1"></i> Mahasiswa belum mengunggah berkas lampiran bukti ujian
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

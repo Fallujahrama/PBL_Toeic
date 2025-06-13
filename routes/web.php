@@ -92,6 +92,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/surat-pernyataan/upload-template', [SuratPernyataanController::class, 'uploadTemplate'])->name('surat-pernyataan.upload-template');
             Route::patch('/surat-pernyataan/template/{id}/toggle-status', [SuratPernyataanController::class, 'toggleStatus'])->name('surat-pernyataan.toggle-status');
             Route::delete('/surat-pernyataan/template/{id}', [SuratPernyataanController::class, 'deleteTemplate'])->name('surat-pernyataan.delete-template');
+
+            // Rute untuk preview lampiran dan unduh lampiran
+            Route::get('/surat-pernyataan/preview-lampiran/{id}', [SuratPernyataanController::class, 'previewLampiranAdmin'])->name('surat-pernyataan.preview-lampiran');
+            Route::get('/surat-pernyataan/download-lampiran/{id}', [SuratPernyataanController::class, 'downloadLampiranAdmin'])->name('surat-pernyataan.download-lampiran');
         });
     });
 
@@ -118,7 +122,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/mahasiswa/{nim}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
             Route::put('/mahasiswa/{nim}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
             Route::delete('/mahasiswa/{nim}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
-            
+
             // Export routes for Mahasiswa data - only for AdmITC
             Route::get('/mahasiswa/export/pdf', [MahasiswaController::class, 'exportPDF'])->name('mahasiswa.export.pdf');
             Route::get('/mahasiswa/export/excel', [MahasiswaController::class, 'exportExcel'])->name('mahasiswa.export.excel');
@@ -131,7 +135,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('mahasiswa/pendaftaran')->name('pendaftaran.')->group(function () {
             Route::get('/baru', [PendaftaranController::class, 'createBaru'])->name('baru');
             Route::post('/baru', [PendaftaranController::class, 'storeBaru'])->name('storeBaru');
-            
+
             // Draft routes for new registration
             Route::post('/save-draft', [PendaftaranController::class, 'saveDraft'])->name('saveDraft');
             Route::get('/load-draft', [PendaftaranController::class, 'loadDraft'])->name('loadDraft');
@@ -139,11 +143,17 @@ Route::middleware('auth')->group(function () {
 
         // Surat Pernyataan routes - ONLY for active students
         Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'index'])->name('surat-pernyataan.index');
+            Route::get('/surat-pernyataan', [SuratPernyataanController::class, 'index'])->name('surat-pernyataan.index')->middleware('auth');
             Route::post('/surat-pernyataan', [SuratPernyataanController::class, 'store'])->name('surat-pernyataan.store');
             Route::delete('/surat-pernyataan/{id}', [SuratPernyataanController::class, 'destroy'])->name('surat-pernyataan.destroy');
-            Route::post('/surat-pernyataan/ajukan', [SuratPernyataanController::class, 'ajukan'])->name('surat-pernyataan.ajukan');
+            Route::post('/surat-pernyataan/ajukan', [SuratPernyataanController::class, 'ajukan'])->name('surat-pernyataan.ajukan')->middleware('auth');
             Route::get('/surat-pernyataan/preview/{id}', [SuratPernyataanController::class, 'previewSurat'])->name('surat-pernyataan.preview')->middleware('auth');
+
+            // Rute baru untuk mengelola lampiran
+            Route::post('/surat-pernyataan/upload-temp-lampiran', [SuratPernyataanController::class, 'uploadTempLampiran'])->name('surat-pernyataan.upload-temp-lampiran')->middleware('auth');
+            Route::post('/surat-pernyataan/upload-lampiran/{id}', [SuratPernyataanController::class, 'uploadLampiran'])->name('surat-pernyataan.upload-lampiran');
+            Route::get('/surat-pernyataan/preview-lampiran/{id}', [SuratPernyataanController::class, 'previewLampiran'])->name('surat-pernyataan.preview-lampiran');
+            Route::delete('/surat-pernyataan/hapus-lampiran/{id}', [SuratPernyataanController::class, 'hapusLampiran'])->name('surat-pernyataan.hapus-lampiran');
         });
     });
 
@@ -196,7 +206,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/pendaftaran/baru', [PendaftaranController::class, 'storeBaru'])->name('pendaftaran.storeBaru.alt');
         Route::get('/pendaftaran/lama', [PendaftaranController::class, 'createLama'])->name('pendaftaran.lama.alt');
         Route::post('/pendaftaran/lama', [PendaftaranController::class, 'storeLama'])->name('pendaftaran.lama.store.alt');
-        
+
         // Additional draft routes for debugging
         Route::post('/pendaftaran/save-draft', [PendaftaranController::class, 'saveDraft'])->name('pendaftaran.saveDraft.alt');
         Route::get('/pendaftaran/load-draft', [PendaftaranController::class, 'loadDraft'])->name('pendaftaran.loadDraft.alt');
